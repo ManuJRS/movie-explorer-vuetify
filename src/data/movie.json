@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "title": "Inception",
+    "year": 2010,
+    "image": "https://m.media-amazon.com/images/I/51v5ZpFyaFL._AC_.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Interstellar",
+    "year": 2014,
+    "image": "https://m.media-amazon.com/images/I/71yNz0d1J2L._AC_SL1500_.jpg"
+  }
+]
