@@ -1,10 +1,15 @@
 <script setup>
-defineProps({
+import { useMoviesStore } from '../stores/movies';
+const moviesStore = useMoviesStore();
+const props = defineProps({
     movie: {
         type: Object,
         required: true
     }
 });
+function deleteItem() {
+    moviesStore.deleteMovie(props.movie.id);
+}
 </script>
 
 <template>
@@ -13,6 +18,16 @@ defineProps({
             <v-img :src="movie.image" height="320px" cover></v-img>
             <v-card-title>{{ movie.title }}</v-card-title>
             <v-card-subtitle>{{ movie.year }}</v-card-subtitle>
+            <v-card-acction>
+                <v-btn
+                class="ml-2 mt-1"
+                color="red"
+                variant="tonal"
+                @click="deleteItem"
+                >
+                    Eliminar
+                </v-btn>
+            </v-card-acction>
         </v-card>
     </v-col>
 </template>

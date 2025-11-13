@@ -5,6 +5,11 @@ const STORAGE_KEY = "movies";
 export const useMoviesStore = defineStore("movies", () => {
 const movies = ref([]);
 
+function deleteMovie(id) {
+    movies.value = movies.value.filter(movie => movie.id !== id);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(movies.value));
+}
+
 async function loadMovies() {
     try {
         const stored = localStorage.getItem(STORAGE_KEY);
@@ -37,6 +42,7 @@ return{
     movies,
     loadMovies,
     addMovie,
-    resetMovies
+    resetMovies,
+    deleteMovie
 }
 })
