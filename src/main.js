@@ -13,10 +13,7 @@ const vuetify = createVuetify({
     directives
 })
 
-const pinia = createPinia()
-
 createApp(App)
-.use(pinia)
+.use(createPinia())
 .use(vuetify)
-
 .mount('#app')
