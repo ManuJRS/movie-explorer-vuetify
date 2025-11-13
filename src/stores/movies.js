@@ -9,9 +9,9 @@ export const useMoviesStore = defineStore("movies", () => {
         movies.value = await rest.json();
     }
 
-    function addmovie(movie) {
+    function addMovie(movie) {
         movies.value.push(movie);
     }
 
-    return { movies, loadMovies, addmovie };
+    return { movies, loadMovies, addMovie };
 })
