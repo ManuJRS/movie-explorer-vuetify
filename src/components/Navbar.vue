@@ -19,7 +19,7 @@ watch(isDark, (value) => {
 <template>
 <v-app-bar>
     <v-app-bar-title>
-        Explorador de peliculas
+        Guadar Peliculas
     </v-app-bar-title>
     <v-spacer>
 
