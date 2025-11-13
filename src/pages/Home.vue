@@ -14,7 +14,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <v-container>
+    <v-container class="mt-16">
         <v-row>
             <v-col cols="12" md="4">
             <AddMovieForm />
