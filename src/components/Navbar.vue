@@ -28,7 +28,8 @@ watch(isDark, (value) => {
         v-model="isDark"
         hide-details
         inset
-        :label="isDark ? 'Dark' : 'Light'"
+        :label="isDark ? '🌙' : '☀️'"
+        class="pr-2"
     >
 
     </v-switch>
