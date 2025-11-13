@@ -1,19 +1,3 @@
-<template>
-<v-app-bar>
-    <v-app-bar-title>
-        Explorador de peliculas
-    </v-app-bar-title>
-    <v-spacer>
-
-    </v-spacer>
-    <v-switch>
-        v-model="isDark"
-        hide-details
-        inset
-        :label="isDark ? 'Dark' : 'Light'"
-    </v-switch>
-</v-app-bar>
-</template>
 
 <script setup>
 import { watch } from 'vue';
@@ -31,3 +15,22 @@ watch(isDark, (value) => {
 }, { immediate: true });
 
 </script>
+
+<template>
+<v-app-bar>
+    <v-app-bar-title>
+        Explorador de peliculas
+    </v-app-bar-title>
+    <v-spacer>
+
+    </v-spacer>
+    <v-switch
+        v-model="isDark"
+        hide-details
+        inset
+        :label="isDark ? 'Dark' : 'Light'"
+    >
+
+    </v-switch>
+</v-app-bar>
+</template>

@@ -1,6 +1,5 @@
 <script setup>
-import MovieCard from './components/MovieCard.vue';
-import AddMovieForm from './components/AddMovieForm.vue';
+import Navbar from './components/Navbar.vue';
 
 const testMovie = {
   id: 1,
@@ -12,13 +11,14 @@ const testMovie = {
 
 <template>
 <v-app>
+  <Navbar />
   <v-main>
-    <v-container class="mt-5">
-      <v-row>
-        <MovieCard :movie="testMovie" />
-        <AddMovieForm />
-      </v-row>
-    </v-container>
+      <v-container class="py-10">
+        <h1   :color="isDark ? 'primary' : 'grey-lighten-4'"
+  :text-color="isDark ? 'white' : 'black'">Probando Navbar</h1>
+        <p   :color="isDark ? 'primary' : 'grey-lighten-4'"
+  :text-color="isDark ? 'white' : 'black'">Aquí irá el resto del contenido.</p>
+      </v-container>
   </v-main>
 </v-app>
 </template>
