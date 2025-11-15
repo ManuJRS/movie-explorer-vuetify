@@ -33,7 +33,7 @@ console.log('Películas en el store:', moviesStore.movies)
 
 <template>
     <v-card>
-        <v-card-title>Aqui puedes agregar tus peliculas</v-card-title>
+        <v-card-title>Aquí puedes agregar tus películas</v-card-title>
         <v-card-text>
             <v-form
             v-model="isFormValid"
@@ -41,7 +41,7 @@ console.log('Películas en el store:', moviesStore.movies)
             @submit.prevent="handleSubmit">
                 <v-text-field 
                 v-model="title" 
-                label="Titulo de la pelicula"
+                label="Título de la película"
                :rules="[required]"
                 required
                 ></v-text-field>
@@ -63,7 +63,7 @@ console.log('Películas en el store:', moviesStore.movies)
                 color="primary" 
                 type="submit"
                 block
-                >Agregar Pelicula</v-btn>
+                >Agregar Película</v-btn>
             </v-form>
         </v-card-text>
     </v-card>
