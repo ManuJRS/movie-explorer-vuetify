@@ -9,7 +9,7 @@ class="footer"
 elevation="0"
 >
     <v-container class="text-center py-4">
-        <span class="footer-text">Desarrollado por <strong>ManuDev</strong> - {{ year }} - Sitio de staging</span>
+        <span class="footer-text">Desarrollado por <strong>ManuDev</strong> - {{ year }}</span>
     </v-container>
 </v-footer>
 </template>
