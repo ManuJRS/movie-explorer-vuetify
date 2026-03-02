@@ -4,31 +4,30 @@ import MovieCard from '../components/MovieCard.vue';
 import { useMoviesStore } from '../stores/movies';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
+
 const moviesStore = useMoviesStore();
 const { movies } = storeToRefs(moviesStore);
+
 onMounted(() => {
     moviesStore.loadMovies();
 });
-
-
 </script>
 
 <template>
-    <v-container class="mt-16">
-        <v-row>
-            <v-col cols="12" md="4">
-            <AddMovieForm />
-            </v-col>
-            <v-col cols="12" md="8">
-                <v-row>
+    <main class="mt-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row flex-wrap gap-6">
+            <div class="w-full md:w-1/3 lg:max-w-md">
+                <AddMovieForm />
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap">
                     <MovieCard
                         v-for="movie in moviesStore.movies"
                         :key="movie.id"
                         :movie="movie"
-                        class="mb-4"
                     />
-                </v-row>
-            </v-col>
-        </v-row>
-    </v-container>
+                </div>
+            </div>
+        </div>
+    </main>
 </template>
