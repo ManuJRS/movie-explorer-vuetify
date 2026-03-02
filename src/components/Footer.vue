@@ -3,23 +3,11 @@ const year = new Date().getFullYear();
 </script>
 
 <template>
-<v-footer
-app
-class="footer"
-elevation="0"
->
-    <v-container class="text-center py-4">
-        <span class="footer-text">Desarrollado por <strong>ManuDev</strong> - {{ year }}</span>
-    </v-container>
-</v-footer>
+    <footer class="w-full bg-transparent py-4">
+        <div class="text-center">
+            <span class="text-sm opacity-70 text-gray-700 dark:text-gray-300">
+                Desarrollado por <strong class="font-semibold">ManuDev</strong> - {{ year }}
+            </span>
+        </div>
+    </footer>
 </template>
-
-<style scoped>
-.footer {
-    background-color: transparent;
-}
-.footer-text {
-    opacity: 0.7;
-    font-size: 14px;
-}
-</style>
