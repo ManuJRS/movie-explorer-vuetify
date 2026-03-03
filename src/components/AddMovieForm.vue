@@ -1,12 +1,26 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useMoviesStore } from '../stores/movies';
+import CustomSelect from './CustomSelect.vue';
 
 const moviesStore = useMoviesStore();
 const title = ref('');
 const year = ref('');
 const image = ref('');
+const platform = ref('');
 const errors = ref({ title: '', year: '', image: '' });
+
+const platformOptions = [
+    { value: 'netflix', label: 'Netflix' },
+    { value: 'amazon', label: 'Amazon' },
+    { value: 'hbo', label: 'HBO' },
+    { value: 'disney', label: 'Disney' },
+    { value: 'hulu', label: 'Hulu' },
+    { value: 'paramount', label: 'Paramount' },
+    { value: 'apple', label: 'Apple' },
+    { value: 'vudu', label: 'Vudu' },
+    { value: 'google', label: 'Google' }
+];
 
 const required = (value) => !!value || 'Este campo es requerido';
 const isYear = (value) =>
@@ -60,6 +74,7 @@ function handleSubmit() {
         title.value = '';
         year.value = '';
         image.value = '';
+        platform.value = '';
         errors.value = { title: '', year: '', image: '' };
     }
 }
@@ -166,7 +181,14 @@ function handleSubmit() {
                 <p v-if="errors.year" class="text-xs text-rose-500 font-medium">{{ errors.year }}</p>
                 <p v-else-if="year && !errors.year" class="text-xs text-emerald-500 font-medium">Looks good!</p>
             </div>
-
+            <div class="space-y-2">
+                <label v-if="platform" class="text-xs font-bold uppercase tracking-wider text-slate-400">Plataforma</label>
+                <CustomSelect
+                    v-model="platform"
+                    placeholder="Selecciona una plataforma"
+                    :options="platformOptions"
+                />
+            </div>
             <button
                 type="submit"
                 :disabled="!isFormValid"
