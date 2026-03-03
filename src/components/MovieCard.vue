@@ -30,13 +30,7 @@ function deleteItem() {
                 >
                     <!-- <button
                         type="button"
-                        class="h-12 w-12 rounded-full glass flex items-center justify-center hover:bg-primary transition-colors"
-                    >
-                        <span class="material-symbols-outlined text-white">play_arrow</span>
-                    </button>
-                    <button
-                        type="button"
-                        class="h-12 w-12 rounded-full glass flex items-center justify-center hover:bg-white/20 transition-colors"
+                        class="hover:cursor-pointer h-12 w-12 rounded-full glass flex items-center justify-center hover:bg-white/20 transition-colors"
                     >
                         <span class="material-symbols-outlined text-white">info</span>
                     </button> -->
@@ -52,7 +46,7 @@ function deleteItem() {
                 <button
                     type="button"
                     @click="deleteItem"
-                    class="flex-shrink-0 p-2 text-slate-400 hover:text-rose-500 rounded-lg transition-all"
+                    class="flex-shrink-0 p-2 text-slate-400 hover:text-rose-500 rounded-lg transition-all hover:cursor-pointer"
                 >
                     <span class="material-symbols-outlined">delete</span>
                 </button>
