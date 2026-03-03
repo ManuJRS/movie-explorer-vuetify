@@ -68,14 +68,15 @@ function handleSubmit() {
             id: Date.now(),
             title: title.value,
             year: Number(year.value),
-            image: image.value
+            image: image.value,
+            platform: platform.value || null
         });
 
         title.value = '';
         year.value = '';
         image.value = '';
         platform.value = '';
-        errors.value = { title: '', year: '', image: '' };
+        errors.value = { title: '', year: '', image: '', platform: '' };
     }
 }
 </script>
