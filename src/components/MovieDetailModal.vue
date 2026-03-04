@@ -81,7 +81,7 @@ function save() {
                         <h2 class="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.1em] mb-2 md:mb-3">
                             Synopsis
                         </h2>
-                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed text-base overflow-y-auto max-h-48 min-h-0">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed text-base overflow-y-auto max-h-48 md:max-h-full min-h-0">
                             {{ movie?.synopsis || 'No Synopsis added' }}
                         </p>
                     </div>
