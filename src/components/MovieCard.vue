@@ -31,12 +31,12 @@ function deleteItem() {
                 <div
                     class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4"
                 >
-                    <button
+                    <!-- <button
                         type="button"
                         class="hover:cursor-pointer h-12 w-12 rounded-full glass flex items-center justify-center hover:bg-white/20 transition-colors"
                     >
                         <span class="material-symbols-outlined text-white">info</span>
-                    </button>
+                    </button> -->
                 </div>
             </div>
             <div class="p-4 flex items-center justify-between">
