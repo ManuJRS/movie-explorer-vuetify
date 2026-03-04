@@ -1,5 +1,5 @@
-<script setup>
-import { useMoviesStore } from '../stores/movies';
+<script setup lang="ts">
+import { useMoviesStore } from '@/stores/movies';
 
 const moviesStore = useMoviesStore();
 const props = defineProps({

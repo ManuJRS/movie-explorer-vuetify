@@ -1,7 +1,7 @@
-<script setup>
+<script setup lang="ts">
 import { watch } from 'vue';
 import { storeToRefs } from 'pinia';
-import { useThemeStore } from '../stores/theme';
+import { useThemeStore } from '@/stores/theme';
 
 const themeStore = useThemeStore();
 const { isDark } = storeToRefs(themeStore);
