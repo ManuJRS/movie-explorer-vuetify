@@ -23,7 +23,7 @@ function toggleTheme() {
     <nav class="fixed top-0 z-50 w-full glass border-b border-black/10 dark:border-white/10 px-6 py-4">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Guarda tus peliculas</h1>
+                <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Save your movies</h1>
             </div>
 
             <div class="flex items-center gap-4">

@@ -29,7 +29,7 @@ const platformOptions = [
     { value: 'google', label: 'Google' }
 ];
 
-const required = (value) => !!value || 'Este campo es requerido';
+const required = (value) => !!value || 'This field is required';
 const isYear = (value) =>
     (value && value > 1800 && value < 2100) || 'Ingrese un año válido';
 
@@ -198,7 +198,7 @@ function handleSubmit() {
                     class="hover:cursor-pointer flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
                 >
                     <span class="material-symbols-outlined text-base">edit</span>
-                    <span>Sinopsis</span>
+                    <span>Synopsis</span>
                 </button>
                 <span
                     v-if="synopsis"
@@ -208,10 +208,10 @@ function handleSubmit() {
                 </span>
             </div>
             <div class="space-y-2">
-                <label v-if="platform" class="text-xs font-bold uppercase tracking-wider text-slate-400">Plataforma</label>
+                <label v-if="platform" class="text-xs font-bold uppercase tracking-wider text-slate-400">Platform</label>
                 <CustomSelect
                     v-model="platform"
-                    placeholder="Selecciona una plataforma"
+                    placeholder="Choose a platform"
                     :options="platformOptions"
                 />
             </div>
