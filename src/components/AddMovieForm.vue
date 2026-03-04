@@ -1,8 +1,10 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useMoviesStore } from '../stores/movies';
-import CustomSelect from './CustomSelect.vue';
-import SynopsisModal from './SynopsisModal.vue';
+import { useMoviesStore } from '@/stores/movies';
+import CustomSelect from '@/components/CustomSelect.vue';
+import SynopsisModal from '@/components/SynopsisModal.vue';
+
+type FormErrors = { title: string; year: string; image: string; platform?: string };
 
 const moviesStore = useMoviesStore();
 const title = ref('');
@@ -11,7 +13,7 @@ const image = ref('');
 const platform = ref('');
 const synopsis = ref('');
 const showSynopsisModal = ref(false);
-const errors = ref({ title: '', year: '', image: '' });
+const errors = ref<FormErrors>({ title: '', year: '', image: '' });
 
 function openSynopsisModal() {
     showSynopsisModal.value = true;
@@ -29,18 +31,19 @@ const platformOptions = [
     { value: 'google', label: 'Google' }
 ];
 
-const required = (value) => !!value || 'This field is required';
-const isYear = (value) =>
-    (value && value > 1800 && value < 2100) || 'Ingrese un año válido';
+const required = (value: string | number): true | string =>
+    !!value || 'This field is required';
+const isYear = (value: string | number): true | string =>
+    (value && Number(value) > 1800 && Number(value) < 2100) || 'Ingrese un año válido';
 
 const isFormValid = computed(() => {
     const titleValid = !!title.value;
-    const yearValid = !!year.value && year.value > 1800 && year.value < 2100;
+    const yearValid = !!year.value && Number(year.value) > 1800 && Number(year.value) < 2100;
     const imageValid = !!image.value;
     return titleValid && yearValid && imageValid;
 });
 
-function validateField(field, value) {
+function validateField(field: 'title' | 'year' | 'image', value: string | number) {
     if (field === 'title') {
         const result = required(value);
         errors.value.title = typeof result === 'string' ? result : '';
@@ -72,12 +75,12 @@ function handleSubmit() {
 
     if (!errors.value.title && !errors.value.year && !errors.value.image) {
         moviesStore.addMovie({
-            id: Date.now(),
+            id: String(Date.now()),
             title: title.value,
-            year: Number(year.value),
+            year: String(year.value),
             image: image.value,
-            platform: platform.value || null,
-            synopsis: synopsis.value || null
+            platform: platform.value || '',
+            synopsis: synopsis.value || ''
         });
 
         title.value = '';
