@@ -1,12 +1,22 @@
 <script setup>
+import { ref } from 'vue';
 import AddMovieForm from '../components/AddMovieForm.vue';
 import MovieCard from '../components/MovieCard.vue';
+import MovieDetailModal from '../components/MovieDetailModal.vue';
 import { useMoviesStore } from '../stores/movies';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
 
 const moviesStore = useMoviesStore();
 const { movies } = storeToRefs(moviesStore);
+
+const showMovieDetailModal = ref(false);
+const selectedMovie = ref(null);
+
+function openMovieDetail(movie) {
+    selectedMovie.value = movie;
+    showMovieDetailModal.value = true;
+}
 
 onMounted(() => {
     moviesStore.loadMovies();
@@ -25,9 +35,15 @@ onMounted(() => {
                         v-for="movie in moviesStore.movies"
                         :key="movie.id"
                         :movie="movie"
+                        @open-detail="openMovieDetail"
                     />
                 </div>
             </div>
         </div>
+
+        <MovieDetailModal
+            v-model:open="showMovieDetailModal"
+            :movie="selectedMovie"
+        />
     </main>
 </template>
