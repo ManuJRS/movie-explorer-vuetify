@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
 
 const props = defineProps({
     modelValue: {
@@ -20,6 +20,8 @@ const emit = defineEmits(['update:modelValue']);
 
 const isOpen = ref(false);
 const triggerRef = ref(null);
+const dropdownRef = ref(null);
+const dropdownStyle = ref({ top: 0, left: 0, width: 0 });
 
 const selectedLabel = computed(() => {
     if (!props.modelValue) return null;
@@ -27,9 +29,29 @@ const selectedLabel = computed(() => {
     return opt ? (typeof opt === 'string' ? opt : opt.label) : null;
 });
 
+function updateDropdownPosition() {
+    if (!triggerRef.value) return;
+    const rect = triggerRef.value.getBoundingClientRect();
+    dropdownStyle.value = {
+        top: rect.bottom + 4,
+        left: rect.left,
+        width: rect.width
+    };
+}
+
 function toggle() {
     isOpen.value = !isOpen.value;
 }
+
+watch(isOpen, async (open) => {
+    if (open) {
+        await nextTick();
+        updateDropdownPosition();
+        window.addEventListener('scroll', handleScroll, true);
+    } else {
+        window.removeEventListener('scroll', handleScroll, true);
+    }
+});
 
 function select(value) {
     emit('update:modelValue', value);
@@ -45,7 +67,15 @@ function getOptionLabel(option) {
 }
 
 function handleClickOutside(event) {
-    if (triggerRef.value && !triggerRef.value.contains(event.target)) {
+    const inTrigger = triggerRef.value?.contains(event.target);
+    const inDropdown = dropdownRef.value?.contains(event.target);
+    if (!inTrigger && !inDropdown) {
+        isOpen.value = false;
+    }
+}
+
+function handleScroll() {
+    if (isOpen.value && window.innerWidth < 768) {
         isOpen.value = false;
     }
 }
@@ -56,6 +86,7 @@ onMounted(() => {
 
 onUnmounted(() => {
     document.removeEventListener('click', handleClickOutside);
+    window.removeEventListener('scroll', handleScroll, true);
 });
 </script>
 
@@ -64,7 +95,7 @@ onUnmounted(() => {
         <button
             type="button"
             @click="toggle"
-            class="w-full flex items-center justify-between gap-2 rounded-lg py-3 text-left text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all text-xs font-bold uppercase tracking-wider"
+            class="hover:cursor-pointer w-full flex items-center justify-between gap-2 rounded-lg py-3 text-left text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all text-xs font-bold uppercase tracking-wider"
         >
             <span :class="selectedLabel ? 'text-slate-900 dark:text-white' : 'text-slate-400'">
                 {{ selectedLabel || placeholder }}
@@ -77,29 +108,33 @@ onUnmounted(() => {
             </span>
         </button>
 
-        <Transition
-            enter-active-class="transition duration-150 ease-out"
-            enter-from-class="opacity-0 -translate-y-1"
-            enter-to-class="opacity-100 translate-y-0"
-            leave-active-class="transition duration-100 ease-in"
-            leave-from-class="opacity-100 translate-y-0"
-            leave-to-class="opacity-0 -translate-y-1"
-        >
-            <div
-                v-show="isOpen"
-                class="absolute z-50 w-full mt-1 py-1 rounded-lg shadow-lg border border-black/10 dark:border-white/10 bg-slate-100 dark:bg-slate-800/95 backdrop-blur-sm overflow-hidden"
+        <Teleport to="body">
+            <Transition
+                enter-active-class="transition duration-150 ease-out"
+                enter-from-class="opacity-0 -translate-y-1"
+                enter-to-class="opacity-100 translate-y-0"
+                leave-active-class="transition duration-100 ease-in"
+                leave-from-class="opacity-100 translate-y-0"
+                leave-to-class="opacity-0 -translate-y-1"
             >
-                <button
-                    v-for="option in options"
-                    :key="getOptionValue(option)"
-                    type="button"
-                    @click="select(getOptionValue(option))"
-                    class="w-full px-4 py-2.5 text-left text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
-                    :class="{ 'bg-primary/10 dark:bg-primary/20 text-primary': modelValue === getOptionValue(option) }"
+                <div
+                    v-show="isOpen"
+                    ref="dropdownRef"
+                    class="fixed z-[9999] py-1 rounded-lg shadow-lg border border-black/10 dark:border-white/10 bg-slate-100 dark:bg-slate-800/95 backdrop-blur-sm overflow-hidden"
+                    :style="{ top: dropdownStyle.top + 'px', left: dropdownStyle.left + 'px', width: dropdownStyle.width + 'px' }"
                 >
-                    {{ getOptionLabel(option) }}
-                </button>
-            </div>
-        </Transition>
+                    <button
+                        v-for="option in options"
+                        :key="getOptionValue(option)"
+                        type="button"
+                        @click="select(getOptionValue(option))"
+                        class="w-full px-4 py-2.5 text-left text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
+                        :class="{ 'bg-primary/10 dark:bg-primary/20 text-primary': modelValue === getOptionValue(option) }"
+                    >
+                        {{ getOptionLabel(option) }}
+                    </button>
+                </div>
+            </Transition>
+        </Teleport>
     </div>
 </template>

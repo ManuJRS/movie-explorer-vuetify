@@ -27,7 +27,7 @@ function toggleTheme() {
             </div>
 
             <div class="flex items-center gap-4">
-                <button
+                <!-- <button
                     type="button"
                     @click="toggleTheme"
                     class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-200 dark:bg-white/5 border border-white/10 hover:bg-slate-300 dark:hover:bg-white/10 transition-all text-slate-900 dark:text-white"
@@ -35,7 +35,7 @@ function toggleTheme() {
                 >
                     <span class="material-symbols-outlined text-sm">{{ isDark ? 'dark_mode' : 'light_mode' }}</span>
                     <span class="text-xs font-semibold">{{ isDark ? 'Dark' : 'Light' }}</span>
-                </button>
+                </button> -->
             </div>
         </div>
     </nav>
