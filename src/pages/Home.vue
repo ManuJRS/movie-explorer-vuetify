@@ -1,19 +1,18 @@
-<script setup>
-import { ref } from 'vue';
-import AddMovieForm from '../components/AddMovieForm.vue';
-import MovieCard from '../components/MovieCard.vue';
-import MovieDetailModal from '../components/MovieDetailModal.vue';
-import { useMoviesStore } from '../stores/movies';
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import AddMovieForm from '@/components/AddMovieForm.vue';
+import MovieCard from '@/components/MovieCard.vue';
+import MovieDetailModal from '@/components/MovieDetailModal.vue';
+import { useMoviesStore, type Movie } from '@/stores/movies';
 import { storeToRefs } from 'pinia';
-import { onMounted } from 'vue';
 
 const moviesStore = useMoviesStore();
 const { movies } = storeToRefs(moviesStore);
 
 const showMovieDetailModal = ref(false);
-const selectedMovie = ref(null);
+const selectedMovie = ref<Movie | null>(null);
 
-function openMovieDetail(movie) {
+function openMovieDetail(movie: Movie) {
     selectedMovie.value = movie;
     showMovieDetailModal.value = true;
 }
@@ -43,7 +42,7 @@ onMounted(() => {
 
         <MovieDetailModal
             v-model:open="showMovieDetailModal"
-            :movie="selectedMovie"
+            :movie="selectedMovie ?? undefined"
         />
     </main>
 </template>
