@@ -2,13 +2,20 @@
 import { ref, computed } from 'vue';
 import { useMoviesStore } from '../stores/movies';
 import CustomSelect from './CustomSelect.vue';
+import SynopsisModal from './SynopsisModal.vue';
 
 const moviesStore = useMoviesStore();
 const title = ref('');
 const year = ref('');
 const image = ref('');
 const platform = ref('');
+const synopsis = ref('');
+const showSynopsisModal = ref(false);
 const errors = ref({ title: '', year: '', image: '' });
+
+function openSynopsisModal() {
+    showSynopsisModal.value = true;
+}
 
 const platformOptions = [
     { value: 'netflix', label: 'Netflix' },
@@ -69,13 +76,15 @@ function handleSubmit() {
             title: title.value,
             year: Number(year.value),
             image: image.value,
-            platform: platform.value || null
+            platform: platform.value || null,
+            synopsis: synopsis.value || null
         });
 
         title.value = '';
         year.value = '';
         image.value = '';
         platform.value = '';
+        synopsis.value = '';
         errors.value = { title: '', year: '', image: '', platform: '' };
     }
 }
@@ -182,6 +191,22 @@ function handleSubmit() {
                 <p v-if="errors.year" class="text-xs text-rose-500 font-medium">{{ errors.year }}</p>
                 <p v-else-if="year && !errors.year" class="text-xs text-emerald-500 font-medium">Looks good!</p>
             </div>
+            <div class="pt-4 flex items-center justify-between">
+                <button
+                    type="button"
+                    @click="openSynopsisModal"
+                    class="hover:cursor-pointer flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                >
+                    <span class="material-symbols-outlined text-base">edit</span>
+                    <span>Sinopsis</span>
+                </button>
+                <span
+                    v-if="synopsis"
+                    class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-600 dark:text-emerald-400"
+                >
+                    Added
+                </span>
+            </div>
             <div class="space-y-2">
                 <label v-if="platform" class="text-xs font-bold uppercase tracking-wider text-slate-400">Plataforma</label>
                 <CustomSelect
@@ -199,5 +224,7 @@ function handleSubmit() {
                 <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
             </button>
         </form>
+
+        <SynopsisModal v-model="synopsis" v-model:open="showSynopsisModal" />
     </div>
 </template>
