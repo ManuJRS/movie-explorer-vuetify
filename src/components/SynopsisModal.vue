@@ -55,18 +55,18 @@ function save() {
                         class="mt-auto flex items-center justify-between pt-6 border-t border-slate-200 dark:border-slate-800"
                     >
                         <div></div>
-                        <div class="flex gap-3">
+                        <div class="flex flex-wrap gap-2 sm:gap-3">
                             <button
                                 type="button"
                                 @click="close"
-                                class="hover:cursor-pointer px-6 py-2.5 rounded-lg border border-primary text-primary hover:bg-primary/5 text-sm font-bold transition-all"
+                                class="hover:cursor-pointer px-4 py-2 sm:px-6 sm:py-2.5 rounded-lg border border-primary text-primary hover:bg-primary/5 text-xs sm:text-sm font-bold transition-all"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="button"
                                 @click="save"
-                                class="px-6 hover:cursor-pointer py-2.5 rounded-lg bg-blue-600 hover:shadow-[0_0_20px_rgba(17,82,212,0.4)] text-white font-bold py-4 rounded-lg transition-all"
+                                class="hover:cursor-pointer px-4 py-2 sm:px-6 sm:py-2.5 rounded-lg bg-blue-600 hover:shadow-[0_0_20px_rgba(17,82,212,0.4)] text-white text-xs sm:text-sm font-bold transition-all"
                             >
                                 Save Changes
                             </button>
