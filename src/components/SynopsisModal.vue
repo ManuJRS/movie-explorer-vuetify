@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 defineProps({
     modelValue: {
         type: String,
@@ -14,6 +14,11 @@ const emit = defineEmits(['update:modelValue', 'update:open']);
 
 function close() {
     emit('update:open', false);
+}
+
+function onInput(e: Event) {
+    const target = e.target as HTMLTextAreaElement;
+    emit('update:modelValue', target?.value ?? '');
 }
 
 function save() {
@@ -46,7 +51,7 @@ function save() {
                         </h2>
                         <textarea
                             :value="modelValue"
-                            @input="emit('update:modelValue', $event.target.value)"
+                            @input="onInput"
                             class="w-full min-h-[200px] p-4 rounded-lg bg-white/5 dark:bg-slate-800 border border-black/10 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-500 focus:ring-2 focus:ring-primary/20 focus:outline-none resize-y"
                             placeholder="Write the movie synopsis..."
                         ></textarea>
