@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 defineProps<{
   open: boolean
   movie: { title?: string; id?: string } | null
@@ -33,11 +35,11 @@ function onConfirm() {
           >
             <span class="material-symbols-outlined text-rose-500 text-3xl">delete_forever</span>
           </div>
-          <h2 class="text-2xl font-bold text-white mb-3">Remove Movie?</h2>
+          <h2 class="text-2xl font-bold text-white mb-3">{{ t('removeMovieModal.title') }}</h2>
           <p class="text-slate-400 leading-relaxed mb-8">
-            Are you sure you want to remove
+            {{ t('removeMovieModal.descriptionPt1') }}
             <span class="text-white font-medium">"{{ movie?.title ?? 'this movie' }}"</span>
-            from your shelf? This action cannot be undone.
+            {{ t('removeMovieModal.descriptionPt2') }}
           </p>
           <div class="flex flex-col sm:flex-row gap-3 w-full">
             <button
@@ -45,14 +47,14 @@ function onConfirm() {
               class="hover:cursor-pointer flex-1 px-6 py-3.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/5 border border-white/5 transition-all"
               @click="close"
             >
-              Cancel
+              {{ t('removeMovieModal.btnCancel') }}
             </button>
             <button
               type="button"
               class="hover:cursor-pointer flex-1 px-6 py-3.5 rounded-xl text-sm font-semibold bg-rose-600 hover:bg-rose-500 text-white shadow-[0_0_20px_rgba(225,29,72,0.3)] hover:shadow-[0_0_25px_rgba(225,29,72,0.5)] transition-all"
               @click="onConfirm"
             >
-              Delete Movie
+              {{ t('removeMovieModal.btnRemove') }}
             </button>
           </div>
         </div>
