@@ -1,0 +1,110 @@
+{
+    "nav": {
+      "title": "MovieShelf",
+      "howToUse": "How to use?",
+      "sigIn": "Sign in",
+      "home": "Home"
+    },
+    "form": {
+      "title": "Add a movie",
+      "description": "Curate your collection by adding new cinematic masterpieces.",
+      "movieTitle": "Movie Title",
+      "titlePlaceholder": "e.g. Inception",
+      "poster": "Poster URL",
+      "posterPlaceholder": "https://image-url.com/poster.jpg",
+      "year": "Release Year",
+      "yearPlaceholder": "e.g. 2024",
+      "platform": "Platform",
+      "ChosePlatform": "Choose a platform",
+      "synopsis": "Synopsis",
+      "submit": "Add to shelf",
+      "looksGood": "Looks good!",
+      "warning": "This field is required",
+      "warningYear": "Enter a valid year",
+      "added": "Added"
+    },
+    "layoutPage": {
+      "moviesCounter": "My Collection"
+    },
+    "modalDetails": {
+      "botoClose": "Close"
+    },
+    "modalModify": {
+      "title": "Edit Movie Details",
+      "description": "Refine the cinematic presentation for your collection.",
+      "btnSave": "Save",
+      "btnCancel": "Cancel"
+    },
+    "modalSynopsis": {
+      "title": "Synopsis",
+      "description": "Write the movie synopsis...",
+      "btnSave": "Save",
+      "btnCancel": "Cancel"
+    },
+    "loginPage": {
+      "title": "Login",
+      "description": "Access your saved movies.",
+      "email": "Email",
+      "emailPlaceholder": "example@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "********",
+      "btnLogin": "Login",
+      "btnForgotPassword": "Forgot password?",
+      "textRegister": "No account",
+      "btnRegister": "Create one",
+      "titleRegister": "Create account",
+      "descriptionRegister": "Create your account to start saving movies.",
+      "username": "Username",
+      "usernamePlaceholder": "example",
+      "confirmPassword": "Confirm password",
+      "ReceiveEmail": "Receive email notifications",
+      "btnCreateAccount": "Create account",
+      "alreadyHaveAccount": "Already have an account?",
+      "errors": {
+        "passwordsDoNotMatch": "Passwords do not match.",
+        "invalidCredentials": "Invalid email or password.",
+        "emailNotConfirmed": "Please confirm your email before signing in.",
+        "userAlreadyRegistered": "An account with this email already exists.",
+        "weakPassword": "Password must be at least 6 characters.",
+        "invalidEmail": "Please enter a valid email address.",
+        "generic": "Something went wrong. Please try again."
+      }
+    },
+    "forgetPasswordPage": {
+      "title": "Reset password?",
+      "description": "We will send you a link to your email so you can create a new password.",
+      "btnSendLink": "Send link",
+      "sending": "Sending..."
+    },
+    "updatePasswordPage": {
+      "title": "New password",
+      "description": "Choose a secure password for your account.",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "updatePassword": "Update password",
+      "loading": "Loading..."
+    },
+    "homePage": {
+      "title": "Save Your Movies",
+      "description": "The faintest ink is better than the best memory… but a web app is even better.",
+      "btnDemo": "Demo"
+    },
+    "homeCards": {
+      "title": "How does it work?",
+      "createAccount": "Create your account",
+      "createAccountDescription": "Sign up on the platform to get your own personal space where you can save and organize your movies.",
+      "saveMovies": "Save your movies",
+      "saveMoviesDescription": "Easily add the title, year, streaming platform, poster link, and a short synopsis for each movie you want to register.",
+      "AccesYourCollection": "Access your collection",
+      "AccesYourCollectionDescription": "View and manage your movie list anytime, keeping an organized record of what you have watched or want to watch."
+    },
+    "explicationProject": {
+      "title": "Hello, let me introduce myself!",
+      "description": "This project is a software development practice project created for my personal portfolio. If you find it useful, feel free to use it. The stack includes Vue 3, using Pinia for state management, Vue Router, i18n for internationalization, Tailwind CSS for styling, and TypeScript. For the backend and user authentication, the project uses Supabase, while deployment and hosting are handled through Netlify."
+    },
+    "settingsPage": {
+      "titlePreview": "Settings",
+      "description": "Manage your account settings.",
+      "language": "Language"
+    }
+  }
