@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useMoviesStore } from '@/stores/movies';
 import DelateMovieModal from '@/components/DelateMovieModal.vue';
+import Tooltip from '@/components/Tooltip.vue';
 
 const moviesStore = useMoviesStore();
 const props = defineProps({
@@ -59,9 +60,11 @@ function confirmDelete() {
             </div>
             <div class="p-4 flex items-center justify-between">
                 <div class="overflow-hidden min-w-0 flex-1">
-                    <h3 class="font-bold text-lg truncate pr-2 text-slate-900 dark:text-white">
-                        {{ movie.title }}
-                    </h3>
+                    <Tooltip :text="movie.title">
+                        <h3 class="font-bold text-lg truncate pr-2 text-slate-900 dark:text-white">
+                            {{ movie.title }}
+                        </h3>
+                    </Tooltip>
                     <p class="text-sm text-slate-500 dark:text-slate-400">{{ movie.year }}</p>
                 </div>
                 <button
