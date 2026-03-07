@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { useMoviesStore } from '@/stores/movies';
+import DelateMovieModal from '@/components/DelateMovieModal.vue';
 
 const moviesStore = useMoviesStore();
 const props = defineProps({
@@ -11,11 +13,17 @@ const props = defineProps({
 
 const emit = defineEmits(['openDetail']);
 
+const showDeleteModal = ref(false);
+
 function openDetail() {
     emit('openDetail', props.movie);
 }
 
-function deleteItem() {
+function openDeleteModal() {
+    showDeleteModal.value = true;
+}
+
+function confirmDelete() {
     moviesStore.deleteMovie(props.movie.id);
 }
 </script>
@@ -33,7 +41,7 @@ function deleteItem() {
                     {{ movie.platform }}
                 </span>
                 <img
-                    :src="movie.image"
+                    :src="movie.image || 'https://via.placeholder.com/300x450?text=No+Poster'""
                     :alt="movie.title"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
@@ -58,7 +66,7 @@ function deleteItem() {
                 </div>
                 <button
                     type="button"
-                    @click="deleteItem"
+                    @click="openDeleteModal"
                     class="flex-shrink-0 p-2 text-slate-400 hover:text-rose-500 rounded-lg transition-all hover:cursor-pointer"
                 >
                     <span class="material-symbols-outlined">delete</span>
@@ -66,4 +74,10 @@ function deleteItem() {
             </div>
         </div>
     </div>
+
+    <DelateMovieModal
+        v-model:open="showDeleteModal"
+        :movie="movie"
+        @confirm="confirmDelete"
+    />
 </template>
