@@ -5,6 +5,9 @@ import { useAuthStore } from '@/stores/auth';
 import { useMoviesStore } from '@/stores/movies';
 import CustomSelect from '@/components/CustomSelect.vue';
 import SynopsisModal from '@/components/SynopsisModal.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 type FormErrors = { title: string; year: string; image: string; platform?: string };
 
@@ -109,24 +112,24 @@ async function handleSubmit() {
 
 <template>
     <div class="glass p-4 sm:p-6 md:p-8 rounded-xl border border-black/10 dark:border-white/10 mt-24 sm:mt-28 px-4 sm:px-6 mx-auto max-w-2xl w-[90%] sm:w-full">
-        <h2 class="text-xl sm:text-2xl font-bold mb-2 text-slate-900 dark:text-white">Settings</h2>
+        <h2 class="text-xl sm:text-2xl font-bold mb-2 text-slate-900 dark:text-white">{{ t('settingsPage.titlePreview') }}</h2>
         <p class="text-slate-500 dark:text-slate-400 text-sm mb-6 sm:mb-8">
-            Configure your account settings.
+            {{ t('settingsPage.description') }}
         </p>
         <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-4 sm:mb-3">
-            <h3 class="text-sm sm:text-base font-bold tracking-wider text-slate-400 shrink-0">Profile Name:</h3>
+            <h3 class="text-sm sm:text-base font-bold tracking-wider text-slate-400 shrink-0">{{ t('settingsPage.ProfileName') }}:</h3>
             <h4 class="text-base sm:text-lg tracking-wider text-slate-900 dark:text-white break-words min-w-0">{{ user?.user_metadata?.username || user?.user_metadata?.name || '—' }}</h4>
         </div>
         <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-4 sm:mb-3">
-            <h3 class="text-sm sm:text-base font-bold tracking-wider text-slate-400 shrink-0">Profile Email:</h3>
+            <h3 class="text-sm sm:text-base font-bold tracking-wider text-slate-400 shrink-0">{{ t('settingsPage.ProfileEmail') }}:</h3>
             <h4 class="text-base sm:text-lg tracking-wider text-slate-900 dark:text-white break-all min-w-0">{{ user?.email ?? '—' }}</h4>
         </div>
         <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-            <h3 class="text-sm sm:text-base font-bold tracking-wider text-slate-400 shrink-0">Password:</h3>
-            <router-link to="/update-password" class="text-blue-500 hover:text-blue-600 underline sm:no-underline font-semibold text-base sm:text-lg">Update Password</router-link>
+            <h3 class="text-sm sm:text-base font-bold tracking-wider text-slate-400 shrink-0">{{ t('settingsPage.Password') }}:</h3>
+            <router-link to="/update-password" class="text-blue-500 hover:text-blue-600 underline sm:no-underline font-semibold text-base sm:text-lg">{{ t('settingsPage.UpdatePassword') }}</router-link>
         </div>
         <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 align-center justify-center mt-4">
-            <router-link to="/movies" class="text-gray-500 hover:text-blue-600 underline sm:no-underline font-semibold text-base sm:text-lg flex items-center justify-center"><span class="material-symbols-outlined mr-2">arrow_back</span>Back to Movies</router-link>
+            <router-link to="/movies" class="text-gray-500 hover:text-blue-600 underline sm:no-underline font-semibold text-base sm:text-lg flex items-center justify-center"><span class="material-symbols-outlined mr-2">arrow_back</span>{{ t('settingsPage.BackToMovies') }}</router-link>
         </div>
     </div>
 </template>

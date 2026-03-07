@@ -44,7 +44,7 @@ async function logout() {
         <div class="max-w-7xl mx-auto flex items-center justify-between">
 
             <div class="flex items-center gap-3">
-                <router-link v-if="!user" to="/" class="...">
+                <router-link to="/" class="...">
                     <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
                     SYM
                     </h1>
@@ -52,7 +52,6 @@ async function logout() {
             </div>
 
             <div class="flex items-center gap-2 h-[50px]">
-                <router-link v-if="user" to="/movies">{{ t('nav.howToUse') }}</router-link>
                 <button
                     v-if="user"
                         @click="logout"
