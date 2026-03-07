@@ -3,7 +3,8 @@
     "title": "MovieShelf",
     "howToUse": "¿Cómo usar?",
     "sigIn": "Iniciar sesión",
-    "home": "Inicio"
+    "home": "Inicio",
+    "language": "Idioma"
   },
   "form": {
     "title": "Guardar una película",
@@ -45,7 +46,7 @@
     "title": "Iniciar sesión",
     "description": "Accede a tus películas guardadas.",
     "email": "Email",
-    "emailPlaceholder": "ejemplo@ejemplo.com",
+    "emailPlaceholder": "ejemplo{'@'}ejemplo.com",
     "password": "Contraseña",
     "passwordPlaceholder": "********",
     "btnLogin": "Iniciar sesión",
@@ -104,7 +105,20 @@
   },
   "settingsPage": {
     "titlePreview": "Ajustes",
+    "Title": "Ajustes",
     "description": "Gestiona tus ajustes de cuenta.",
-    "language": "Idioma"
+    "ProfileName": "Nombre de usuario",
+    "ProfileEmail": "Correo electrónico",
+    "Password": "Contraseña",
+    "language": "Idioma",
+    "UpdatePassword": "Actualizar contraseña",
+    "BackToMovies": "Volver a películas"
+  },
+  "removeMovieModal": {
+    "title": "¿Eliminar película?",
+    "descriptionPt1": "¿Estás seguro de querer eliminar",
+    "descriptionPt2": "de tu colección? Esta acción no puede ser deshecha.",
+    "btnCancel": "Cancelar",
+    "btnRemove": "Eliminar"
   }
 }

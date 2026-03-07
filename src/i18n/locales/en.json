@@ -3,7 +3,8 @@
       "title": "MovieShelf",
       "howToUse": "How to use?",
       "sigIn": "Sign in",
-      "home": "Home"
+      "home": "Home",
+      "language": "Language"
     },
     "form": {
       "title": "Add a movie",
@@ -45,7 +46,7 @@
       "title": "Login",
       "description": "Access your saved movies.",
       "email": "Email",
-      "emailPlaceholder": "example@example.com",
+      "emailPlaceholder": "example{'@'}example.com",
       "password": "Password",
       "passwordPlaceholder": "********",
       "btnLogin": "Login",
@@ -104,7 +105,19 @@
     },
     "settingsPage": {
       "titlePreview": "Settings",
-      "description": "Manage your account settings.",
-      "language": "Language"
+      "Title": "settings",
+      "description": "Configure your account settings.",
+      "ProfileName": "Profile Name",
+      "ProfileEmail": "Profile Email",
+      "Password": "Password",
+      "UpdatePassword": "Update Password",
+      "BackToMovies": "Back to Movies"
+    },
+    "removeMovieModal": {
+      "title": "Remove Movie?",
+      "descriptionPt1": "Are you sure you want to remove",
+      "descriptionPt2": "from your shelf? This action cannot be undone.",
+      "btnCancel": "Cancel",
+      "btnRemove": "Remove"
     }
   }
