@@ -1,76 +1,82 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useMoviesStore } from '@/stores/movies';
-import CustomSelect from '@/components/CustomSelect.vue';
-import SynopsisModal from '@/components/SynopsisModal.vue';
-import { useI18n } from 'vue-i18n';
-import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue';
-import MoviePosterSearch from '@/components/MoviePosterSearch.vue';
-import type { MoviePosterResult } from '@/lib/tmdb';
+import { ref, computed } from 'vue'
+import { useMoviesStore } from '@/stores/movies'
+import CustomSelect from '@/components/CustomSelect.vue'
+import SynopsisModal from '@/components/SynopsisModal.vue'
+import { useI18n } from 'vue-i18n'
+import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue'
+import MoviePosterSearch from '@/components/MoviePosterSearch.vue'
+import type { MoviePosterResult } from '@/lib/tmdb'
+import { getMovieFullData } from '@/lib/tmdb'
 
-const { t } = useI18n();
+const { t } = useI18n()
 
-type FormErrors = { title: string; year: string; image: string; platform?: string };
+type FormErrors = { title: string; year: string; image: string; platform?: string }
+
+const moviesStore = useMoviesStore()
+
+const title = ref('')
+const year = ref('')
+const image = ref('')
+const platform = ref('')
+const synopsis = ref('')
+const showSynopsisModal = ref(false)
+const selectedMovieId = ref<number | null>(null)
+
+const errors = ref<FormErrors>({ title: '', year: '', image: '' })
 
 const handleSelectMovie = (movie: MoviePosterResult) => {
+  selectedMovieId.value = movie.id
   title.value = movie.title
   year.value = movie.year
   image.value = movie.posterUrl || ''
 }
 
-const moviesStore = useMoviesStore();
-const title = ref('');
-const year = ref('');
-const image = ref('');
-const platform = ref('');
-const synopsis = ref('');
-const showSynopsisModal = ref(false);
-const errors = ref<FormErrors>({ title: '', year: '', image: '' });
-
 function openSynopsisModal() {
-    showSynopsisModal.value = true;
+  showSynopsisModal.value = true
 }
 
 const platformOptions = [
-    { value: 'netflix', label: 'Netflix' },
-    { value: 'amazon', label: 'Amazon' },
-    { value: 'hbo', label: 'HBO' },
-    { value: 'disney', label: 'Disney' },
-    { value: 'hulu', label: 'Hulu' },
-    { value: 'paramount', label: 'Paramount' },
-    { value: 'apple', label: 'Apple' },
-    { value: 'vudu', label: 'Vudu' },
-    { value: 'google', label: 'Google' }
-];
+  { value: 'netflix', label: 'Netflix' },
+  { value: 'amazon', label: 'Amazon' },
+  { value: 'hbo', label: 'HBO' },
+  { value: 'disney', label: 'Disney' },
+  { value: 'hulu', label: 'Hulu' },
+  { value: 'paramount', label: 'Paramount' },
+  { value: 'apple', label: 'Apple' },
+  { value: 'vudu', label: 'Vudu' },
+  { value: 'google', label: 'Google' }
+]
 
 const required = (value: string | number): true | string =>
-    !!value || t('form.warning');
+  !!value || t('form.warning')
+
 const isYear = (value: string | number): true | string =>
-    (value && Number(value) > 1800 && Number(value) < 2100) || t('form.warningYear');
+  (value && Number(value) > 1800 && Number(value) < 2100) || t('form.warningYear')
 
 const isFormValid = computed(() => {
-    const titleValid = !!title.value;
-    const yearValid = !!year.value && Number(year.value) > 1800 && Number(year.value) < 2100;
-    const imageValid = !!image.value;
-    return titleValid && yearValid && imageValid;
-});
+  const titleValid = !!title.value
+  const yearValid = !!year.value && Number(year.value) > 1800 && Number(year.value) < 2100
+  const imageValid = !!image.value
+  return titleValid && yearValid && imageValid
+})
 
 function validateField(field: 'title' | 'year' | 'image', value: string | number) {
-    if (field === 'title') {
-        const result = required(value);
-        errors.value.title = typeof result === 'string' ? result : '';
-    } else if (field === 'year') {
-        const result = required(value);
-        if (typeof result === 'string') {
-            errors.value.year = result;
-        } else {
-            const yearResult = isYear(value);
-            errors.value.year = typeof yearResult === 'string' ? yearResult : '';
-        }
-    } else if (field === 'image') {
-        const result = required(value);
-        errors.value.image = typeof result === 'string' ? result : '';
+  if (field === 'title') {
+    const result = required(value)
+    errors.value.title = typeof result === 'string' ? result : ''
+  } else if (field === 'year') {
+    const result = required(value)
+    if (typeof result === 'string') {
+      errors.value.year = result
+    } else {
+      const yearResult = isYear(value)
+      errors.value.year = typeof yearResult === 'string' ? yearResult : ''
     }
+  } else if (field === 'image') {
+    const result = required(value)
+    errors.value.image = typeof result === 'string' ? result : ''
+  }
 }
 
 async function handleSubmit() {
@@ -90,22 +96,36 @@ async function handleSubmit() {
 
   if (!errors.value.title && !errors.value.year && !errors.value.image) {
     try {
-      await 
-      console.log('IMAGE FIELD:', image.value)
-      moviesStore.addMovie({
+      let movieData = {
         title: title.value.trim(),
         year: year.value,
-        image: image.value, 
+        image: image.value,
         platform: platform.value || '',
         synopsis: synopsis.value || '',
-      })
+      }
 
-      // reset form
+      if (selectedMovieId.value) {
+        const fullMovieData = await getMovieFullData(selectedMovieId.value)
+
+        movieData = {
+          title: fullMovieData.title,
+          year: fullMovieData.year,
+          image: fullMovieData.image || image.value,
+          platform: platform.value || '',
+          synopsis: synopsis.value || fullMovieData.synopsis,
+        }
+
+        console.log('FULL MOVIE DATA:', fullMovieData)
+      }
+
+      moviesStore.addMovie(movieData)
+
       title.value = ''
       year.value = ''
       image.value = ''
       platform.value = ''
       synopsis.value = ''
+      selectedMovieId.value = null
       errors.value = { title: '', year: '', image: '', platform: '' }
     } catch (e) {
       console.error(e)
