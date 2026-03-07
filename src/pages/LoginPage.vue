@@ -221,10 +221,10 @@ async function submit() {
       </div>
 
       <p class="mt-8 text-center text-slate-500 text-xs px-4 leading-relaxed">
-        By creating an account, you agree to our
-        <a href="#" class="underline hover:text-slate-300 transition-colors">Terms of Service</a>
-        and
-        <a href="#" class="underline hover:text-slate-300 transition-colors">Privacy Policy</a>.
+        {{ t('policyPage.textTerms') }} 
+        <a href="#" class="underline hover:text-slate-300 transition-colors">{{ t('policyPage.textTermsLink') }}</a>
+        {{ t('policyPage.textPrivacy') }}
+        <a href="#" class="underline hover:text-slate-300 transition-colors">{{ t('policyPage.textPrivacyLink') }}</a>.
       </p>
     </main>
   </div>

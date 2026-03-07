@@ -119,5 +119,25 @@
       "descriptionPt2": "from your shelf? This action cannot be undone.",
       "btnCancel": "Cancel",
       "btnRemove": "Remove"
+    },
+    "policyPage": {
+      "textTerms": "By creating an account, you agree to our",
+      "textPrivacy": "and",
+      "textPrivacyLink": "Privacy Policy",
+      "textTermsLink": "Terms of Service",
+      "title": "Privacy Policy",
+      "description": "This is the privacy policy for the movie explorer app. It explains how we collect, use, and share your data when you use our app."
+    },
+    "moviePosterSearch": {
+      "title": "Search by movie title",
+      "placeholder": "e.g. Inception",
+      "searching": "Searching...",
+      "noImage": "No image",
+      "unknownYear": "Unknown year"
+    },
+    "confirmEmailPage": {
+      "title": "Confirm your email",
+      "description": "We sent you a confirmation link to your email. Click the link to activate your account, then come back here and enter your movies.",
+      "btnBackToLogin": "Back to Login"
     }
   }

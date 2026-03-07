@@ -120,5 +120,25 @@
     "descriptionPt2": "de tu colección? Esta acción no puede ser deshecha.",
     "btnCancel": "Cancelar",
     "btnRemove": "Eliminar"
+  },
+  "policyPage": {
+    "textTerms": "Al crear una cuenta, aceptas nuestros",
+    "textPrivacy": "y nuestras",
+    "textPrivacyLink": "Política de Privacidad",
+    "textTermsLink": "Términos de Servicio",
+    "title": "Política de Privacidad",
+    "description": "Esta es la política de privacidad para la aplicación de exploración de películas. Explica cómo recopilamos, utilizamos y compartimos tus datos cuando usas nuestra aplicación."
+  },
+  "moviePosterSearch": {
+    "title": "Buscar por título",
+    "placeholder": "e.g. Inception",
+    "searching": "Buscando...",
+    "noImage": "No hay imagen",
+    "unknownYear": "Año desconocido"
+  },
+  "confirmEmailPage": {
+    "title": "Confirmar tu email",
+    "description": "Te enviamos un enlace de confirmación a tu email. Haz clic en el enlace para activar tu cuenta, luego regresa aquí y agrega tus películas.",
+    "btnBackToLogin": "Volver a Iniciar sesión"
   }
 }
