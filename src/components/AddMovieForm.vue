@@ -5,10 +5,18 @@ import CustomSelect from '@/components/CustomSelect.vue';
 import SynopsisModal from '@/components/SynopsisModal.vue';
 import { useI18n } from 'vue-i18n';
 import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue';
+import MoviePosterSearch from '@/components/MoviePosterSearch.vue';
+import type { MoviePosterResult } from '@/lib/tmdb';
 
 const { t } = useI18n();
 
 type FormErrors = { title: string; year: string; image: string; platform?: string };
+
+const handleSelectMovie = (movie: MoviePosterResult) => {
+  title.value = movie.title
+  year.value = movie.year
+  image.value = movie.posterUrl || ''
+}
 
 const moviesStore = useMoviesStore();
 const title = ref('');
@@ -117,6 +125,8 @@ async function handleSubmit() {
             {{ t('form.description') }}
         </p>
         <form @submit.prevent="handleSubmit" class="space-y-5">
+            <MoviePosterSearch @select-movie="handleSelectMovie" />
+
             <div class="space-y-2">
                 <label for="title" class="text-xs font-bold uppercase tracking-wider text-slate-400">{{ t('form.movieTitle') }}</label>
                 <div class="relative">
@@ -149,6 +159,7 @@ async function handleSubmit() {
 
             <div class="space-y-2">
                 <label for="image" class="text-xs font-bold uppercase tracking-wider text-slate-400">{{ t('form.poster') }}</label>
+
                 <div class="relative">
                     <input
                         id="image"
