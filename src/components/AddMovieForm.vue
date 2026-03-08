@@ -138,7 +138,9 @@ async function handleSubmit() {
     <div class="glass p-8 rounded-xl sticky top-28 border border-black/10 dark:border-white/10">
         <div class="flex items-center gap-2">
             <h2 class="text-2xl font-bold mb-2">{{ t('form.title') }}</h2>
-            <span class="material-symbols-outlined text-sm text-blue-500 mb-2 hover:cursor-pointer hover:text-blue-600 transition-all duration-300">info</span>
+            <router-link to="/info">
+                <span class="material-symbols-outlined text-sm text-blue-500 mb-2 hover:cursor-pointer hover:text-blue-600 transition-all duration-300">info</span>
+            </router-link>
         </div>
 
         <p class="text-slate-500 dark:text-slate-400 text-sm mb-8">
