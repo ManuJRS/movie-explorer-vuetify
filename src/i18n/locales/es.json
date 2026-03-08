@@ -1,0 +1,186 @@
+{
+  "nav": {
+    "title": "MovieShelf",
+    "howToUse": "¿Cómo usar?",
+    "sigIn": "Iniciar sesión",
+    "home": "Inicio",
+    "language": "Idioma"
+  },
+  "form": {
+    "title": "Guardar una película",
+    "description": "Agrega tus películas favoritas a tu colección.",
+    "movieTitle": "Título",
+    "titlePlaceholder": "Ejemplo: Inception",
+    "poster": "URL del póster",
+    "posterPlaceholder": "https://image-url.com/poster.jpg",
+    "year": "Año de estreno",
+    "yearPlaceholder": "e.g. 2024",
+    "platform": "Plataforma",
+    "ChosePlatform": "Elegir una plataforma",
+    "synopsis": "Sinopsis",
+    "submit": "Guardar película",
+    "looksGood": "Perfecto!",
+    "warning": "Este campo es requerido",
+    "warningYear": "Ingrese un año válido",
+    "added": "Agregado"
+  },
+  "layoutPage": {
+    "moviesCounter": "Mi Colección"
+  },
+  "modalDetails": {
+    "botoClose": "Cerrar",
+    "directors": "Directores",
+    "cast": "Reparto",
+    "writers": "Escritores"
+  },
+  "modalModify": {
+    "title": "Editar",
+    "description": "Refina la presentación cinematográfica para tu colección.",
+    "btnSave": "Guardar",
+    "btnCancel": "Cancelar"
+  },
+  "modalSynopsis": {
+    "title": "Sinopsis",
+    "description": "Escribe la sinopsis de la película...",
+    "btnSave": "Guardar",
+    "btnCancel": "Cancelar"
+  },
+  "loginPage": {
+    "title": "Iniciar sesión",
+    "description": "Accede a tus películas guardadas.",
+    "email": "Email",
+    "emailPlaceholder": "ejemplo{'@'}ejemplo.com",
+    "password": "Contraseña",
+    "passwordPlaceholder": "********",
+    "btnLogin": "Iniciar sesión",
+    "btnForgotPassword": "¿Olvidaste tu contraseña?",
+    "textRegister": "No tienes una cuenta?",
+    "btnRegister": "Crear una cuenta",
+    "titleRegister": "Crear cuenta",
+    "descriptionRegister": "Crea tu cuenta para empezar a guardar películas.",
+    "username": "Nombre de usuario",
+    "usernamePlaceholder": "ejemplo",
+    "confirmPassword": "Confirmar contraseña",
+    "ReceiveEmail": "Recibir notificaciones por email",
+    "btnCreateAccount": "Crear cuenta",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "errors": {
+      "passwordsDoNotMatch": "Las contraseñas no coinciden.",
+      "invalidCredentials": "Email o contraseña incorrectos.",
+      "emailNotConfirmed": "Confirma tu correo antes de iniciar sesión.",
+      "userAlreadyRegistered": "Ya existe una cuenta con este correo.",
+      "weakPassword": "La contraseña debe tener al menos 6 caracteres.",
+      "invalidEmail": "Introduce una dirección de correo válida.",
+      "generic": "Algo salió mal. Inténtalo de nuevo."
+    }
+  },
+  "forgetPasswordPage": {
+    "title": "¿Olvidaste tu contraseña?",
+    "description": "Te enviaremos un enlace a tu correo para que puedas crear una nueva contraseña.",
+    "btnSendLink": "Enviar enlace",
+    "sending": "Enviando..."
+  },
+  "updatePasswordPage": {
+    "title": "Nueva contraseña",
+    "description": "Elige una contraseña segura para tu cuenta.",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "updatePassword": "Actualizar contraseña",
+    "loading": "Cargando..."
+  },    
+  "homePage": {
+    "title": "Guarda tus películas",
+    "description": "Mas vale una pálida tinta que una brillante memoria... pero una aplicación web es aún mejor.",
+    "btnDemo": "Demo"
+  },
+  "homeCards": {
+    "title": "¿Cómo funciona?",
+    "createAccount": "Crea tu cuenta",
+    "createAccountDescription": "Regístrate en la plataforma para tener tu propio espacio personal donde podrás guardar y organizar tus películas.",
+    "saveMovies": "Guarda tus películas",
+    "saveMoviesDescription": "Agrega fácilmente el título, año, plataforma de streaming, póster y una breve sinopsis de cada película que quieras registrar.",
+    "AccesYourCollection": "Accede a tu colección",
+    "AccesYourCollectionDescription": "Consulta y administra tu lista de películas en cualquier momento, manteniendo un registro organizado de lo que has visto o quieres ver."
+  },
+  "explicationProject": {
+    "title": "Hola, ¡me presento!",
+    "description": "Este proyecto es una práctica de desarrollo de software para mi portafolio personal. Si te resulta útil, siéntete en la libertad de usarlo. El stack utilizado es Vue 3, utilizando Pinia para la gestión del estado, Vue Router, i18n para la internacionalización, Tailwind CSS para los estilos y TypeScript. Para el backend y la autenticación de usuarios se utiliza Supabase, mientras que el despliegue y hosting de la aplicación se realiza en Netlify."
+  },
+  "settingsPage": {
+    "titlePreview": "Ajustes",
+    "Title": "Ajustes",
+    "description": "Gestiona tus ajustes de cuenta.",
+    "ProfileName": "Nombre de usuario",
+    "ProfileEmail": "Correo electrónico",
+    "Password": "Contraseña",
+    "language": "Idioma",
+    "UpdatePassword": "Actualizar contraseña",
+    "BackToMovies": "Volver a películas"
+  },
+  "removeMovieModal": {
+    "title": "¿Eliminar película?",
+    "descriptionPt1": "¿Estás seguro de querer eliminar",
+    "descriptionPt2": "de tu colección? Esta acción no puede ser deshecha.",
+    "btnCancel": "Cancelar",
+    "btnRemove": "Eliminar"
+  },
+  "policyPage": {
+    "textTerms": "Al crear una cuenta, aceptas nuestros",
+    "textPrivacy": "y nuestras",
+    "textPrivacyLink": "Política de Privacidad",
+    "textTermsLink": "Términos de Servicio",
+    "title": "Política de Privacidad",
+    "description": "Esta es la política de privacidad para la aplicación de exploración de películas. Explica cómo recopilamos, utilizamos y compartimos tus datos cuando usas nuestra aplicación."
+  },
+  "moviePosterSearch": {
+    "title": "Buscar por título",
+    "placeholder": "e.g. Inception",
+    "searching": "Buscando...",
+    "noImage": "No hay imagen",
+    "unknownYear": "Año desconocido"
+  },
+  "confirmEmailPage": {
+    "title": "Confirmar tu email",
+    "description": "Te enviamos un enlace de confirmación a tu email. Haz clic en el enlace para activar tu cuenta, luego regresa aquí y agrega tus películas.",
+    "btnBackToLogin": "Volver a Iniciar sesión"
+  },
+  "infoPage": {
+    "backToMovies": "Volver a películas",
+    "howToUse": "¿Cómo funciona?",
+    "howToUseDescription": "Solo tienes que buscar tu pelicula favorita, despues revisa que los datos son correctosm recuerda que editar todo el contenido, hasta tu poner el poster de tu preferencia",
+    "HoToEdit": "¿Cómo edito una película guardada?",
+    "HoToEditDescription": "Para editar una película, primero abre la tarjeta de la película. Luego haz clic en el icono de editar que se encuentra junto al título de la película. Esto te permitirá actualizar la información de la película."
+  },
+  "faqPage": {
+    "title": "Preguntas Frecuentes",
+    "question1": "¿Para qué sirve esta plataforma?",
+    "answer1": "Esta plataforma te ayuda a organizar y llevar un registro de las películas que has visto o que quieres ver. Puedes guardar detalles como el título, año de estreno, plataforma de streaming, póster y una sinopsis personal.",
+    "question2": "¿Puedo editar o eliminar películas de mi lista?",
+    "answer2": "Sí. Puedes actualizar o eliminar cualquier película que hayas guardado, lo que te permite mantener tu colección organizada y actualizada.",
+    "question3": "¿Cómo se agregan los pósters y datos de las películas?",
+    "answer3": "Puedes agregar películas manualmente o buscarlas utilizando una API de base de datos de películas que proporciona pósters e información básica.",
+    "question4": "¿Mis datos son privados?",
+    "answer4": "Sí. Tu lista de películas está asociada a tu cuenta y solo tú puedes ver o administrar las películas que guardes."
+  },
+  "insightsPage": {
+  "tag": "Panel de Analítica",
+  "title": "Estadísticas del Usuario",
+  "description": "Un análisis cinematográfico de tus hábitos de visualización. Tu recorrido a través del cine, curado y analizado.",
+  "totalMovies": "Películas vistas",
+  "totalWatchTime": "Tiempo de visualización",
+  "favoriteActors": "Actores favoritos",
+  "favoriteDirectors": "Directores favoritos",
+  "favoriteGenres": "Géneros favoritos",
+  "favoriteWriters": "Guionistas favoritos",
+  "ActorsTitle": "Actores principales",
+  "DirectorsTitle": "Directores principales",
+  "GenresTitle": "Géneros favoritos",
+  "WritersTitle": "Guionistas principales"
+  },
+  "cardVideo": {
+    "title": "Resumen detallado de tu película",
+    "description": "Obtén un resumen claro de cada película que guardes. Podrás ver rápidamente su título, año, póster y sinopsis para recordar de qué trata y por qué la agregaste.",
+    "title2": "Estadísticas de tus preferencias",
+    "description2": "Analiza tus hábitos de visualización. La aplicación genera estadísticas basadas en las películas que guardas."
+  }
+}

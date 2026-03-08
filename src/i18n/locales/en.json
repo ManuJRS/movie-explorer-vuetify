@@ -1,0 +1,185 @@
+{
+    "nav": {
+      "title": "MovieShelf",
+      "howToUse": "How to use?",
+      "sigIn": "Sign in",
+      "home": "Home",
+      "language": "Language"
+    },
+    "form": {
+      "title": "Add a movie",
+      "description": "Curate your collection by adding new cinematic masterpieces.",
+      "movieTitle": "Movie Title",
+      "titlePlaceholder": "e.g. Inception",
+      "poster": "Poster URL",
+      "posterPlaceholder": "https://image-url.com/poster.jpg",
+      "year": "Release Year",
+      "yearPlaceholder": "e.g. 2024",
+      "platform": "Platform",
+      "ChosePlatform": "Choose a platform",
+      "synopsis": "Synopsis",
+      "submit": "Add to shelf",
+      "looksGood": "Looks good!",
+      "warning": "This field is required",
+      "warningYear": "Enter a valid year",
+      "added": "Added"
+    },
+    "layoutPage": {
+      "moviesCounter": "My Collection"
+    },
+    "modalDetails": {
+      "botoClose": "Close",
+      "directors": "Directors",
+      "cast": "Cast",
+      "writers": "Writers"
+    },
+    "modalModify": {
+      "title": "Edit Movie Details",
+      "description": "Refine the cinematic presentation for your collection.",
+      "btnSave": "Save",
+      "btnCancel": "Cancel"
+    },
+    "modalSynopsis": {
+      "title": "Synopsis",
+      "description": "Write the movie synopsis...",
+      "btnSave": "Save",
+      "btnCancel": "Cancel"
+    },
+    "loginPage": {
+      "title": "Login",
+      "description": "Access your saved movies.",
+      "email": "Email",
+      "emailPlaceholder": "example{'@'}example.com",
+      "password": "Password",
+      "passwordPlaceholder": "********",
+      "btnLogin": "Login",
+      "btnForgotPassword": "Forgot password?",
+      "textRegister": "No account",
+      "btnRegister": "Create one",
+      "titleRegister": "Create account",
+      "descriptionRegister": "Create your account to start saving movies.",
+      "username": "Username",
+      "usernamePlaceholder": "example",
+      "confirmPassword": "Confirm password",
+      "ReceiveEmail": "Receive email notifications",
+      "btnCreateAccount": "Create account",
+      "alreadyHaveAccount": "Already have an account?",
+      "errors": {
+        "passwordsDoNotMatch": "Passwords do not match.",
+        "invalidCredentials": "Invalid email or password.",
+        "emailNotConfirmed": "Please confirm your email before signing in.",
+        "userAlreadyRegistered": "An account with this email already exists.",
+        "weakPassword": "Password must be at least 6 characters.",
+        "invalidEmail": "Please enter a valid email address.",
+        "generic": "Something went wrong. Please try again."
+      }
+    },
+    "forgetPasswordPage": {
+      "title": "Reset password?",
+      "description": "We will send you a link to your email so you can create a new password.",
+      "btnSendLink": "Send link",
+      "sending": "Sending..."
+    },
+    "updatePasswordPage": {
+      "title": "New password",
+      "description": "Choose a secure password for your account.",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "updatePassword": "Update password",
+      "loading": "Loading..."
+    },
+    "homePage": {
+      "title": "Save Your Movies",
+      "description": "The faintest ink is better than the best memory… but a web app is even better.",
+      "btnDemo": "Demo"
+    },
+    "homeCards": {
+      "title": "How does it work?",
+      "createAccount": "Create your account",
+      "createAccountDescription": "Sign up on the platform to get your own personal space where you can save and organize your movies.",
+      "saveMovies": "Save your movies",
+      "saveMoviesDescription": "Easily add the title, year, streaming platform, poster link, and a short synopsis for each movie you want to register.",
+      "AccesYourCollection": "Access your collection",
+      "AccesYourCollectionDescription": "View and manage your movie list anytime, keeping an organized record of what you have watched or want to watch."
+    },
+    "explicationProject": {
+      "title": "Hello, let me introduce myself!",
+      "description": "This project is a software development practice project created for my personal portfolio. If you find it useful, feel free to use it. The stack includes Vue 3, using Pinia for state management, Vue Router, i18n for internationalization, Tailwind CSS for styling, and TypeScript. For the backend and user authentication, the project uses Supabase, while deployment and hosting are handled through Netlify."
+    },
+    "settingsPage": {
+      "titlePreview": "Settings",
+      "Title": "settings",
+      "description": "Configure your account settings.",
+      "ProfileName": "Profile Name",
+      "ProfileEmail": "Profile Email",
+      "Password": "Password",
+      "UpdatePassword": "Update Password",
+      "BackToMovies": "Back to Movies"
+    },
+    "removeMovieModal": {
+      "title": "Remove Movie?",
+      "descriptionPt1": "Are you sure you want to remove",
+      "descriptionPt2": "from your shelf? This action cannot be undone.",
+      "btnCancel": "Cancel",
+      "btnRemove": "Remove"
+    },
+    "policyPage": {
+      "textTerms": "By creating an account, you agree to our",
+      "textPrivacy": "and",
+      "textPrivacyLink": "Privacy Policy",
+      "textTermsLink": "Terms of Service",
+      "title": "Privacy Policy",
+      "description": "This is the privacy policy for the movie explorer app. It explains how we collect, use, and share your data when you use our app."
+    },
+    "moviePosterSearch": {
+      "title": "Search by movie title",
+      "placeholder": "e.g. Inception",
+      "searching": "Searching...",
+      "noImage": "No image",
+      "unknownYear": "Unknown year"
+    },
+    "confirmEmailPage": {
+      "title": "Confirm your email",
+      "description": "We sent you a confirmation link to your email. Click the link to activate your account, then come back here and enter your movies.",
+      "btnBackToLogin": "Back to Login"
+    },
+    "infoPage": {
+      "backToMovies": "Back to Movies",
+      "howToUse": "How to use?",
+      "howToUseDescription": "Just search for your favorite movie, then check that the data is correct, remember to edit all the content, until you put the poster of your preference",
+      "HoToEdit": "How do I edit a saved movie?",
+      "HoToEditDescription": "To edit a movie, first open the movie card. Then click the edit icon located next to the movie title. This will allow you to update the movie information."
+    },
+    "faqPage": {
+      "title": "Frequently Asked Questions",
+      "question1": "What is this platform for?",
+      "answer1": "This platform helps you organize and keep track of the movies you’ve watched or want to watch. You can store details like the title, release year, streaming platform, poster, and a personal synopsis.",
+      "question2": "Can I edit or delete movies from my list?",
+      "answer2": "Yes. You can update or remove any movie you have saved, allowing you to keep your collection organized and up to date.",
+      "question3": "How are movie posters and details added?",
+      "answer3": "You can add movies manually or search for them using an integrated movie database API that provides posters and basic movie information.",
+      "question4": "Is my data private?",
+      "answer4": "Yes. Your movie list is associated with your account and only you can view or manage your saved movies."
+    },
+    "insightsPage": {
+      "tag": "Analytics Dashboard",
+      "title": "User Insights",
+      "description": "A cinematic breakdown of your viewing habits. Your journey through the lens, curated and analyzed.",
+      "totalMovies": "Movies Watched",
+      "totalWatchTime": "Watch Time",
+      "favoriteActors": "Favorite Actors",
+      "favoriteDirectors": "Favorite Directors",
+      "favoriteGenres": "Favorite Genres",
+      "favoriteWriters": "Favorite Writers",
+      "ActorsTitle": "Top Actors",
+      "DirectorsTitle": "Top Directors",
+      "GenresTitle": "Favorite Genres",
+      "WritersTitle": "Top Writers"
+    },
+    "cardVideo": {
+      "title": "Detailed Summary of Your Movie",
+      "description": "Get a clear overview of every movie you save. Quickly see the title, year, poster, and synopsis to remember what the movie is about and why you added it.",
+      "title2": "Statistics of Your Preferences",
+      "description2": "Analyze your viewing habits. The app generates statistics from the movies you save to highlight your viewing preferences."
+    }
+  }

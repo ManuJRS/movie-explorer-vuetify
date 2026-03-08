@@ -1,4 +1,7 @@
-<script setup>
+<script setup lang="ts">
+import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 defineProps({
     modelValue: {
         type: String,
@@ -16,6 +19,11 @@ function close() {
     emit('update:open', false);
 }
 
+function onInput(e: Event) {
+    const target = e.target as HTMLTextAreaElement;
+    emit('update:modelValue', target?.value ?? '');
+}
+
 function save() {
     emit('update:open', false);
 }
@@ -29,7 +37,7 @@ function save() {
             @click.self="close"
         >
             <div
-                class="relative w-full max-w-5xl bg-background-light dark:bg-background-dark/90 rounded-xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row"
+                class="relative w-full max-w-5xl bg-background-light dark:bg-background-dark/90 dark:border-slate-800 rounded-xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col md:flex-row"
             >
                 <button
                     type="button"
@@ -42,34 +50,48 @@ function save() {
                     <div class="mb-8"></div>
                     <div class="mb-8">
                         <h2 class="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.1em] mb-3">
-                            Synopsis
+                            {{ t('modalSynopsis.title') }}
                         </h2>
                         <textarea
                             :value="modelValue"
-                            @input="emit('update:modelValue', $event.target.value)"
+                            @input="onInput"
                             class="w-full min-h-[200px] p-4 rounded-lg bg-white/5 dark:bg-slate-800 border border-black/10 dark:border-white/10 text-slate-900 dark:text-white placeholder-slate-500 focus:ring-2 focus:ring-primary/20 focus:outline-none resize-y"
-                            placeholder="Write the movie synopsis..."
+                            :placeholder="t('modalSynopsis.description')"
                         ></textarea>
                     </div>
                     <div
                         class="mt-auto flex items-center justify-between pt-6 border-t border-slate-200 dark:border-slate-800"
                     >
                         <div></div>
-                        <div class="flex flex-wrap gap-2 sm:gap-3">
-                            <button
+                        <div class="flex items-center justify-end gap-2">
+                            <!-- <button
                                 type="button"
                                 @click="close"
                                 class="hover:cursor-pointer px-4 py-2 sm:px-6 sm:py-2.5 rounded-lg border border-primary text-primary hover:bg-primary/5 text-xs sm:text-sm font-bold transition-all"
                             >
-                                Cancel
-                            </button>
-                            <button
+                                {{ t('modalSynopsis.btnCancel') }}
+                            </button> -->
+                            <InteractiveHoverButton
+                              type="button"
+                              @click="close"
+                              class="hover:cursor-pointer rounded-lg text-white text-xs sm:text-sm font-bold transition-all"
+                              variant="cancel"
+                              :text="t('modalSynopsis.btnCancel')"
+                            />
+                            <InteractiveHoverButton
+                              type="button"
+                              @click="save"
+                              class="hover:cursor-pointer rounded-lg text-white font-bold transition-all"
+                              variant="save"
+                              :text="t('modalSynopsis.btnSave')"
+                            />
+                            <!-- <button
                                 type="button"
                                 @click="save"
                                 class="hover:cursor-pointer px-4 py-2 sm:px-6 sm:py-2.5 rounded-lg bg-blue-600 hover:shadow-[0_0_20px_rgba(17,82,212,0.4)] text-white text-xs sm:text-sm font-bold transition-all"
                             >
-                                Save Changes
-                            </button>
+                                {{ t('modalSynopsis.btnSave') }}
+                            </button> -->
                         </div>
                     </div>
                 </div>

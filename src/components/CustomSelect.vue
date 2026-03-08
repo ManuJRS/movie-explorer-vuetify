@@ -1,5 +1,7 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
+
+type OptionItem = string | { value: string; label: string };
 
 const props = defineProps({
     modelValue: {
@@ -11,16 +13,16 @@ const props = defineProps({
         default: 'Selecciona una opción'
     },
     options: {
-        type: Array,
+        type: Array as () => OptionItem[],
         required: true
     }
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits<{ 'update:modelValue': [value: string] }>();
 
 const isOpen = ref(false);
-const triggerRef = ref(null);
-const dropdownRef = ref(null);
+const triggerRef = ref<HTMLElement | null>(null);
+const dropdownRef = ref<HTMLElement | null>(null);
 const dropdownStyle = ref({ top: 0, left: 0, width: 0 });
 
 const selectedLabel = computed(() => {
@@ -53,22 +55,23 @@ watch(isOpen, async (open) => {
     }
 });
 
-function select(value) {
+function select(value: string) {
     emit('update:modelValue', value);
     isOpen.value = false;
 }
 
-function getOptionValue(option) {
+function getOptionValue(option: OptionItem): string {
     return typeof option === 'string' ? option : option.value;
 }
 
-function getOptionLabel(option) {
+function getOptionLabel(option: OptionItem): string {
     return typeof option === 'string' ? option : option.label;
 }
 
-function handleClickOutside(event) {
-    const inTrigger = triggerRef.value?.contains(event.target);
-    const inDropdown = dropdownRef.value?.contains(event.target);
+function handleClickOutside(event: MouseEvent) {
+    const target = event.target as Node | null;
+    const inTrigger = triggerRef.value?.contains(target);
+    const inDropdown = dropdownRef.value?.contains(target);
     if (!inTrigger && !inDropdown) {
         isOpen.value = false;
     }

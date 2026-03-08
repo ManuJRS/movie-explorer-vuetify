@@ -1,15 +1,8 @@
-<script setup>
-import Navbar from './components/Navbar.vue';
-import Home from './pages/Home.vue';
-import Footer from './components/Footer.vue';
+<script setup lang="ts">
+import Navbar from '@/components/Navbar.vue'
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col">
-    <Navbar />
-    <main class="flex-1">
-      <Home />
-    </main>
-    <Footer />
-  </div>
+  <Navbar />
+  <router-view />
 </template>
