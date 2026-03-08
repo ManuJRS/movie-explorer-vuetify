@@ -139,5 +139,23 @@
       "title": "Confirm your email",
       "description": "We sent you a confirmation link to your email. Click the link to activate your account, then come back here and enter your movies.",
       "btnBackToLogin": "Back to Login"
+    },
+    "infoPage": {
+      "backToMovies": "Back to Movies",
+      "howToUse": "How to use?",
+      "howToUseDescription": "Just search for your favorite movie, then check that the data is correct, remember to edit all the content, until you put the poster of your preference",
+      "HoToEdit": "How do I edit a saved movie?",
+      "HoToEditDescription": "To edit a movie, first open the movie card. Then click the edit icon located next to the movie title. This will allow you to update the movie information."
+    },
+    "faqPage": {
+      "title": "Frequently Asked Questions",
+      "question1": "What is this platform for?",
+      "answer1": "This platform helps you organize and keep track of the movies you’ve watched or want to watch. You can store details like the title, release year, streaming platform, poster, and a personal synopsis.",
+      "question2": "Can I edit or delete movies from my list?",
+      "answer2": "Yes. You can update or remove any movie you have saved, allowing you to keep your collection organized and up to date.",
+      "question3": "How are movie posters and details added?",
+      "answer3": "You can add movies manually or search for them using an integrated movie database API that provides posters and basic movie information.",
+      "question4": "Is my data private?",
+      "answer4": "Yes. Your movie list is associated with your account and only you can view or manage your saved movies."
     }
   }

@@ -140,5 +140,23 @@
     "title": "Confirmar tu email",
     "description": "Te enviamos un enlace de confirmación a tu email. Haz clic en el enlace para activar tu cuenta, luego regresa aquí y agrega tus películas.",
     "btnBackToLogin": "Volver a Iniciar sesión"
+  },
+  "infoPage": {
+    "backToMovies": "Volver a películas",
+    "howToUse": "¿Cómo funciona?",
+    "howToUseDescription": "Solo tienes que buscar tu pelicula favorita, despues revisa que los datos son correctosm recuerda que editar todo el contenido, hasta tu poner el poster de tu preferencia",
+    "HoToEdit": "¿Cómo edito una película guardada?",
+    "HoToEditDescription": "Para editar una película, primero abre la tarjeta de la película. Luego haz clic en el icono de editar que se encuentra junto al título de la película. Esto te permitirá actualizar la información de la película."
+  },
+  "faqPage": {
+    "title": "Preguntas Frecuentes",
+    "question1": "¿Para qué sirve esta plataforma?",
+    "answer1": "Esta plataforma te ayuda a organizar y llevar un registro de las películas que has visto o que quieres ver. Puedes guardar detalles como el título, año de estreno, plataforma de streaming, póster y una sinopsis personal.",
+    "question2": "¿Puedo editar o eliminar películas de mi lista?",
+    "answer2": "Sí. Puedes actualizar o eliminar cualquier película que hayas guardado, lo que te permite mantener tu colección organizada y actualizada.",
+    "question3": "¿Cómo se agregan los pósters y datos de las películas?",
+    "answer3": "Puedes agregar películas manualmente o buscarlas utilizando una API de base de datos de películas que proporciona pósters e información básica.",
+    "question4": "¿Mis datos son privados?",
+    "answer4": "Sí. Tu lista de películas está asociada a tu cuenta y solo tú puedes ver o administrar las películas que guardes."
   }
 }
