@@ -5,6 +5,7 @@ import HomeHero from '@/components/HomeHero.vue'
 import HomeMockup from '@/components/HomeMockup.vue'
 import HomeCards from '@/components/HomeCards.vue'
 import Footer from '@/components/Footer.vue'
+import CardVideo from '@/components/CardVideo.vue'
 import ExplicationProject from '@/components/ExplicationProject.vue'
 
 const authStore = useAuthStore()
@@ -17,6 +18,7 @@ const { user } = storeToRefs(authStore)
       <HomeHero />
       <HomeMockup />
       <HomeCards />
+      <CardVideo />
       <ExplicationProject />
       <Footer />
     </template>
