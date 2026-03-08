@@ -1,107 +1,161 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useMoviesStore } from '@/stores/movies';
-import CustomSelect from '@/components/CustomSelect.vue';
-import SynopsisModal from '@/components/SynopsisModal.vue';
+import { ref, computed } from 'vue'
+import { useMoviesStore } from '@/stores/movies'
+import CustomSelect from '@/components/CustomSelect.vue'
+import SynopsisModal from '@/components/SynopsisModal.vue'
+import { useI18n } from 'vue-i18n'
+import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue'
+import MoviePosterSearch from '@/components/MoviePosterSearch.vue'
+import type { Movie } from '@/stores/movies'
+import type { MoviePosterResult } from '@/lib/tmdb'
+import { getMovieFullData } from '@/lib/tmdb'
 
-type FormErrors = { title: string; year: string; image: string; platform?: string };
+const { t } = useI18n()
 
-const moviesStore = useMoviesStore();
-const title = ref('');
-const year = ref('');
-const image = ref('');
-const platform = ref('');
-const synopsis = ref('');
-const showSynopsisModal = ref(false);
-const errors = ref<FormErrors>({ title: '', year: '', image: '' });
+type FormErrors = { title: string; year: string; image: string; platform?: string }
+
+const moviesStore = useMoviesStore()
+
+const title = ref('')
+const year = ref('')
+const image = ref('')
+const platform = ref('')
+const synopsis = ref('')
+const showSynopsisModal = ref(false)
+const selectedMovieId = ref<number | null>(null)
+
+const errors = ref<FormErrors>({ title: '', year: '', image: '' })
+
+const handleSelectMovie = (movie: MoviePosterResult) => {
+  selectedMovieId.value = movie.id
+  title.value = movie.title
+  year.value = movie.year
+  image.value = movie.posterUrl || ''
+}
 
 function openSynopsisModal() {
-    showSynopsisModal.value = true;
+  showSynopsisModal.value = true
 }
 
 const platformOptions = [
-    { value: 'netflix', label: 'Netflix' },
-    { value: 'amazon', label: 'Amazon' },
-    { value: 'hbo', label: 'HBO' },
-    { value: 'disney', label: 'Disney' },
-    { value: 'hulu', label: 'Hulu' },
-    { value: 'paramount', label: 'Paramount' },
-    { value: 'apple', label: 'Apple' },
-    { value: 'vudu', label: 'Vudu' },
-    { value: 'google', label: 'Google' }
-];
+  { value: 'netflix', label: 'Netflix' },
+  { value: 'amazon', label: 'Amazon' },
+  { value: 'hbo', label: 'HBO' },
+  { value: 'disney', label: 'Disney' },
+  { value: 'hulu', label: 'Hulu' },
+  { value: 'paramount', label: 'Paramount' },
+  { value: 'apple', label: 'Apple' },
+  { value: 'vudu', label: 'Vudu' },
+  { value: 'google', label: 'Google' }
+]
 
 const required = (value: string | number): true | string =>
-    !!value || 'This field is required';
+  !!value || t('form.warning')
+
 const isYear = (value: string | number): true | string =>
-    (value && Number(value) > 1800 && Number(value) < 2100) || 'Ingrese un año válido';
+  (value && Number(value) > 1800 && Number(value) < 2100) || t('form.warningYear')
 
 const isFormValid = computed(() => {
-    const titleValid = !!title.value;
-    const yearValid = !!year.value && Number(year.value) > 1800 && Number(year.value) < 2100;
-    const imageValid = !!image.value;
-    return titleValid && yearValid && imageValid;
-});
+  const titleValid = !!title.value
+  const yearValid = !!year.value && Number(year.value) > 1800 && Number(year.value) < 2100
+  const imageValid = !!image.value
+  return titleValid && yearValid && imageValid
+})
 
 function validateField(field: 'title' | 'year' | 'image', value: string | number) {
-    if (field === 'title') {
-        const result = required(value);
-        errors.value.title = typeof result === 'string' ? result : '';
-    } else if (field === 'year') {
-        const result = required(value);
-        if (typeof result === 'string') {
-            errors.value.year = result;
-        } else {
-            const yearResult = isYear(value);
-            errors.value.year = typeof yearResult === 'string' ? yearResult : '';
-        }
-    } else if (field === 'image') {
-        const result = required(value);
-        errors.value.image = typeof result === 'string' ? result : '';
+  if (field === 'title') {
+    const result = required(value)
+    errors.value.title = typeof result === 'string' ? result : ''
+  } else if (field === 'year') {
+    const result = required(value)
+    if (typeof result === 'string') {
+      errors.value.year = result
+    } else {
+      const yearResult = isYear(value)
+      errors.value.year = typeof yearResult === 'string' ? yearResult : ''
     }
+  } else if (field === 'image') {
+    const result = required(value)
+    errors.value.image = typeof result === 'string' ? result : ''
+  }
 }
 
-function handleSubmit() {
-    const titleResult = required(title.value);
-    const yearResult = required(year.value);
-    const yearValidResult = isYear(year.value);
-    const imageResult = required(image.value);
+async function handleSubmit() {
+  const titleResult = required(title.value)
+  const yearResult = required(year.value)
+  const yearValidResult = isYear(year.value)
+  const imageResult = required(image.value)
 
-    errors.value = {
-        title: typeof titleResult === 'string' ? titleResult : '',
-        year: typeof yearResult === 'string' ? yearResult : (typeof yearValidResult === 'string' ? yearValidResult : ''),
-        image: typeof imageResult === 'string' ? imageResult : ''
-    };
+  errors.value = {
+    title: typeof titleResult === 'string' ? titleResult : '',
+    year:
+      typeof yearResult === 'string'
+        ? yearResult
+        : (typeof yearValidResult === 'string' ? yearValidResult : ''),
+    image: typeof imageResult === 'string' ? imageResult : '',
+  }
 
-    if (!errors.value.title && !errors.value.year && !errors.value.image) {
-        moviesStore.addMovie({
-            id: String(Date.now()),
-            title: title.value,
-            year: String(year.value),
-            image: image.value,
-            platform: platform.value || '',
-            synopsis: synopsis.value || ''
-        });
+  if (!errors.value.title && !errors.value.year && !errors.value.image) {
+    try {
+      let movieData: Omit<Movie, 'id'> = {
+        title: title.value.trim(),
+        year: year.value,
+        image: image.value,
+        platform: platform.value || '',
+        synopsis: synopsis.value || '',
+      }
 
-        title.value = '';
-        year.value = '';
-        image.value = '';
-        platform.value = '';
-        synopsis.value = '';
-        errors.value = { title: '', year: '', image: '', platform: '' };
+      if (selectedMovieId.value) {
+        const fullMovieData = await getMovieFullData(selectedMovieId.value)
+
+        movieData = {
+          title: fullMovieData.title,
+          year: fullMovieData.year,
+          image: fullMovieData.image || image.value,
+          platform: platform.value || '',
+          synopsis: synopsis.value || fullMovieData.synopsis,
+          genres: fullMovieData.genres,
+          runtime: fullMovieData.runtime,
+          rating: fullMovieData.rating,
+          directors: fullMovieData.directors,
+          mainActors: fullMovieData.mainActors,
+          writers: fullMovieData.writers,
+        }
+      }
+
+      moviesStore.addMovie(movieData)
+
+      title.value = ''
+      year.value = ''
+      image.value = ''
+      platform.value = ''
+      synopsis.value = ''
+      selectedMovieId.value = null
+      errors.value = { title: '', year: '', image: '', platform: '' }
+    } catch (e) {
+      console.error(e)
     }
+  }
 }
 </script>
 
 <template>
     <div class="glass p-8 rounded-xl sticky top-28 border border-black/10 dark:border-white/10">
-        <h2 class="text-2xl font-bold mb-2">Add a movie</h2>
+        <div class="flex items-center gap-2">
+            <h2 class="text-2xl font-bold mb-2">{{ t('form.title') }}</h2>
+            <router-link to="/info">
+                <span class="material-symbols-outlined text-sm text-blue-500 mb-2 hover:cursor-pointer hover:text-blue-600 transition-all duration-300">info</span>
+            </router-link>
+        </div>
+
         <p class="text-slate-500 dark:text-slate-400 text-sm mb-8">
-            Curate your collection by adding new cinematic masterpieces.
+            {{ t('form.description') }}
         </p>
         <form @submit.prevent="handleSubmit" class="space-y-5">
+            <MoviePosterSearch @select-movie="handleSelectMovie" />
+
             <div class="space-y-2">
-                <label for="title" class="text-xs font-bold uppercase tracking-wider text-slate-400">Movie Title</label>
+                <label for="title" class="text-xs font-bold uppercase tracking-wider text-slate-400">{{ t('form.movieTitle') }}</label>
                 <div class="relative">
                     <input
                         id="title"
@@ -115,7 +169,7 @@ function handleSubmit() {
                                     ? 'bg-white/5 border border-emerald-500/50 focus:ring-emerald-500/20'
                                     : 'bg-white/5 border border-black/10 dark:border-white/10 focus:border-primary focus:ring-primary/20'
                         ]"
-                        placeholder="e.g. Inception"
+                        :placeholder="t('form.titlePlaceholder')"
                         @blur="validateField('title', title)"
                     />
                     <span
@@ -126,12 +180,13 @@ function handleSubmit() {
                         {{ errors.title ? 'warning' : 'check_circle' }}
                     </span>
                 </div>
-                <p v-if="errors.title" class="text-xs text-rose-500 font-medium">{{ errors.title }}</p>
-                <p v-else-if="title" class="text-xs text-emerald-500 font-medium">Looks good!</p>
+                <p v-if="errors.title" class="text-xs text-rose-500 font-medium">{{ t('form.warning') }}</p>
+                <p v-else-if="title" class="text-xs text-emerald-500 font-medium">{{ t('form.looksGood') }}</p>
             </div>
 
             <div class="space-y-2">
-                <label for="image" class="text-xs font-bold uppercase tracking-wider text-slate-400">Poster URL</label>
+                <label for="image" class="text-xs font-bold uppercase tracking-wider text-slate-400">{{ t('form.poster') }}</label>
+
                 <div class="relative">
                     <input
                         id="image"
@@ -153,15 +208,16 @@ function handleSubmit() {
                         class="material-symbols-outlined absolute right-3 top-3"
                         :class="errors.image ? 'text-rose-500' : 'text-emerald-500'"
                     >
+                    
                         {{ errors.image ? 'warning' : 'check_circle' }}
                     </span>
                 </div>
                 <p v-if="errors.image" class="text-xs text-rose-500 font-medium">{{ errors.image }}</p>
-                <p v-else-if="image" class="text-xs text-emerald-500 font-medium">Looks good!</p>
+                <p v-else-if="image" class="text-xs text-emerald-500 font-medium">{{ t('form.looksGood') }}</p>
             </div>
 
             <div class="space-y-2">
-                <label for="year" class="text-xs font-bold uppercase tracking-wider text-slate-400">Release Year</label>
+                <label for="year" class="text-xs font-bold uppercase tracking-wider text-slate-400">{{ t('form.year') }}</label>
                 <div class="relative">
                     <input
                         id="year"
@@ -192,8 +248,9 @@ function handleSubmit() {
                     </span>
                 </div>
                 <p v-if="errors.year" class="text-xs text-rose-500 font-medium">{{ errors.year }}</p>
-                <p v-else-if="year && !errors.year" class="text-xs text-emerald-500 font-medium">Looks good!</p>
+                <p v-else-if="year && !errors.year" class="text-xs text-emerald-500 font-medium">{{ t('form.looksGood') }}</p>
             </div>
+
             <div class="pt-4 flex items-center justify-between">
                 <button
                     type="button"
@@ -201,31 +258,38 @@ function handleSubmit() {
                     class="hover:cursor-pointer flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
                 >
                     <span class="material-symbols-outlined text-base">edit</span>
-                    <span>Synopsis</span>
+                    <span>{{ t('form.synopsis') }}</span>
                 </button>
                 <span
                     v-if="synopsis"
                     class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-600 dark:text-emerald-400"
                 >
-                    Added
+                    {{ t('form.added') }}
                 </span>
             </div>
             <div class="space-y-2">
-                <label v-if="platform" class="text-xs font-bold uppercase tracking-wider text-slate-400">Platform</label>
+                <label v-if="platform" class="text-xs font-bold uppercase tracking-wider text-slate-400">{{ t('form.platform') }}</label>
                 <CustomSelect
                     v-model="platform"
-                    placeholder="Choose a platform"
+                    :placeholder="t('form.ChosePlatform')"
                     :options="platformOptions"
                 />
             </div>
-            <button
+            <!-- <button
                 type="submit"
                 :disabled="!isFormValid"
                 class="w-full mt-4 bg-blue-600 hover:shadow-[0_0_20px_rgba(17,82,212,0.4)] text-white font-bold py-4 rounded-lg transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
             >
-                <span>Add to shelf</span>
+                <span>{{ t('form.submit') }}</span>
                 <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            </button>
+            </button> -->
+            <InteractiveHoverButton
+              type="submit"
+              :disabled="!isFormValid"
+              class="w-full mt-4 text-white font-bold py-4 rounded-lg transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
+              variant="common"
+              :text="t('form.submit')"
+            />
         </form>
 
         <SynopsisModal v-model="synopsis" v-model:open="showSynopsisModal" />

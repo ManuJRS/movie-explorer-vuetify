@@ -1,4 +1,13 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+import { useMoviesStore } from '@/stores/movies';
+import type { Movie } from '@/stores/movies';
+import EditModal from '@/components/EditModal.vue';
+import { useI18n } from 'vue-i18n';
+import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue';
+
+const { t } = useI18n();
+
 defineProps({
     open: {
         type: Boolean,
@@ -18,6 +27,9 @@ defineProps({
 
 const emit = defineEmits(['update:open', 'save']);
 
+const moviesStore = useMoviesStore();
+const showEditModal = ref(false);
+
 function close() {
     emit('update:open', false);
 }
@@ -25,6 +37,15 @@ function close() {
 function save() {
     emit('save');
     emit('update:open', false);
+}
+
+function openEditModal() {
+    showEditModal.value = true;
+    emit('update:open', false);
+}
+
+async function onEditSave(updatedMovie: Movie) {
+    await moviesStore.updateMovie(updatedMovie);
 }
 </script>
 
@@ -36,7 +57,7 @@ function save() {
             @click.self="close"
         >
             <div
-                class="relative w-full max-w-5xl bg-background-light dark:bg-slate-900 rounded-t-xl md:rounded-xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:h-full max-h-[800px] md:mt-0 mt-18"
+                class="relative w-full max-w-5xl bg-background-light dark:bg-slate-900 rounded-t-xl md:rounded-xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:h-full max-h-[800px] md:mt-0 mt-18 mt-8 md:mt-20"
             >
                 <button
                     type="button"
@@ -58,6 +79,14 @@ function save() {
                 <div class="w-full md:w-3/5 p-8 overflow-y-auto flex flex-col rounded-b-xl md:rounded-none md:rounded-r-xl h-[200px] md:h-full px-4 md:px-8">
                     <div class="mb-2 md:mb-8">
                         <div class="flex items-center gap-3 mb-2 items-start md:items-center">
+                            <button
+                                type="button"
+                                @click="openEditModal"
+                                class="hover:cursor-pointer p-2 rounded-full hover:text-blue-500 transition-colors"
+                                aria-label="Editar película"
+                            >
+                                <span class="material-symbols-outlined">edit</span>
+                            </button>
                             <h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">
                                 {{ movie?.title || '—' }}
                             </h1>
@@ -75,11 +104,34 @@ function save() {
                             >
                                 {{ movie.platform }}
                             </span>
+                            <span
+                                v-for="genre in movie?.genres"
+                                :key="genre"
+                                class="px-3 py-1 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 text-xs font-medium"
+                            >
+                                {{ genre }}
+                            </span>
+                        </div>
+                        <div v-if="movie?.runtime || movie?.rating" class="flex flex-wrap gap-3 mt-2 text-sm text-slate-500 dark:text-slate-400">
+                            <span v-if="movie?.runtime">{{ movie.runtime }} min</span>
+                            <span v-if="movie?.rating">★ {{ movie.rating.toFixed(1) }}</span>
+                        </div>
+                        <div v-if="movie?.directors?.length" class="mt-2">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{{ t('modalDetails.directors') }}</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300">{{ movie.directors.join(', ') }}</p>
+                        </div>
+                        <div v-if="movie?.mainActors?.length" class="mt-2">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{{ t('modalDetails.cast') }}</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300">{{ movie.mainActors.join(', ') }}</p>
+                        </div>
+                        <div v-if="movie?.writers?.length" class="mt-2">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{{ t('modalDetails.writers') }}</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300">{{ movie.writers.join(', ') }}</p>
                         </div>
                     </div>
                     <div class="mb-8">
                         <h2 class="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.1em] mb-2 md:mb-3">
-                            Synopsis
+                            {{ t('form.synopsis') }}
                         </h2>
                         <p class="text-slate-700 dark:text-slate-300 leading-relaxed text-base overflow-y-auto max-h-48 md:max-h-full min-h-0">
                             {{ movie?.synopsis || 'No Synopsis added' }}
@@ -90,17 +142,31 @@ function save() {
                     >
                         <div></div>
                         <div class="flex flex-wrap gap-2 sm:gap-3">
-                            <button
+                            <!-- <button
                                 type="button"
                                 @click="close"
                                 class="hover:cursor-pointer px-4 py-2 sm:px-6 sm:py-2.5 rounded-lg border border-primary text-primary hover:bg-primary/5 text-xs sm:text-sm font-bold transition-all"
                             >
-                                Close
-                            </button>
+                                {{ t('modalDetails.botoClose') }}
+                            </button> -->
+
+                            <InteractiveHoverButton
+                              type="button"
+                              @click="close"
+                              class="hover:cursor-pointer rounded-lg text-white text-xs sm:text-sm font-bold transition-all"
+                              variant="cancel"
+                              :text="t('modalDetails.botoClose')"
+                            />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </Teleport>
+
+    <EditModal
+        v-model:open="showEditModal"
+        :movie="movie"
+        @save="onEditSave"
+    />
 </template>

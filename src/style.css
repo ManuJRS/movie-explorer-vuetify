@@ -20,6 +20,11 @@ body {
     background: rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(8px);
 }
+.glass-darker-hero {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    
+}
 }
 
 input[type='number']::-webkit-outer-spin-button,
