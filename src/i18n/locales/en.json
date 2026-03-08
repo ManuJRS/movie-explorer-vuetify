@@ -175,5 +175,11 @@
       "DirectorsTitle": "Top Directors",
       "GenresTitle": "Favorite Genres",
       "WritersTitle": "Top Writers"
+    },
+    "cardVideo": {
+      "title": "Detailed Summary of Your Movie",
+      "description": "Get a clear overview of every movie you save. Quickly see the title, year, poster, and synopsis to remember what the movie is about and why you added it.",
+      "title2": "Statistics of Your Preferences",
+      "description2": "Analyze your viewing habits. The app generates statistics from the movies you save to highlight your viewing preferences."
     }
   }

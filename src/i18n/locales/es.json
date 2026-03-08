@@ -176,5 +176,11 @@
   "DirectorsTitle": "Directores principales",
   "GenresTitle": "Géneros favoritos",
   "WritersTitle": "Guionistas principales"
-}
+  },
+  "cardVideo": {
+    "title": "Resumen detallado de tu película",
+    "description": "Obtén un resumen claro de cada película que guardes. Podrás ver rápidamente su título, año, póster y sinopsis para recordar de qué trata y por qué la agregaste.",
+    "title2": "Estadísticas de tus preferencias",
+    "description2": "Analiza tus hábitos de visualización. La aplicación genera estadísticas basadas en las películas que guardas."
+  }
 }
