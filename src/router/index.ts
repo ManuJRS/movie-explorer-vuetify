@@ -8,6 +8,7 @@ import ForgotPasswordView from '@/pages/ForgotPasswordView.vue'
 import UpdatePasswordView from '@/pages/UpdatePasswordView.vue'
 import UserSettings from '@/pages/UserSettings.vue' 
 import InfoPage from '@/pages/InfoPage.vue'
+import StadsPage from '@/pages/StadsPage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -20,6 +21,7 @@ const router = createRouter({
     { path: '/update-password', name: 'update-password', component: UpdatePasswordView },
     { path: '/user-settings', name: 'user-settings', component: UserSettings },
     { path: '/info', name: 'info', component: InfoPage },
+    { path: '/stads', name: 'stads', component: StadsPage },
   ],
 })
 
@@ -57,6 +59,10 @@ router.beforeEach(async (to) => {
   }
 
   if (to.name === 'info' && !auth.user) {
+    return { name: 'login' }
+  }
+
+  if (to.name === 'stads' && !auth.user) {
     return { name: 'login' }
   }
 
