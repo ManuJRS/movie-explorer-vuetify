@@ -7,6 +7,7 @@ import { useAuthStore } from '@/stores/auth'
 import ForgotPasswordView from '@/pages/ForgotPasswordView.vue'
 import UpdatePasswordView from '@/pages/UpdatePasswordView.vue'
 import UserSettings from '@/pages/UserSettings.vue' 
+import InfoPage from '@/pages/InfoPage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -18,6 +19,7 @@ const router = createRouter({
     { path: '/forgot-password', name: 'forgot-password', component: ForgotPasswordView },
     { path: '/update-password', name: 'update-password', component: UpdatePasswordView },
     { path: '/user-settings', name: 'user-settings', component: UserSettings },
+    { path: '/info', name: 'info', component: InfoPage },
   ],
 })
 
@@ -51,6 +53,10 @@ router.beforeEach(async (to) => {
   }
 
   if (to.name === 'user-settings' && !auth.user) {
+    return { name: 'login' }
+  }
+
+  if (to.name === 'info' && !auth.user) {
     return { name: 'login' }
   }
 
