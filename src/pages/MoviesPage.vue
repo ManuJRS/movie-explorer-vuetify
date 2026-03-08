@@ -66,9 +66,17 @@ onMounted(async () => {
                 >
                     <span class="material-symbols-outlined hover:text-white rounded-full">settings</span>
                     <span>{{ t('settingsPage.titlePreview') }}</span>
-                </router-link>
-                <MoviesCounter class="md:self-end self-start pl-4 md:pl-0" />
-
+          </router-link>
+          <router-link
+                    v-if="user"
+                    :to="{ name: 'stads' }"
+                    class=" text-sm rounded-lg hover:cursor-pointer dark:text-slate-400 text-white transition inline-flex hover:scale-105 transition-all duration-300 elf-start gap-2"
+                    aria-label="Ajustes"
+                >
+                    <span class="material-symbols-outlined hover:text-white rounded-full">bar_chart</span>
+                    <span>Stadistics</span>
+          </router-link>
+          <MoviesCounter class="md:self-end self-start pl-4 md:pl-0" />
         </div>
        
         <div class="flex flex-wrap">
