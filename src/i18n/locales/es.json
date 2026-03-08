@@ -28,7 +28,10 @@
     "moviesCounter": "Mi Colección"
   },
   "modalDetails": {
-    "botoClose": "Cerrar"
+    "botoClose": "Cerrar",
+    "directors": "Directores",
+    "cast": "Reparto",
+    "writers": "Escritores"
   },
   "modalModify": {
     "title": "Editar",
@@ -158,5 +161,20 @@
     "answer3": "Puedes agregar películas manualmente o buscarlas utilizando una API de base de datos de películas que proporciona pósters e información básica.",
     "question4": "¿Mis datos son privados?",
     "answer4": "Sí. Tu lista de películas está asociada a tu cuenta y solo tú puedes ver o administrar las películas que guardes."
-  }
+  },
+  "insightsPage": {
+  "tag": "Panel de Analítica",
+  "title": "Estadísticas del Usuario",
+  "description": "Un análisis cinematográfico de tus hábitos de visualización. Tu recorrido a través del cine, curado y analizado.",
+  "totalMovies": "Películas vistas",
+  "totalWatchTime": "Tiempo de visualización",
+  "favoriteActors": "Actores favoritos",
+  "favoriteDirectors": "Directores favoritos",
+  "favoriteGenres": "Géneros favoritos",
+  "favoriteWriters": "Guionistas favoritos",
+  "ActorsTitle": "Actores principales",
+  "DirectorsTitle": "Directores principales",
+  "GenresTitle": "Géneros favoritos",
+  "WritersTitle": "Guionistas principales"
+}
 }

@@ -104,6 +104,29 @@ async function onEditSave(updatedMovie: Movie) {
                             >
                                 {{ movie.platform }}
                             </span>
+                            <span
+                                v-for="genre in movie?.genres"
+                                :key="genre"
+                                class="px-3 py-1 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 text-xs font-medium"
+                            >
+                                {{ genre }}
+                            </span>
+                        </div>
+                        <div v-if="movie?.runtime || movie?.rating" class="flex flex-wrap gap-3 mt-2 text-sm text-slate-500 dark:text-slate-400">
+                            <span v-if="movie?.runtime">{{ movie.runtime }} min</span>
+                            <span v-if="movie?.rating">★ {{ movie.rating.toFixed(1) }}</span>
+                        </div>
+                        <div v-if="movie?.directors?.length" class="mt-2">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{{ t('modalDetails.directors') }}</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300">{{ movie.directors.join(', ') }}</p>
+                        </div>
+                        <div v-if="movie?.mainActors?.length" class="mt-2">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{{ t('modalDetails.cast') }}</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300">{{ movie.mainActors.join(', ') }}</p>
+                        </div>
+                        <div v-if="movie?.writers?.length" class="mt-2">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{{ t('modalDetails.writers') }}</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300">{{ movie.writers.join(', ') }}</p>
                         </div>
                     </div>
                     <div class="mb-8">

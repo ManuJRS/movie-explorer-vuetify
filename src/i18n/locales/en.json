@@ -28,7 +28,10 @@
       "moviesCounter": "My Collection"
     },
     "modalDetails": {
-      "botoClose": "Close"
+      "botoClose": "Close",
+      "directors": "Directors",
+      "cast": "Cast",
+      "writers": "Writers"
     },
     "modalModify": {
       "title": "Edit Movie Details",
@@ -157,5 +160,20 @@
       "answer3": "You can add movies manually or search for them using an integrated movie database API that provides posters and basic movie information.",
       "question4": "Is my data private?",
       "answer4": "Yes. Your movie list is associated with your account and only you can view or manage your saved movies."
+    },
+    "insightsPage": {
+      "tag": "Analytics Dashboard",
+      "title": "User Insights",
+      "description": "A cinematic breakdown of your viewing habits. Your journey through the lens, curated and analyzed.",
+      "totalMovies": "Movies Watched",
+      "totalWatchTime": "Watch Time",
+      "favoriteActors": "Favorite Actors",
+      "favoriteDirectors": "Favorite Directors",
+      "favoriteGenres": "Favorite Genres",
+      "favoriteWriters": "Favorite Writers",
+      "ActorsTitle": "Top Actors",
+      "DirectorsTitle": "Top Directors",
+      "GenresTitle": "Favorite Genres",
+      "WritersTitle": "Top Writers"
     }
   }

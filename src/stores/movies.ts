@@ -10,6 +10,13 @@ export interface Movie {
   image: string
   platform: string
   synopsis: string
+  /** Datos de TMDB cuando se añade desde búsqueda */
+  genres?: string[]
+  runtime?: number | null
+  rating?: number
+  directors?: string[]
+  mainActors?: string[]
+  writers?: string[]
 }
 
 type DbMovie = {
@@ -20,10 +27,12 @@ type DbMovie = {
   poster_url: string | null
   platform: string | null
   synopsis: string | null
+  tmdb_details?: { genres?: string[]; runtime?: number | null; rating?: number; directors?: string[]; mainActors?: string[]; writers?: string[] } | null
   created_at: string
 }
 
 function dbToUi(m: DbMovie): Movie {
+  const details = m.tmdb_details
   return {
     id: m.id,
     title: m.title,
@@ -31,6 +40,14 @@ function dbToUi(m: DbMovie): Movie {
     image: m.poster_url ?? '',
     platform: m.platform ?? '',
     synopsis: m.synopsis ?? '',
+    ...(details && {
+      genres: details.genres,
+      runtime: details.runtime,
+      rating: details.rating,
+      directors: details.directors,
+      mainActors: details.mainActors,
+      writers: details.writers,
+    }),
   }
 }
 
@@ -52,14 +69,7 @@ export const useMoviesStore = defineStore('movies', () => {
   
       if (error) throw error
   
-      movies.value = (data ?? []).map((m: any) => ({
-        id: m.id,
-        title: m.title,
-        year: String(m.year),
-        image: m.poster_url ?? '',
-        platform: m.platform ?? '',
-        synopsis: m.synopsis ?? '',
-      }))
+      movies.value = (data ?? []).map((m: DbMovie) => dbToUi(m))
     } catch (error) {
       console.error('Error loading movies:', error)
     }
@@ -68,23 +78,39 @@ export const useMoviesStore = defineStore('movies', () => {
   async function addMovie(movie: Omit<Movie, 'id'>) {
     const auth = useAuthStore()
     if (!auth.user) throw new Error('Not authenticated')
-        console.log('PAYLOAD MOVIE:', movie)
+
+    const tmdbDetails =
+      movie.genres || movie.runtime != null || movie.rating != null || movie.directors?.length || movie.mainActors?.length || movie.writers?.length
+        ? {
+            genres: movie.genres,
+            runtime: movie.runtime ?? null,
+            rating: movie.rating,
+            directors: movie.directors,
+            mainActors: movie.mainActors,
+            writers: movie.writers,
+          }
+        : null
+
     try {
+      const payload: Record<string, unknown> = {
+        user_id: auth.user.id,
+        title: movie.title.trim(),
+        year: Number(movie.year),
+        poster_url: movie.image?.trim() || null,
+        platform: movie.platform || null,
+        synopsis: movie.synopsis || null,
+      }
+      if (tmdbDetails) (payload as Record<string, unknown>).tmdb_details = tmdbDetails
+
       const { data, error } = await supabase
-        .from('movies') 
-        .insert({
-          user_id: auth.user.id,
-          title: movie.title.trim(),
-          year: Number(movie.year),
-          poster_url: movie.image?.trim() || null,
-          platform: movie.platform || null,
-          synopsis: movie.synopsis || null,
-        })
+        .from('movies')
+        .insert(payload)
         .select('*')
         .single()
-  
+
       if (error) throw error
-  
+
+      const details = (data as DbMovie).tmdb_details
       movies.value.unshift({
         id: data.id,
         title: data.title,
@@ -92,6 +118,14 @@ export const useMoviesStore = defineStore('movies', () => {
         image: data.poster_url ?? '',
         platform: data.platform ?? '',
         synopsis: data.synopsis ?? '',
+        ...(details && {
+          genres: details.genres,
+          runtime: details.runtime,
+          rating: details.rating,
+          directors: details.directors,
+          mainActors: details.mainActors,
+          writers: details.writers,
+        }),
       })
     } catch (error) {
       console.error('Error adding movie:', error)
@@ -101,16 +135,27 @@ export const useMoviesStore = defineStore('movies', () => {
 
   async function updateMovie(movie: Movie) {
     try {
-      const { error } = await supabase
-        .from('movies')
-        .update({
-          title: movie.title.trim(),
-          year: Number(movie.year),
-          poster_url: movie.image?.trim() || null,
-          platform: movie.platform || null,
-          synopsis: movie.synopsis || null,
-        })
-        .eq('id', movie.id)
+      const payload: Record<string, unknown> = {
+        title: movie.title.trim(),
+        year: Number(movie.year),
+        poster_url: movie.image?.trim() || null,
+        platform: movie.platform || null,
+        synopsis: movie.synopsis || null,
+      }
+      const tmdbDetails =
+        movie.genres?.length || movie.runtime != null || movie.rating != null || movie.directors?.length || movie.mainActors?.length || movie.writers?.length
+          ? {
+              genres: movie.genres,
+              runtime: movie.runtime ?? null,
+              rating: movie.rating,
+              directors: movie.directors,
+              mainActors: movie.mainActors,
+              writers: movie.writers,
+            }
+          : null
+      if (tmdbDetails) (payload as Record<string, unknown>).tmdb_details = tmdbDetails
+
+      const { error } = await supabase.from('movies').update(payload).eq('id', movie.id)
 
       if (error) throw error
 

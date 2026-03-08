@@ -6,6 +6,7 @@ import SynopsisModal from '@/components/SynopsisModal.vue'
 import { useI18n } from 'vue-i18n'
 import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue'
 import MoviePosterSearch from '@/components/MoviePosterSearch.vue'
+import type { Movie } from '@/stores/movies'
 import type { MoviePosterResult } from '@/lib/tmdb'
 import { getMovieFullData } from '@/lib/tmdb'
 
@@ -96,7 +97,7 @@ async function handleSubmit() {
 
   if (!errors.value.title && !errors.value.year && !errors.value.image) {
     try {
-      let movieData = {
+      let movieData: Omit<Movie, 'id'> = {
         title: title.value.trim(),
         year: year.value,
         image: image.value,
@@ -113,9 +114,13 @@ async function handleSubmit() {
           image: fullMovieData.image || image.value,
           platform: platform.value || '',
           synopsis: synopsis.value || fullMovieData.synopsis,
+          genres: fullMovieData.genres,
+          runtime: fullMovieData.runtime,
+          rating: fullMovieData.rating,
+          directors: fullMovieData.directors,
+          mainActors: fullMovieData.mainActors,
+          writers: fullMovieData.writers,
         }
-
-        console.log('FULL MOVIE DATA:', fullMovieData)
       }
 
       moviesStore.addMovie(movieData)

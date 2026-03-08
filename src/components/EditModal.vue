@@ -113,6 +113,7 @@ function onSubmit() {
 
   if (errors.value.title || errors.value.year || errors.value.image) return
 
+  const movie = props.movie as Movie
   const updated: Movie = {
     id,
     title: title.value.trim(),
@@ -120,6 +121,12 @@ function onSubmit() {
     image: image.value.trim(),
     platform: platform.value || '',
     synopsis: synopsis.value || '',
+    ...(movie?.genres && { genres: movie.genres }),
+    ...(movie?.runtime != null && { runtime: movie.runtime }),
+    ...(movie?.rating != null && { rating: movie.rating }),
+    ...(movie?.directors?.length && { directors: movie.directors }),
+    ...(movie?.mainActors?.length && { mainActors: movie.mainActors }),
+    ...(movie?.writers?.length && { writers: movie.writers }),
   }
   emit('save', updated)
   emit('update:open', false)
