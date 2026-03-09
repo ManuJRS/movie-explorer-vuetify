@@ -3,8 +3,10 @@
     "title": "MovieShelf",
     "howToUse": "¿Cómo usar?",
     "sigIn": "Iniciar sesión",
+    "signOut": "Cerrar sesión",
     "home": "Inicio",
-    "language": "Idioma"
+    "language": "Idioma",
+    "signIn": "Iniciar sesión"
   },
   "form": {
     "title": "Guardar una película",
@@ -23,6 +25,11 @@
     "warning": "Este campo es requerido",
     "warningYear": "Ingrese un año válido",
     "added": "Agregado"
+  },
+  "titleIntro": {
+    "heading": "Encuentra tu película favorita",
+    "description": "Usa el formulario para añadir tu película favorita o busca en tu colección.",
+    "searchPlaceholder": "Buscar por título..."
   },
   "layoutPage": {
     "moviesCounter": "Mi Colección"
