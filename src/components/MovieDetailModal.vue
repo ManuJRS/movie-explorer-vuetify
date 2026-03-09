@@ -1,29 +1,32 @@
-<script setup>
-defineProps({
-    open: {
-        type: Boolean,
-        default: false
-    },
-    movie: {
-        type: Object,
-        default: () => ({
-            title: '',
-            year: '',
-            image: '',
-            platform: '',
-            synopsis: ''
-        })
-    }
-});
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+import InteractiveHoverButton from './InteractiveHoverButton.vue';
 
-const emit = defineEmits(['update:open', 'save']);
+const { t } = useI18n();
+
+defineProps<{
+    open?: boolean
+    movie?: {
+        title?: string
+        year?: string | number
+        image?: string
+        platform?: string
+        synopsis?: string
+        genres?: string[]
+        runtime?: number | null
+        rating?: number
+        directors?: string[]
+        mainActors?: string[]
+        writers?: string[]
+    } | null
+}>();
+
+const emit = defineEmits<{
+    (e: 'update:open', value: boolean): void
+    (e: 'save'): void
+}>();
 
 function close() {
-    emit('update:open', false);
-}
-
-function save() {
-    emit('save');
     emit('update:open', false);
 }
 </script>
@@ -36,7 +39,7 @@ function save() {
             @click.self="close"
         >
             <div
-                class="relative w-full max-w-5xl bg-background-light dark:bg-slate-900 rounded-t-xl md:rounded-xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:h-full max-h-[800px] md:mt-0 mt-18"
+                class="relative w-full max-w-5xl bg-background-light dark:bg-slate-900 rounded-t-xl md:rounded-xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:max-h-[90vh] max-h-[85vh] md:mt-0 mt-8 md:mt-20"
             >
                 <button
                     type="button"
@@ -55,9 +58,17 @@ function save() {
                     ></div>
                     <div class="absolute bottom-6 left-6 right-6 z-20"></div>
                 </div>
-                <div class="w-full md:w-3/5 p-8 overflow-y-auto flex flex-col rounded-b-xl md:rounded-none md:rounded-r-xl h-[200px] md:h-full px-4 md:px-8">
+                <div class="w-full md:w-3/5 p-8 overflow-y-auto flex flex-col rounded-b-xl md:rounded-none md:rounded-r-xl min-h-[300px] md:min-h-0 flex-1 px-4 md:px-8">
                     <div class="mb-2 md:mb-8">
                         <div class="flex items-center gap-3 mb-2 items-start md:items-center">
+                            <!-- <button
+                                type="button"
+                                @click="openEditModal"
+                                class="hover:cursor-pointer p-2 rounded-full hover:text-blue-500 transition-colors"
+                                aria-label="Editar película"
+                            >
+                                <span class="material-symbols-outlined">edit</span>
+                            </button> -->
                             <h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">
                                 {{ movie?.title || '—' }}
                             </h1>
@@ -75,11 +86,34 @@ function save() {
                             >
                                 {{ movie.platform }}
                             </span>
+                            <span
+                                v-for="genre in (movie?.genres || [])"
+                                :key="genre"
+                                class="px-3 py-1 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 text-xs font-medium"
+                            >
+                                {{ genre }}
+                            </span>
+                        </div>
+                        <div v-if="movie?.runtime || movie?.rating" class="flex flex-wrap gap-3 mt-2 text-sm text-slate-500 dark:text-slate-400">
+                            <span v-if="movie?.runtime">{{ movie.runtime }} min</span>
+                            <span v-if="movie?.rating">★ {{ movie.rating.toFixed(1) }}</span>
+                        </div>
+                        <div v-if="movie?.directors?.length" class="mt-2">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{{ t('modalDetails.directors') }}</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300">{{ movie.directors.join(', ') }}</p>
+                        </div>
+                        <div v-if="movie?.mainActors?.length" class="mt-2">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{{ t('modalDetails.cast') }}</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300">{{ movie.mainActors.join(', ') }}</p>
+                        </div>
+                        <div v-if="movie?.writers?.length" class="mt-2">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{{ t('modalDetails.writers') }}</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300">{{ movie.writers.join(', ') }}</p>
                         </div>
                     </div>
                     <div class="mb-8">
                         <h2 class="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.1em] mb-2 md:mb-3">
-                            Synopsis
+                            {{ t('form.synopsis') }}
                         </h2>
                         <p class="text-slate-700 dark:text-slate-300 leading-relaxed text-base overflow-y-auto max-h-48 md:max-h-full min-h-0">
                             {{ movie?.synopsis || 'No Synopsis added' }}
@@ -95,7 +129,7 @@ function save() {
                                 @click="close"
                                 class="hover:cursor-pointer px-4 py-2 sm:px-6 sm:py-2.5 rounded-lg border border-primary text-primary hover:bg-primary/5 text-xs sm:text-sm font-bold transition-all"
                             >
-                                Close
+                                {{ t('modalDetails.botoClose') }}
                             </button>
                         </div>
                     </div>
@@ -103,4 +137,10 @@ function save() {
             </div>
         </div>
     </Teleport>
+
+        <!-- <EditModal
+            v-model:open="showEditModal"
+            :movie="movie"
+            @save="onEditSave"
+        /> -->
 </template>
