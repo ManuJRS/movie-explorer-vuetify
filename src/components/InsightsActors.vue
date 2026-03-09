@@ -11,7 +11,7 @@ function avatarUrl(name: string): string {
 </script>
 
 <template>
-        <section class="space-y-6 pt-16">
+        <section class="space-y-6 pt-8">
             <div class="flex items-center justify-between">
                 <h3 class="text-xl font-bold flex items-center gap-2">
                     <span class="material-symbols-outlined text-primary">group</span>

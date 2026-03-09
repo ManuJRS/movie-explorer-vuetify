@@ -1,9 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { useI18n } from 'vue-i18n'
 import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue'
+import PageLoader from '@/components/ui/PageLoader.vue'
 
+const isLoading = ref(true)
+
+onMounted(async () => {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 1800))
+  } finally {
+    isLoading.value = false
+  }
+})
 const email = ref('')
 const loading = ref(false)
 const message = ref('')
@@ -33,6 +43,7 @@ const handleSendRecovery = async () => {
 </script>
 
 <template>
+  <PageLoader v-if="isLoading" />
   <div
     class="bg-background-dark text-slate-100 min-h-screen flex flex-col items-center justify-center relative overflow-hidden p-6"
   >

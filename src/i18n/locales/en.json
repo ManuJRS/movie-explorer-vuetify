@@ -3,8 +3,10 @@
       "title": "MovieShelf",
       "howToUse": "How to use?",
       "sigIn": "Sign in",
+      "signOut": "Sign out",
       "home": "Home",
-      "language": "Language"
+      "language": "Language",
+      "signIn": "Sign in"
     },
     "form": {
       "title": "Add a movie",
@@ -23,6 +25,11 @@
       "warning": "This field is required",
       "warningYear": "Enter a valid year",
       "added": "Added"
+    },
+    "titleIntro": {
+      "heading": "Find your favorite movie",
+      "description": "Use the form to add your favorite movie, or search your collection below.",
+      "searchPlaceholder": "Search by title..."
     },
     "layoutPage": {
       "moviesCounter": "My Collection"

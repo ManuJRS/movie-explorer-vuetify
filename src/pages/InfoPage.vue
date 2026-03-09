@@ -1,8 +1,19 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue'
 import InfoVideoComponent from '@/components/InfoVideoComponent.vue';
 import AccordionFAQS from '@/components/AccordionFAQS.vue';
 import { useI18n } from 'vue-i18n'
+import PageLoader from '@/components/ui/PageLoader.vue'
 const { t } = useI18n()
+const isLoading = ref(true)
+
+onMounted(async () => {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 1800))
+  } finally {
+    isLoading.value = false
+  }
+})
 const faqItems = [
   {
     question: t('faqPage.question1'),
@@ -28,6 +39,7 @@ const faqItems = [
 </script>
 
 <template>
+  <PageLoader v-if="isLoading" />
     <main class="md:py-24 py-24">
         <div class="max-w-7xl mx-auto px-6">
             <router-link to="/" class="inline-flex items-center gap-2">

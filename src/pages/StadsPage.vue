@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted, watch, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import InsightsIntro from '@/components/InsightsIntro.vue'
 import InsightsActors from '@/components/InsightsActors.vue'
@@ -8,7 +8,17 @@ import InsightsGenere from '@/components/InsightsGenere.vue'
 import InsightsWriters from '@/components/InsightsWriters.vue'
 import { useMoviesStore } from '@/stores/movies'
 import { useAuthStore } from '@/stores/auth'
+import PageLoader from '@/components/ui/PageLoader.vue'
 
+const isLoading = ref(true)
+
+onMounted(async () => {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 1800))
+  } finally {
+    isLoading.value = false
+  }
+})
 const moviesStore = useMoviesStore()
 const authStore = useAuthStore()
 const { movies } = storeToRefs(moviesStore)
@@ -108,7 +118,8 @@ const topWriters = computed(() => {
 </script>
 
 <template>
-    <main class="mt-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main class="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <PageLoader v-if="isLoading" />
         <InsightsIntro :total-movies="totalMovies" :total-watch-time="totalWatchTimeFormatted" />
         <InsightsActors :actors="topActors" />
         <InsightsDirectors :directors="topDirectors" />
