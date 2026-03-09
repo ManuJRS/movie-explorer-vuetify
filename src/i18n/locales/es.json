@@ -1,0 +1,36 @@
+{
+    "nav": {
+      "title": "MovieShelf"
+    },
+    "modalDetails": {
+      "directors": "Directores",
+      "cast": "Reparto",
+      "writers": "Guionistas",
+      "botoClose": "Cerrar"
+    },
+    "addMovieForm": {
+      "title": "Guarda tus películas",
+      "description": "Cura tu colección agregando nuevas obras maestras cinematográficas.",
+      "movieTitle": "Título de la película",
+      "posterLabel": "Enlace del póster",
+      "posterPlaceholder": "URL del póster",
+      "poster": "Enlace del póster",
+      "year": "Año",
+      "platform": "Selecciona una plataforma",
+      "synopsis": "Sinopsis",
+      "submit": "Guardar película",
+      "movieTitleLabel": "Título de la película",
+      "posterLabelSearch": "Busca una película",
+      "movieTitleplaceholder": "Ejemplo: Inception",
+      "posterPlaceholderSearch": "buscano...",
+      "yearLabel": "Año de estreno"
+    },
+    "errors": {
+      "required": "Este campo es requerido",
+      "invalidYear": "Año inválido"
+    },
+    "warningAdviser": {
+      "title": "Aviso de Demo (v1.0.3)",
+      "description": "Esta es una versión demo. Los datos se almacenan solo en tu sesión, por lo que si borras la caché se eliminarán las películas guardadas. Las cuentas de usuario para conservar tus datos, la edición de películas guardadas y el análisis de tus preferencias según las películas que agregues están disponibles gratis en la versión 2.0.4 después de registrarte."
+    }
+  }

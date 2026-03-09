@@ -1,0 +1,36 @@
+{
+    "nav": {
+      "title": "MovieShelf"
+    },
+    "modalDetails": {
+      "directors": "Directors",
+      "cast": "Cast",
+      "writers": "Writers",
+      "botoClose": "Close"
+    },
+    "addMovieForm": {
+      "title": "Save your movies",
+      "description": "Curate your collection by adding new cinematic masterpieces.",
+      "movieTitle": "Movie title",
+      "posterLabel": "Poster link",
+      "posterPlaceholder": "URL of the poster",
+      "poster": "Poster link",
+      "year": "Year",
+      "platform": "Select a platform",
+      "synopsis": "Synopsis",
+      "submit": "Save movie",
+      "movieTitleLabel": "Movie title",
+      "movieTitleplaceholder": "e.g. Inception",
+      "posterLabelSearch": "Search for a movie",
+      "posterPlaceholderSearch": "searching...",
+      "yearLabel": "Release year"
+    },
+    "errors": {
+      "required": "This field is required",
+      "invalidYear": "Invalid year"
+    },
+    "warningAdviser": {
+        "title": "Demo Notice (v1.0.3)",
+        "description": "This is a demo version. Data is stored only in your session, so clearing your cache will erase saved movies. Multi-language support, user accounts to keep your data, editing saved movies, and analysis of your preferences based on the movies you add are available for free in version 2.0.4 after registration."
+      }
+  }
