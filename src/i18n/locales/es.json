@@ -4,9 +4,13 @@
     "howToUse": "¿Cómo usar?",
     "sigIn": "Iniciar sesión",
     "signOut": "Cerrar sesión",
+    "statistics": "Estadísticas",
+    "settings": "Configuración",
     "home": "Inicio",
     "language": "Idioma",
-    "signIn": "Iniciar sesión"
+    "signIn": "Iniciar sesión",
+    "recommendations": "Recomendaciones",
+    "watchList": "Ver mas tarde"
   },
   "form": {
     "title": "Guardar una película",
@@ -189,5 +193,25 @@
     "description": "Obtén un resumen claro de cada película que guardes. Podrás ver rápidamente su título, año, póster y sinopsis para recordar de qué trata y por qué la agregaste.",
     "title2": "Estadísticas de tus preferencias",
     "description2": "Analiza tus hábitos de visualización. La aplicación genera estadísticas basadas en las películas que guardas."
+  },
+  "watchlist": {
+    "saved": "Guardada",
+    "title": "Pendientes para ver",
+    "description": "Aquí puedes ver las películas que has marcado como pendientes para ver.",
+    "empty": "No tienes películas en tu lista de pendientes. Guarda películas desde las recomendaciones.",
+    "remove": "Quitar"
+  },
+  "recommendations": {
+    "title": "Recomendadas para ti",
+    "subtitle": "Basado en tus películas guardadas y tus preferencias, aquí tienes 12 películas que podrían gustarte.",
+    "emptyMinimum": "Agrega al menos 3 películas para poder recomendarte títulos según tus preferencias.",
+    "noResults": "No pudimos encontrar recomendaciones por ahora. Intenta agregando más películas.",
+    "noOverview": "No hay descripción disponible.",
+    "saveButton": "Guardar película",
+    "seeded": "En colección",
+    "seeMore": "Ver más",
+    "seeLess": "Ver menos",
+    "addToShell": "Guardar",
+    "addToWatchlist": "ver después"
   }
 }

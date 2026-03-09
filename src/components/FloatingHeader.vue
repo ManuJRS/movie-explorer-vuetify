@@ -40,8 +40,10 @@ const props = withDefaults(defineProps<Props>(), {
   signInText: 'Sign In',
   getStartedText: 'Get Started',
   links: () => [
-    { label: 'Stats', href: '/stads' },
-    { label: 'Settings', href: '/user-settings' },
+    { label: 'nav.statistics', href: '/stads' },
+    { label: 'nav.settings', href: '/user-settings' },
+    { label: 'nav.recommendations', href: '/recommendations' },
+    { label: 'nav.watchList', href: '/watch-list' },
   ],
 })
 
@@ -95,7 +97,7 @@ async function logout() {
           :to="link.href"
           class="inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/5"
         >
-          {{ link.label }}
+          {{ t(link.label) }}
         </router-link>
       </div>
 
@@ -117,15 +119,15 @@ async function logout() {
             <span class="material-symbols-outlined text-lg">logout</span>
             {{ t('nav.signOut') }}
           </button>
-          <button
-            v-else
+        </div>
+        <button
+            v-if="!user"
             type="button"
             class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md border border-black/10 bg-white px-4 text-sm font-medium transition-colors hover:bg-black/5 dark:border-white/10 dark:bg-slate-950 dark:hover:bg-white/5"
             @click="router.push('/login'); closeMenu();"
           >
             {{ t('nav.signIn') }}
           </button>
-        </div>
         <button
           v-if="user"
           type="button"
@@ -205,7 +207,7 @@ async function logout() {
             class="inline-flex h-10 items-center justify-start rounded-md px-3 text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/5"
             @click="closeMenu"
           >
-            {{ link.label }}
+            {{ t(link.label) }}
           </router-link>
         </div>
 

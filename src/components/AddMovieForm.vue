@@ -127,6 +127,7 @@ async function handleSubmit() {
         const fullMovieData = await getMovieFullData(selectedMovieId.value)
 
         movieData = {
+          tmdbId: selectedMovieId.value,
           title: fullMovieData.title,
           year: fullMovieData.year,
           image: fullMovieData.image || image.value,
