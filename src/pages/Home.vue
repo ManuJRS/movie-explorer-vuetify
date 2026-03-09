@@ -2,12 +2,14 @@
 import { ref } from 'vue';
 import AddMovieForm from '../components/AddMovieForm.vue';
 import MovieCard from '../components/MovieCard.vue';
+import MovieCardPlaceholder from '../components/MovieCardPlaceholder.vue';
 import MovieDetailModal from '../components/MovieDetailModal.vue';
 import { useMoviesStore } from '../stores/movies';
 import WarningAdviser from '../components/WarningAdviser.vue';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
-
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 const moviesStore = useMoviesStore();
 const { movies } = storeToRefs(moviesStore);
 
@@ -31,12 +33,11 @@ onMounted(() => {
                 <AddMovieForm />
             </div>
             <div class="flex-1 min-w-0">
-                <WarningAdviser variant="info" title="Demo Notice (v1.0.3)">
-                    <p>This is a demo version. Data is stored only in your session, so clearing your cache will erase saved movies. The app is currently available in English only, and saved movies cannot be edited.</p>
-                    <br>
-                    <p>All these features—multi-language support, user accounts to keep your data, and editing saved movies—are available for free in version 2.0.4 after registration.</p>
+                <WarningAdviser variant="info" :title="t('warningAdviser.title')">
+                    <p>{{ t('warningAdviser.description') }}</p>
                 </WarningAdviser>
                 <div class="flex flex-wrap">
+                    <MovieCardPlaceholder v-if="!moviesStore.movies.length" />
                     <MovieCard
                         v-for="movie in moviesStore.movies"
                         :key="movie.id"
