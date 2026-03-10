@@ -30,12 +30,12 @@ function confirmDelete() {
 </script>
 
 <template>
-    <div class="w-full min-w-0 p-2 sm:w-1/2 lg:w-1/3">
+    <div class="w-1/2 min-w-0 max-w-[280px] p-2 sm:w-1/2 lg:w-1/2 md:w-full md:min-w-0 md:p-2 sm:w-1/2 lg:w-1/3">
         <div
             class="group relative glass rounded-xl overflow-hidden hover:scale-[1.02] transition-all duration-300 border border-black/10 dark:border-white/10"
         >
             <div
-                class="relative h-[240px] sm:h-[320px] lg:h-[400px] overflow-hidden cursor-pointer"
+                class="relative h-[200px] sm:h-[260px] lg:h-[320px] overflow-hidden cursor-pointer"
                 @click="openDetail"
             >
                 <span v-if="movie.platform" class="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 inline-flex items-center px-2 py-0.5 sm:px-3 sm:py-1 text-[10px] sm:text-xs font-medium bg-black/60 text-white rounded-full tracking-wider">
@@ -58,21 +58,21 @@ function confirmDelete() {
                     </button>
                 </div>
             </div>
-            <div class="p-3 sm:p-4 flex items-center justify-between gap-2">
+            <div class="p-2.5 sm:p-3 flex items-center justify-between gap-2">
                 <div class="overflow-hidden min-w-0 flex-1">
                     <Tooltip :text="movie.title">
-                        <h3 class="font-bold text-base sm:text-lg truncate pr-2 text-slate-900 dark:text-white">
+                        <h3 class="font-bold text-sm sm:text-base truncate pr-2 text-slate-900 dark:text-white">
                             {{ movie.title }}
                         </h3>
                     </Tooltip>
-                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">{{ movie.year }}</p>
+                    <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">{{ movie.year }}</p>
                 </div>
                 <button
                     type="button"
                     @click="openDeleteModal"
-                    class="flex-shrink-0 p-1.5 sm:p-2 text-slate-400 hover:text-rose-500 rounded-lg transition-all hover:cursor-pointer"
+                    class="flex-shrink-0 p-1 sm:p-1.5 text-slate-400 hover:text-rose-500 rounded-lg transition-all hover:cursor-pointer"
                 >
-                    <span class="material-symbols-outlined">delete</span>
+                    <span class="material-symbols-outlined text-lg">delete</span>
                 </button>
             </div>
         </div>

@@ -10,6 +10,8 @@ export interface Movie {
   image: string
   platform: string
   synopsis: string
+  /** ID de TMDB cuando se añade desde búsqueda (para recomendaciones) */
+  tmdbId?: number
   /** Datos de TMDB cuando se añade desde búsqueda */
   genres?: string[]
   runtime?: number | null
@@ -27,7 +29,7 @@ type DbMovie = {
   poster_url: string | null
   platform: string | null
   synopsis: string | null
-  tmdb_details?: { genres?: string[]; runtime?: number | null; rating?: number; directors?: string[]; mainActors?: string[]; writers?: string[] } | null
+  tmdb_details?: { tmdb_id?: number; genres?: string[]; runtime?: number | null; rating?: number; directors?: string[]; mainActors?: string[]; writers?: string[] } | null
   created_at: string
 }
 
@@ -40,6 +42,7 @@ function dbToUi(m: DbMovie): Movie {
     image: m.poster_url ?? '',
     platform: m.platform ?? '',
     synopsis: m.synopsis ?? '',
+    ...(details && { tmdbId: details.tmdb_id }),
     ...(details && {
       genres: details.genres,
       runtime: details.runtime,
@@ -79,17 +82,26 @@ export const useMoviesStore = defineStore('movies', () => {
     const auth = useAuthStore()
     if (!auth.user) throw new Error('Not authenticated')
 
-    const tmdbDetails =
-      movie.genres || movie.runtime != null || movie.rating != null || movie.directors?.length || movie.mainActors?.length || movie.writers?.length
-        ? {
-            genres: movie.genres,
-            runtime: movie.runtime ?? null,
-            rating: movie.rating,
-            directors: movie.directors,
-            mainActors: movie.mainActors,
-            writers: movie.writers,
-          }
-        : null
+    const hasTmdbData =
+      movie.tmdbId != null ||
+      movie.genres?.length ||
+      movie.runtime != null ||
+      movie.rating != null ||
+      movie.directors?.length ||
+      movie.mainActors?.length ||
+      movie.writers?.length
+
+    const tmdbDetails = hasTmdbData
+      ? {
+          tmdb_id: movie.tmdbId ?? undefined,
+          genres: movie.genres,
+          runtime: movie.runtime ?? null,
+          rating: movie.rating,
+          directors: movie.directors,
+          mainActors: movie.mainActors,
+          writers: movie.writers,
+        }
+      : null
 
     try {
       const payload: Record<string, unknown> = {
@@ -118,6 +130,7 @@ export const useMoviesStore = defineStore('movies', () => {
         image: data.poster_url ?? '',
         platform: data.platform ?? '',
         synopsis: data.synopsis ?? '',
+        ...(details && { tmdbId: details.tmdb_id }),
         ...(details && {
           genres: details.genres,
           runtime: details.runtime,
@@ -142,17 +155,26 @@ export const useMoviesStore = defineStore('movies', () => {
         platform: movie.platform || null,
         synopsis: movie.synopsis || null,
       }
-      const tmdbDetails =
-        movie.genres?.length || movie.runtime != null || movie.rating != null || movie.directors?.length || movie.mainActors?.length || movie.writers?.length
-          ? {
-              genres: movie.genres,
+      const hasTmdbData =
+        movie.tmdbId != null ||
+        movie.genres?.length ||
+        movie.runtime != null ||
+        movie.rating != null ||
+        movie.directors?.length ||
+        movie.mainActors?.length ||
+        movie.writers?.length
+
+      const tmdbDetails = hasTmdbData
+        ? {
+            tmdb_id: movie.tmdbId ?? undefined,
+            genres: movie.genres,
               runtime: movie.runtime ?? null,
               rating: movie.rating,
               directors: movie.directors,
               mainActors: movie.mainActors,
-              writers: movie.writers,
-            }
-          : null
+            writers: movie.writers,
+          }
+        : null
       if (tmdbDetails) (payload as Record<string, unknown>).tmdb_details = tmdbDetails
 
       const { error } = await supabase.from('movies').update(payload).eq('id', movie.id)

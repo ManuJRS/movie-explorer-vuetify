@@ -9,6 +9,8 @@ import UpdatePasswordView from '@/pages/UpdatePasswordView.vue'
 import UserSettings from '@/pages/UserSettings.vue' 
 import InfoPage from '@/pages/InfoPage.vue'
 import StadsPage from '@/pages/StadsPage.vue'
+import RecommendationsPage from '@/pages/RecommendationsPage.vue'
+import WatchList from '@/pages/WatchList.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -22,6 +24,8 @@ const router = createRouter({
     { path: '/user-settings', name: 'user-settings', component: UserSettings },
     { path: '/info', name: 'info', component: InfoPage },
     { path: '/stads', name: 'stads', component: StadsPage },
+    { path: '/recommendations', name: 'recommendations', component: RecommendationsPage },
+    { path: '/watch-list', name: 'watch-list', component: WatchList },
   ],
 })
 
@@ -63,6 +67,14 @@ router.beforeEach(async (to) => {
   }
 
   if (to.name === 'stads' && !auth.user) {
+    return { name: 'login' }
+  }
+
+  if (to.name === 'recommendations' && !auth.user) {
+    return { name: 'login' }
+  }
+
+  if (to.name === 'watch-list' && !auth.user) {
     return { name: 'login' }
   }
 

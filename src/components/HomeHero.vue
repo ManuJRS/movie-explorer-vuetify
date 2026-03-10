@@ -5,13 +5,17 @@ import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue'
 </script>
 
 <template>
-  <header class="relative md:min-h-screen min-h-[60vh] flex items-center justify-center pt-20 overflow-hidden">
+  <header class="relative min-h-[60vh] flex items-center justify-center pt-20 overflow-hidden">
     <div class="absolute inset-0 z-0">
-      <img
-        alt="Cinematic background"
+      <video
+        autoplay
+        muted
+        loop  
         class="w-full h-full object-cover object-bottom opacity-60 scale-105 blur-xs"
-        src="/src/assets/img/Diseño sin título (3).png"
-      />
+        type="video/mp4"
+      >
+        <source src="https://res.cloudinary.com/dronteu5m/video/upload/v1773004245/Dise%C3%B1o_sin_t%C3%ADtulo_5_wah75m.mp4" type="video/mp4">
+      </video>
       <div
         class="absolute inset-0 bg-gradient-to-b via-background-dark/10 to-background-dark"
       />

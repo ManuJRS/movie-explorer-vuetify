@@ -3,8 +3,14 @@
       "title": "MovieShelf",
       "howToUse": "How to use?",
       "sigIn": "Sign in",
+      "signOut": "Sign out",
+      "statistics": "Statistics",
+      "settings": "Settings",
       "home": "Home",
-      "language": "Language"
+      "language": "Language",
+      "signIn": "Sign in",
+      "recommendations": "Recommendations",
+      "watchList": "Watch List"
     },
     "form": {
       "title": "Add a movie",
@@ -23,6 +29,11 @@
       "warning": "This field is required",
       "warningYear": "Enter a valid year",
       "added": "Added"
+    },
+    "titleIntro": {
+      "heading": "Find your favorite movie",
+      "description": "Use the form to add your favorite movie, or search your collection below.",
+      "searchPlaceholder": "Search by title..."
     },
     "layoutPage": {
       "moviesCounter": "My Collection"
@@ -181,5 +192,25 @@
       "description": "Get a clear overview of every movie you save. Quickly see the title, year, poster, and synopsis to remember what the movie is about and why you added it.",
       "title2": "Statistics of Your Preferences",
       "description2": "Analyze your viewing habits. The app generates statistics from the movies you save to highlight your viewing preferences."
+    },
+    "watchlist": {
+      "saved": "Saved",
+      "title": "Watch List",
+      "description": "Here you can see the movies you've marked as pending to watch.",
+      "empty": "You have no movies in your watch list. Save movies from recommendations.",
+      "remove": "Remove"
+    },
+    "recommendations": {
+      "title": "Recommended for You",
+      "subtitle": "Based on your saved movies and preferences, here are 12 movies you may like.",
+      "emptyMinimum": "Add at least 3 movies so we can recommend titles based on your preferences.",
+      "noResults": "We couldn't find recommendations right now. Try adding more movies.",
+      "noOverview": "No description available.",
+      "saveButton": "Save movie",
+      "seeded": "In collection",
+      "seeMore": "See more",
+      "seeLess": "See less",
+      "addToShell": "Add to shell",
+      "addToWatchlist": "Watch later"
     }
   }

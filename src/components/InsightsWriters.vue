@@ -11,12 +11,12 @@ function avatarUrl(name: string): string {
 </script>
 
 <template>
-    <section class="space-y-6 pt-16 mb-16">
+    <section class="space-y-6 pt-8 mb-16">
                 <h3 class="text-xl font-bold flex items-center gap-2">
                     <span class="material-symbols-outlined text-primary">movie_edit</span>
                     {{ t('insightsPage.WritersTitle') }}
                 </h3>
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <div class="grid grid-cols-3 sm:grid-cols-3 gap-4">
                     <div
                         v-for="writer in writers"
                         :key="writer"

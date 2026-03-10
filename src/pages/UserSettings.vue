@@ -1,14 +1,23 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
 import { useMoviesStore } from '@/stores/movies';
 import CustomSelect from '@/components/CustomSelect.vue';
 import SynopsisModal from '@/components/SynopsisModal.vue';
+import PageLoader from '@/components/ui/PageLoader.vue'
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const isLoading = ref(true)
 
+onMounted(async () => {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 1800))
+  } finally {
+    isLoading.value = false
+  }
+})
 type FormErrors = { title: string; year: string; image: string; platform?: string };
 
 const authStore = useAuthStore();
@@ -111,6 +120,7 @@ async function handleSubmit() {
 </script>
 
 <template>
+    <PageLoader v-if="isLoading" />
     <div class="glass p-4 sm:p-6 md:p-8 rounded-xl border border-black/10 dark:border-white/10 mt-24 sm:mt-28 px-4 sm:px-6 mx-auto max-w-2xl w-[90%] sm:w-full">
         <h2 class="text-xl sm:text-2xl font-bold mb-2 text-slate-900 dark:text-white">{{ t('settingsPage.titlePreview') }}</h2>
         <p class="text-slate-500 dark:text-slate-400 text-sm mb-6 sm:mb-8">

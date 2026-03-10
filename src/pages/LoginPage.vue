@@ -1,10 +1,20 @@
 <script setup lang="ts">
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
 import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue'
+import PageLoader from '@/components/ui/PageLoader.vue'
 
+const isLoading = ref(true)
+
+onMounted(async () => {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 1800))
+  } finally {
+    isLoading.value = false
+  }
+})
 const router = useRouter()
 const auth = useAuthStore()
 const mode = ref<'login' | 'register'>('login')
@@ -67,8 +77,8 @@ async function submit() {
   }
 }
 </script>
-
 <template>
+  <PageLoader v-if="isLoading" />
   <div
     class="bg-background-dark text-slate-100 min-h-screen flex flex-col items-center justify-center relative overflow-hidden p-6"
   >

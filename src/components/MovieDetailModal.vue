@@ -53,11 +53,11 @@ async function onEditSave(updatedMovie: Movie) {
     <Teleport to="body">
         <div
             v-if="open"
-            class="fixed inset-0 bg-background-dark/80 backdrop-blur-sm z-40 flex items-center justify-center p-6"
+            class="fixed inset-0 bg-background-dark/80 backdrop-blur-sm z-40 flex items-center justify-center p-0 md:p-6 mt-32 md:mt-0"
             @click.self="close"
         >
             <div
-                class="relative w-full max-w-5xl bg-background-light dark:bg-slate-900 rounded-t-xl md:rounded-xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:h-full max-h-[800px] md:mt-0 mt-18 mt-8 md:mt-20"
+                class="relative w-full h-full min-h-screen md:min-h-0 md:h-auto md:max-w-5xl md:max-h-[800px] bg-background-light dark:bg-slate-900 rounded-none md:rounded-xl overflow-hidden shadow-2xl border-0 md:border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row"
             >
                 <button
                     type="button"
@@ -67,7 +67,7 @@ async function onEditSave(updatedMovie: Movie) {
                     <span class="material-symbols-outlined">close</span>
                 </button>
                 <div
-                    class="w-full md:w-2/5 h-64 md:h-auto relative bg-slate-200 dark:bg-slate-800 flex items-center justify-center border-r border-slate-200 dark:border-slate-800 rounded-t-xl md:rounded-none md:rounded-l-xl overflow-hidden"
+                    class="w-full md:w-2/5 min-h-[60vh] md:min-h-0 md:h-auto relative bg-slate-200 dark:bg-slate-800 flex items-center justify-center border-r border-slate-200 dark:border-slate-800 rounded-none md:rounded-l-xl overflow-hidden"
                 >
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent z-10"></div>
                     <div
@@ -76,7 +76,7 @@ async function onEditSave(updatedMovie: Movie) {
                     ></div>
                     <div class="absolute bottom-6 left-6 right-6 z-20"></div>
                 </div>
-                <div class="w-full md:w-3/5 p-8 overflow-y-auto flex flex-col rounded-b-xl md:rounded-none md:rounded-r-xl h-[200px] md:h-full px-4 md:px-8">
+                <div class="w-full md:w-3/5 p-6 md:p-8 overflow-y-auto flex flex-col flex-1 min-h-0 md:rounded-none md:rounded-r-xl px-4 md:px-8">
                     <div class="mb-2 md:mb-8">
                         <div class="flex items-center gap-3 mb-2 items-start md:items-center">
                             <button
