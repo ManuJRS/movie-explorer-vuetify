@@ -21,7 +21,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section class="min-h-screen px-6 py-10 bg-slate-950 text-white">
+  <section class="min-h-screen px-6 py-10 text-white">
     <div class="max-w-7xl mx-auto">
       <div class="mb-10">
         <h1 class="text-3xl md:text-4xl font-bold mb-3">
