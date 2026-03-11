@@ -1,105 +1,92 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRecommendations } from '@/composables/useRecommendations'
-import { useMoviesStore } from '@/stores/movies'
-import { useWatchlistStore } from '@/stores/watchlist'
-import { getMovieFullData } from '@/lib/tmdb'
-import { useI18n } from 'vue-i18n'
+import { computed, ref } from 'vue'
 import PageLoader from '@/components/ui/PageLoader.vue'
+import MovieCard from '@/components/favorites/MovieCard.vue'
+import { useRecommendationsPage } from '@/composables/useRecommendationsPage'
+import MovieDetailModal from '@/components/shared/MovieDetailModal.vue'
+import { getMovieFullData } from '@/lib/tmdb'
+import type { TMDbMovie } from '@/composables/useRecommendations'
 
-const isLoading = ref(true)
-
-onMounted(async () => {
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 1800))
-  } finally {
-    isLoading.value = false
-  }
-})
-
-
-const { t } = useI18n()
-const moviesStore = useMoviesStore()
-const watchlistStore = useWatchlistStore()
-
-const savingId = ref<number | null>(null)
-const seedingId = ref<number | null>(null)
-
-async function seedToMovies(movie: { id: number; poster_path: string | null }) {
-  seedingId.value = movie.id
-  try {
-    const fullData = await getMovieFullData(movie.id)
-    await moviesStore.addMovie({
-      tmdbId: fullData.tmdbId,
-      title: fullData.title,
-      year: fullData.year,
-      image: fullData.image || getPosterUrl(movie.poster_path),
-      platform: '',
-      synopsis: fullData.synopsis,
-      genres: fullData.genres,
-      runtime: fullData.runtime,
-      rating: fullData.rating,
-      directors: fullData.directors,
-      mainActors: fullData.mainActors,
-      writers: fullData.writers,
-      favorite: false,
-    })
-    await removeAndReplaceMovie(movie.id)
-  } catch {
-    // Error ya se maneja en el store
-  } finally {
-    seedingId.value = null
-  }
-}
-
-function isInMovies(tmdbId: number) {
-  return moviesStore.movies.some((m) => m.tmdbId === tmdbId)
-}
-
-async function saveToWatchlist(movie: { id: number; title: string; poster_path: string | null; overview: string; release_date: string; vote_average: number }) {
-  savingId.value = movie.id
-  try {
-    await watchlistStore.addToWatchlist(movie)
-    await removeAndReplaceMovie(movie.id)
-  } catch {
-    // Error ya se maneja en el store
-  } finally {
-    savingId.value = null
-  }
-}
+const showMovieDetailModal = ref(false)
+const loadingDetail = ref(false)
+const selectedMovieForModal = ref<{
+  title: string
+  year: string
+  image: string
+  platform: string
+  synopsis: string
+  runtime?: number | null
+  rating?: number
+  genres?: string[]
+  directors?: string[]
+  mainActors?: string[]
+  writers?: string[]
+} | null>(null)
 
 const {
+  t,
+  isLoading,
+  savingId,
+  seedingId,
   recommendations,
   loading,
   error,
   getRecommendations,
   getPosterUrl,
-  removeAndReplaceMovie,
-} = useRecommendations()
+  hasMinimumFavorites,
+  isInMovies,
+  isInWatchlist,
+  seedToMovies,
+  saveToWatchlist,
+  expandedOverviewIds,
+  toggleOverview,
+} = useRecommendationsPage()
 
-const expandedOverviewIds = ref<Set<number>>(new Set())
-
-function toggleOverview(movieId: number) {
-  const set = new Set(expandedOverviewIds.value)
-  if (set.has(movieId)) {
-    set.delete(movieId)
-  } else {
-    set.add(movieId)
+async function openRecommendationDetail(movie: TMDbMovie | import('@/types/movie').Movie) {
+  const rec = movie as TMDbMovie
+  if (!('poster_path' in rec)) return
+  loadingDetail.value = true
+  try {
+    const full = await getMovieFullData(rec.id)
+    selectedMovieForModal.value = {
+      title: full.title,
+      year: full.year,
+      image: full.image,
+      platform: '',
+      synopsis: full.synopsis,
+      runtime: full.runtime,
+      rating: full.rating,
+      genres: full.genres,
+      directors: full.directors,
+      mainActors: full.mainActors,
+      writers: full.writers,
+    }
+    showMovieDetailModal.value = true
+  } catch {
+    // Error al cargar detalle; se podría mostrar un toast
+  } finally {
+    loadingDetail.value = false
   }
-  expandedOverviewIds.value = set
 }
 
-onMounted(async () => {
-  await moviesStore.loadMovies()
-  await watchlistStore.loadWatchlist()
-  getRecommendations()
-})
+function onModalOpenChange(open: boolean) {
+  if (!open) selectedMovieForModal.value = null
+}
+
+const recommendationLabels = computed(() => ({
+  addToShell: t('recommendations.addToShell'),
+  seeded: t('recommendations.seeded'),
+  addToWatchlist: t('recommendations.addToWatchlist'),
+  saved: t('watchlist.saved'),
+  noOverview: t('recommendations.noOverview'),
+  seeMore: t('recommendations.seeMore'),
+  seeLess: t('recommendations.seeLess'),
+}))
 </script>
 
 <template>
   <PageLoader v-if="isLoading" />
-  <section class="min-h-screen px-6 py-10 text-white">
-    <div class="max-w-7xl mx-auto">
+  <section class="mt-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div class="mb-10">
         <div class="flex items-center gap-3 mb-3">
           <h1 class="text-3xl md:text-4xl font-bold">
@@ -126,7 +113,7 @@ onMounted(async () => {
       </div>
 
       <div
-        v-if="moviesStore.movies.filter(m => m.favorite && m.tmdbId != null).length < 3"
+        v-if="hasMinimumFavorites"
         class="rounded-2xl border border-white/10 bg-white/5 p-6 text-slate-300"
       >
         {{ t('recommendations.emptyMinimum') }}
@@ -166,87 +153,32 @@ onMounted(async () => {
 
       <div
         v-else
-        class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2"
       >
-        <article
+        <MovieCard
           v-for="movie in recommendations"
           :key="movie.id"
-          class="group relative glass rounded-xl overflow-hidden hover:scale-[1.02] transition-all duration-300 border border-black/10 dark:border-white/10"
-        >
-          <div
-            class="relative h-[200px] sm:h-[260px] md:h-[360px] overflow-hidden cursor-pointer"
-            @click="toggleOverview(movie.id)"
-          >
-            <img
-              :src="getPosterUrl(movie.poster_path)"
-              :alt="movie.title"
-              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-            <div
-              class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 sm:gap-4"
-            >
-              <button
-                type="button"
-                class="hover:cursor-pointer h-10 w-10 sm:h-12 sm:w-12 rounded-full glass flex items-center justify-center hover:bg-white/20 transition-colors"
-                @click.stop="toggleOverview(movie.id)"
-              >
-                <span class="material-symbols-outlined text-white">info</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="p-2.5 sm:p-4">
-            <h2 class="font-bold text-sm sm:text-base line-clamp-1 mb-1 text-slate-900 dark:text-white">
-              {{ movie.title }}
-            </h2>
-
-            <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mb-2">
-              {{ movie.release_date?.slice(0, 4) || 'N/A' }}
-            </p>
-
-            <p
-              :class="[
-                'text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mb-2',
-                expandedOverviewIds.has(movie.id) ? '' : 'line-clamp-3',
-              ]"
-            >
-              {{ movie.overview || t('recommendations.noOverview') }}
-            </p>
-            <button
-              v-if="movie.overview && movie.overview.length > 100"
-              type="button"
-              class="text-xs text-primary hover:underline mb-3"
-              @click="toggleOverview(movie.id)"
-            >
-              {{ expandedOverviewIds.has(movie.id) ? t('recommendations.seeLess') : t('recommendations.seeMore') }}
-            </button>
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-2">
-              <button
-                type="button"
-                class="w-full rounded-lg px-4 py-2 text-sm font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed border border-black/10 dark:border-white/10 bg-white/5 hover:bg-white/10 dark:bg-white/5 dark:hover:bg-white/10"
-                :class="isInMovies(movie.id)
-                  ? 'text-slate-500 dark:text-slate-400 cursor-default'
-                  : 'text-slate-900 dark:text-white'"
-                :disabled="seedingId === movie.id || isInMovies(movie.id)"
-                @click="seedToMovies(movie)"
-              >
-                {{ seedingId === movie.id ? '...' : isInMovies(movie.id) ? t('recommendations.seeded') : t('recommendations.addToShell') }}
-              </button>
-              <button
-                type="button"
-                class="w-full rounded-lg px-4 py-2 text-sm font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed border border-black/10 dark:border-white/10 bg-white/5 hover:bg-white/10 dark:bg-white/5 dark:hover:bg-white/10"
-                :class="watchlistStore.isInWatchlist(movie.id)
-                  ? 'text-slate-500 dark:text-slate-400 cursor-default'
-                  : 'text-slate-900 dark:text-white'"
-                :disabled="savingId === movie.id || watchlistStore.isInWatchlist(movie.id)"
-                @click="saveToWatchlist(movie)"
-              >
-                {{ savingId === movie.id ? '...' : watchlistStore.isInWatchlist(movie.id) ? t('watchlist.saved') : t('recommendations.addToWatchlist') }}
-              </button>
-            </div>
-          </div>
-        </article>
+          variant="recommendation"
+          full-width
+          :recommendation="movie"
+          :get-poster-url="getPosterUrl"
+          :expanded-overview-ids="expandedOverviewIds"
+          :seeding-id="seedingId"
+          :saving-id="savingId"
+          :recommendation-labels="recommendationLabels"
+          :is-in-movies="isInMovies"
+          :is-in-watchlist="isInWatchlist"
+          @toggle-overview="toggleOverview"
+          @open-detail="openRecommendationDetail"
+          @seed-to-movies="seedToMovies"
+          @save-to-watchlist="saveToWatchlist"
+        />
+        <MovieDetailModal
+          v-model:open="showMovieDetailModal"
+          :movie="selectedMovieForModal ?? undefined"
+          :show-edit-button="false"
+          @update:open="onModalOpenChange"
+        />
       </div>
-    </div>
   </section>
 </template>
