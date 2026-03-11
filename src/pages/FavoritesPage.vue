@@ -1,0 +1,95 @@
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useMoviesStore } from '@/stores/movies'
+import { useAuthStore } from '@/stores/auth'
+import { useRecommendations } from '@/composables/useRecommendations'
+import MovieCard from '@/components/MovieCard.vue'
+import MovieDetailModal from '@/components/MovieDetailModal.vue'
+import MoviesCounter from '@/components/MoviesCounter.vue'
+import BaseTabs from '@/components/ui/BaseTabs.vue'
+import type { Movie } from '@/types/movie'
+import { useI18n } from 'vue-i18n'
+import { buildFavoriteProfile } from '@/lib/recommendations'
+import FavoriteComponent from '@/components/FavoriteComponent.vue'
+import StadsFavs from '@/components/StadsFavs.vue'
+
+const { t } = useI18n()
+const moviesStore = useMoviesStore()
+const authStore = useAuthStore()
+const { movies } = storeToRefs(moviesStore)
+const { getRecommendations } = useRecommendations()
+
+const loading = ref(false)
+const showMovieDetailModal = ref(false)
+const selectedMovie = ref<Movie | null>(null)
+
+const favoriteMovies = computed(() =>
+  movies.value.filter((m) => m.favorite === true)
+)
+
+const selectedTab = ref('Favorites')
+const tabOptions = ['Favorites', 'statistics']
+
+function openMovieDetail(movie: Movie) {
+  selectedMovie.value = movie
+  showMovieDetailModal.value = true
+}
+
+onMounted(async () => {
+  loading.value = true
+  try {
+    if (!movies.value.length) {
+      await moviesStore.loadMovies()
+    }
+    // Log del perfil de favoritas en consola (si hay favoritas)
+    const favorites = movies.value.filter((m) => m.favorite === true)
+    if (favorites.length) {
+      const profile = buildFavoriteProfile(favorites)
+      console.group('[Favoritas] Perfil de gusto')
+      console.log('Películas favoritas:', favorites.length)
+      console.log('Perfil (géneros, directores, actores, guionistas):', profile)
+      console.groupEnd()
+    }
+    // Ejecutar recomendaciones para que se calculen y logueen las puntuaciones en consola
+    await getRecommendations()
+  } finally {
+    loading.value = false
+  }
+})
+</script>
+
+<template>
+  <main class="mt-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="mb-8 text-left">
+      <h1 class="text-3xl font-bold text-white">
+        {{ t('favorites.title') }}
+      </h1>
+      <p class="text-slate-400 mt-2">
+        {{ t('favorites.description') }}
+      </p>
+    </div>
+    <div class="flex justify-between items-center mb-8">
+      <BaseTabs
+          v-model="selectedTab"
+          :options="tabOptions"
+      />
+      <div v-if="selectedTab === 'Favorites'" class="flex justify-end text-right">
+          <MoviesCounter
+          class="text-right"
+          :count="favoriteMovies.length"
+          :label="t('favorites.counterLabel')"
+        />
+      </div>
+    </div>
+    <FavoriteComponent
+      v-if="selectedTab === 'Favorites'"
+      @open-detail="openMovieDetail"
+    />
+    <StadsFavs v-else-if="selectedTab === 'statistics'" />
+    <MovieDetailModal
+      v-model:open="showMovieDetailModal"
+      :movie="selectedMovie ?? undefined"
+    />
+  </main>
+</template>

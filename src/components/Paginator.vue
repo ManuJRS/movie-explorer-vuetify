@@ -123,7 +123,7 @@ const goNext = () => {
 </script>
 
 <template>
-  <div :class="['flex items-center gap-3', className]">
+  <div :class="['flex flex-wrap items-center justify-center gap-3 min-w-0', className]">
     <button
       type="button"
       class="inline-flex h-9 items-center justify-center rounded-lg border border-black/10 dark:border-white/10 bg-white/5 px-3 text-sm text-slate-700 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-300"
@@ -135,7 +135,7 @@ const goNext = () => {
 
     <div
       ref="containerRef"
-      class="relative inline-flex items-center gap-2"
+      class="relative flex flex-wrap items-center justify-center gap-2"
     >
       <template
         v-for="(pageNum, index) in pagesToShow"

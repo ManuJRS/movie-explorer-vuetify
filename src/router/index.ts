@@ -11,6 +11,7 @@ import InfoPage from '@/pages/InfoPage.vue'
 import StadsPage from '@/pages/StadsPage.vue'
 import RecommendationsPage from '@/pages/RecommendationsPage.vue'
 import WatchList from '@/pages/WatchList.vue'
+import FavoritesPage from '@/pages/FavoritesPage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -26,6 +27,7 @@ const router = createRouter({
     { path: '/stads', name: 'stads', component: StadsPage },
     { path: '/recommendations', name: 'recommendations', component: RecommendationsPage },
     { path: '/watch-list', name: 'watch-list', component: WatchList },
+    { path: '/favorites', name: 'favorites', component: FavoritesPage },
   ],
 })
 
@@ -75,6 +77,10 @@ router.beforeEach(async (to) => {
   }
 
   if (to.name === 'watch-list' && !auth.user) {
+    return { name: 'login' }
+  }
+
+  if (to.name === 'favorites' && !auth.user) {
     return { name: 'login' }
   }
 

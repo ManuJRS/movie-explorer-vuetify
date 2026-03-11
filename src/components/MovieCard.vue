@@ -1,16 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useMoviesStore } from '@/stores/movies';
 import DelateMovieModal from '@/components/DelateMovieModal.vue';
 import Tooltip from '@/components/Tooltip.vue';
+import type { Movie } from '@/types/movie';
 
 const moviesStore = useMoviesStore();
-const props = defineProps({
-    movie: {
-        type: Object,
-        required: true
-    }
-});
+const props = withDefaults(
+  defineProps<{
+    movie: Movie
+    fullWidth?: boolean
+  }>(),
+  { fullWidth: false }
+);
+
+const isFavorite = computed(() => props.movie.favorite)
+
+const handleToggleFavorite = async () => {
+  await moviesStore.toggleFavorite(props.movie.id, props.movie.favorite)
+}
 
 const emit = defineEmits(['openDetail']);
 
@@ -30,10 +38,43 @@ function confirmDelete() {
 </script>
 
 <template>
-    <div class="w-1/2 min-w-0 max-w-[280px] p-2 sm:w-1/2 lg:w-1/2 md:w-full md:min-w-0 md:p-2 sm:w-1/2 lg:w-1/3">
+    <div
+      :class="[
+        'min-w-0 p-2',
+        fullWidth
+          ? 'w-full max-w-none'
+          : 'w-1/2 sm:w-1/2 lg:w-1/2 md:w-full md:min-w-0 sm:w-1/2 lg:w-1/3 max-w-[280px]',
+      ]"
+    >
         <div
             class="group relative glass rounded-xl overflow-hidden hover:scale-[1.02] transition-all duration-300 border border-black/10 dark:border-white/10"
         >
+            <div class="absolute top-2 right-2 z-10 bg-black/40 backdrop-blur-sm rounded-full p-2">
+                <button
+                    type="button"
+                    @click="handleToggleFavorite"
+                    class="group shrink-0 rounded-full md:p-2 p-2 transition hover:cursor-pointer"
+                    :aria-label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
+                    >
+                    <span class="relative flex items-center justify-center ">
+                        <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="size-5 transition-all duration-300 group-active:scale-90 group-hover:text-pink-500"
+                        :class="isFavorite ? 'text-pink-500 fill-current' : 'text-white'"
+                        >
+                        <path
+                            d="m19 14-7 7-7-7a5 5 0 0 1 7-7l0 0a5 5 0 0 1 7 7z"
+                        />
+                        </svg>
+                    </span>
+                </button>
+            </div>
             <div
                 class="relative h-[200px] sm:h-[260px] lg:h-[320px] overflow-hidden cursor-pointer"
                 @click="openDetail"
@@ -60,12 +101,18 @@ function confirmDelete() {
             </div>
             <div class="p-2.5 sm:p-3 flex items-center justify-between gap-2">
                 <div class="overflow-hidden min-w-0 flex-1">
-                    <Tooltip :text="movie.title">
+                    <Tooltip :text="movie.title ?? ''">
                         <h3 class="font-bold text-sm sm:text-base truncate pr-2 text-slate-900 dark:text-white">
-                            {{ movie.title }}
+                            {{ movie.title ?? 'Sin título' }}
                         </h3>
                     </Tooltip>
-                    <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">{{ movie.year }}</p>
+                    <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">{{ movie.year ?? '—' }}</p>
+                    <p
+                        v-if="movie.synopsis"
+                        class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2"
+                    >
+                        {{ movie.synopsis }}
+                    </p>
                 </div>
                 <button
                     type="button"

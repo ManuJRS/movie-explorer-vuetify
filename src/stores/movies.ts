@@ -2,36 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { useAuthStore } from '@/stores/auth'
-
-export interface Movie {
-  id: string
-  title: string
-  year: string
-  image: string
-  platform: string
-  synopsis: string
-  /** ID de TMDB cuando se añade desde búsqueda (para recomendaciones) */
-  tmdbId?: number
-  /** Datos de TMDB cuando se añade desde búsqueda */
-  genres?: string[]
-  runtime?: number | null
-  rating?: number
-  directors?: string[]
-  mainActors?: string[]
-  writers?: string[]
-}
-
-type DbMovie = {
-  id: string
-  user_id: string
-  title: string
-  year: number
-  poster_url: string | null
-  platform: string | null
-  synopsis: string | null
-  tmdb_details?: { tmdb_id?: number; genres?: string[]; runtime?: number | null; rating?: number; directors?: string[]; mainActors?: string[]; writers?: string[] } | null
-  created_at: string
-}
+import type { Movie, DbMovie } from '@/types/movie'
 
 function dbToUi(m: DbMovie): Movie {
   const details = m.tmdb_details
@@ -51,6 +22,7 @@ function dbToUi(m: DbMovie): Movie {
       mainActors: details.mainActors,
       writers: details.writers,
     }),
+    favorite: m.favorite,
   }
 }
 
@@ -139,6 +111,7 @@ export const useMoviesStore = defineStore('movies', () => {
           mainActors: details.mainActors,
           writers: details.writers,
         }),
+        favorite: false,
       })
     } catch (error) {
       console.error('Error adding movie:', error)
@@ -207,10 +180,30 @@ export const useMoviesStore = defineStore('movies', () => {
     movies.value = []
   }
 
+  async function toggleFavorite(movieId: string, currentValue: boolean) {
+    try {
+      const { error: supabaseError } = await supabase
+        .from('movies')
+        .update({ favorite: !currentValue })
+        .eq('id', movieId)
+
+      if (supabaseError) throw supabaseError
+
+      const movie = movies.value.find(m => m.id === movieId)
+      if (movie) {
+        movie.favorite = !currentValue
+      }
+    } catch (err) {
+      console.error('Error updating favorite:', err)
+      throw err
+    }
+  }
+
   return {
     movies,
     loadMovies,
     addMovie,
+    toggleFavorite,
     updateMovie,
     deleteMovie,
     resetMovies,

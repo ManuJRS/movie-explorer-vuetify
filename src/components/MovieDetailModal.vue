@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useMoviesStore } from '@/stores/movies';
-import type { Movie } from '@/stores/movies';
+import { useMoviesStore } from '@/stores/movies'
+import type { Movie } from '@/types/movie'
 import EditModal from '@/components/EditModal.vue';
 import { useI18n } from 'vue-i18n';
 import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue';

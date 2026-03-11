@@ -10,7 +10,8 @@
       "language": "Language",
       "signIn": "Sign in",
       "recommendations": "Recommendations",
-      "watchList": "Watch List"
+      "watchList": "Watch List",
+      "favorites": "Favorites"
     },
     "form": {
       "title": "Add a movie",
@@ -200,10 +201,39 @@
       "empty": "You have no movies in your watch list. Save movies from recommendations.",
       "remove": "Remove"
     },
+    "statsFavs": {
+      "title": "Discover your favorite statistics",
+      "moviesLabel": "Movies I like",
+      "hoursLabel": "Time watching what I love",
+      "hoursSuffix": "hrs",
+      "decadesTitle": "Favorite decades",
+      "genresTitle": "Favorite genres",
+      "directorsTitle": "Favorite directors",
+      "actorsTitle": "Favorite actors",
+      "writersTitle": "Favorite writers",
+      "director": "Director",
+      "actor": "Actor",
+      "writer": "Writer",
+      "movie_one": "movie",
+      "movie_other": "movies",
+      "percentTotal": "% Total",
+      "noDecades": "Not enough favorite movies with valid year.",
+      "noGenres": "Not enough genre data.",
+      "noDirectors": "No directors in your favorite movies.",
+      "noActors": "No actors in your favorite movies.",
+      "noWriters": "No writers in your favorite movies."
+    },
+    "favorites": {
+      "title": "Favorite Movies",
+      "description": "Here you only see the movies you marked with a heart in your collection.",
+      "counterLabel": "Favorites",
+      "empty": "You don't have favorite movies yet. Mark movies with ♥ on the movies page.",
+      "loading": "Loading favorites..."
+    },
     "recommendations": {
       "title": "Recommended for You",
       "subtitle": "Based on your saved movies and preferences, here are 12 movies you may like.",
-      "emptyMinimum": "Add at least 3 movies so we can recommend titles based on your preferences.",
+      "emptyMinimum": "Mark at least 3 movies as favorites (♥) in your collection so we can recommend titles based on your taste.",
       "noResults": "We couldn't find recommendations right now. Try adding more movies.",
       "noOverview": "No description available.",
       "saveButton": "Save movie",
@@ -211,6 +241,7 @@
       "seeMore": "See more",
       "seeLess": "See less",
       "addToShell": "Add to shell",
-      "addToWatchlist": "Watch later"
+      "addToWatchlist": "Watch later",
+      "refresh": "Load new recommendations"
     }
   }

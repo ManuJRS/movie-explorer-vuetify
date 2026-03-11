@@ -1,18 +1,7 @@
 import { defineStore } from 'pinia'
 import type { User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
-
-interface SignUpInput {
-  email: string
-  password: string
-  username?: string
-  wantsEmailNotifications?: boolean
-}
-
-interface SignInInput {
-  email: string
-  password: string
-}
+import type { SignUpInput, SignInInput } from '@/types/auth'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
