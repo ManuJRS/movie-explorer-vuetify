@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import type { Movie } from '@/stores/movies'
+import type { Movie } from '@/types/movie'
 import CustomSelect from '@/components/CustomSelect.vue'
 import { useI18n } from 'vue-i18n';
 import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue';
