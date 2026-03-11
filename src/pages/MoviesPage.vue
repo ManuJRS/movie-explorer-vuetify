@@ -1,90 +1,28 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue'
-import { storeToRefs } from 'pinia'
-import i18n from '@/i18n'
-
-
-import AddMovieForm from '@/components/AddMovieForm.vue'
-import MovieCard from '@/components/MovieCard.vue'
-import MovieDetailModal from '@/components/MovieDetailModal.vue'
-import MoviesCounter from '@/components/MoviesCounter.vue'
-import FloatingActionMenu from '@/components/FloatingActionMenu.vue'
-import { useWindowWidth } from '@/composables/useWindowWidth'
-import Paginator from '@/components/Paginator.vue'
-import TitleIntro from '@/components/TitleIntro.vue'
+import AddMovieForm from '@/components/movies/AddMovieForm.vue'
+import MovieCard from '@/components/favorites/MovieCard.vue'
+import MovieDetailModal from '@/components/shared/MovieDetailModal.vue'
+import MoviesCounter from '@/components/shared/MoviesCounter.vue'
+import FloatingActionMenu from '@/components/movies/FloatingActionMenu.vue'
+import Paginator from '@/components/shared/Paginator.vue'
+import TitleIntro from '@/components/movies/TitleIntro.vue'
 import PageLoader from '@/components/ui/PageLoader.vue'
+import { useMoviesPage } from '@/composables/useMoviesPage'
 
-const windowWidth = useWindowWidth()
-const isMobile = computed(() => windowWidth.value < 640)
-import { useMoviesStore } from '@/stores/movies'
-import type { Movie } from '@/types/movie'
-import { useAuthStore } from '@/stores/auth'
-
-const isLoading = ref(true)
-
-onMounted(async () => {
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 1800))
-  } finally {
-    isLoading.value = false
-  }
-})
-
-const moviesStore = useMoviesStore()
-const authStore = useAuthStore()
-const { t } = i18n.global
-const { user } = storeToRefs(authStore)
-
-const showMovieDetailModal = ref(false)
-const selectedMovie = ref<Movie | null>(null)
-const addMovieFormRef = ref<InstanceType<typeof AddMovieForm> | null>(null)
-const searchQuery = ref('')
-const currentPage = ref(1)
-
-const ITEMS_PER_PAGE = 12
-
-const filteredMovies = computed(() => {
-  const q = searchQuery.value.trim().toLowerCase()
-  if (!q) return moviesStore.movies
-  return moviesStore.movies.filter((m) =>
-    String(m.title ?? '').toLowerCase().includes(q)
-  )
-})
-
-const totalPages = computed(() =>
-  Math.max(1, Math.ceil(filteredMovies.value.length / ITEMS_PER_PAGE))
-)
-
-const paginatedMovies = computed(() => {
-  const start = (currentPage.value - 1) * ITEMS_PER_PAGE
-  return filteredMovies.value.slice(start, start + ITEMS_PER_PAGE)
-})
-
-watch(searchQuery, () => {
-  currentPage.value = 1
-})
-watch(filteredMovies, () => {
-  if (currentPage.value > totalPages.value) currentPage.value = totalPages.value
-})
-
-function openMovieDetail(movie: Movie) {
-  selectedMovie.value = movie
-  showMovieDetailModal.value = true
-}
-
-function openAddMovieModal() {
-  const form = addMovieFormRef.value
-  if (form && 'openMobileFormModal' in form) form.openMobileFormModal()
-}
-
-watch(user, async (u) => {
-  if (u) await moviesStore.loadMovies()
-  else moviesStore.resetMovies()
-}, { immediate: true })
-
-onMounted(async () => {
-  if (user.value) await moviesStore.loadMovies()
-})
+const {
+  user,
+  isMobile,
+  isLoading,
+  showMovieDetailModal,
+  selectedMovie,
+  addMovieFormRef,
+  searchQuery,
+  currentPage,
+  totalPages,
+  paginatedMovies,
+  openMovieDetail,
+  openAddMovieModal,
+} = useMoviesPage()
 </script>
 
 <template>

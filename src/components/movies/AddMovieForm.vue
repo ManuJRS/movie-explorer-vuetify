@@ -1,18 +1,39 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useMoviesStore } from '@/stores/movies'
-import CustomSelect from '@/components/CustomSelect.vue'
-import SynopsisModal from '@/components/SynopsisModal.vue'
-import { useI18n } from 'vue-i18n'
-import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue'
-import MoviePosterSearch from '@/components/MoviePosterSearch.vue'
-import type { Movie } from '@/types/movie'
-import type { MoviePosterResult } from '@/lib/tmdb'
-import { getMovieFullData } from '@/lib/tmdb'
+import SynopsisModal from '@/components/movies/SynopsisModal.vue'
+import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.vue'
+import MoviePosterSearch from '@/components/movies/MoviePosterSearch.vue'
 import { useWindowWidth } from '@/composables/useWindowWidth'
+import { useAddMovieForm } from '@/composables/useAddMovieForm'
+import { useI18n } from 'vue-i18n'
 
+// composables
+const windowWidth = useWindowWidth()
+const { t } = useI18n()
+
+const {
+  title,
+  year,
+  image,
+  platform,
+  synopsis,
+  selectedMovieId,
+  errors,
+  isFormValid,
+  handleSubmit,
+  resetForm,
+  handleSelectMovie,
+  validateField,
+} = useAddMovieForm(t)
+
+// local state
 const showMobileFormModal = ref(false)
+const showSynopsisModal = ref(false)
 
+// computed
+const isMobile = computed(() => windowWidth.value < 640)
+
+// handlers
 function openMobileFormModal() {
   showMobileFormModal.value = true
 }
@@ -21,144 +42,24 @@ function closeMobileFormModal() {
   showMobileFormModal.value = false
 }
 
-defineExpose({
-  openMobileFormModal,
-})
-
-const windowWidth = useWindowWidth()
-const { t } = useI18n()
-
-type FormErrors = { title: string; year: string; image: string; platform?: string }
-
-const moviesStore = useMoviesStore()
-const isMobile = computed(() => windowWidth.value < 640)
-
-const title = ref('')
-const year = ref('')
-const image = ref('')
-const platform = ref('')
-const synopsis = ref('')
-const showSynopsisModal = ref(false)
-const selectedMovieId = ref<number | null>(null)
-
-const errors = ref<FormErrors>({ title: '', year: '', image: '' })
-
-const handleSelectMovie = (movie: MoviePosterResult) => {
-  selectedMovieId.value = movie.id
-  title.value = movie.title
-  year.value = movie.year
-  image.value = movie.posterUrl || ''
-}
-
 function openSynopsisModal() {
   showSynopsisModal.value = true
 }
 
-const platformOptions = [
-  { value: 'netflix', label: 'Netflix' },
-  { value: 'amazon', label: 'Amazon' },
-  { value: 'hbo', label: 'HBO' },
-  { value: 'disney', label: 'Disney' },
-  { value: 'hulu', label: 'Hulu' },
-  { value: 'paramount', label: 'Paramount' },
-  { value: 'apple', label: 'Apple' },
-  { value: 'vudu', label: 'Vudu' },
-  { value: 'google', label: 'Google' }
-]
+const submitForm = async () => {
+  const success = await handleSubmit()
 
-const required = (value: string | number): true | string =>
-  !!value || t('form.warning')
+  if (success) {
+    showMobileFormModal.value = false
+  }
+}
 
-const isYear = (value: string | number): true | string =>
-  (value && Number(value) > 1800 && Number(value) < 2100) || t('form.warningYear')
-
-const isFormValid = computed(() => {
-  const titleValid = !!title.value
-  const yearValid = !!year.value && Number(year.value) > 1800 && Number(year.value) < 2100
-  const imageValid = !!image.value
-  return titleValid && yearValid && imageValid
+// expose
+defineExpose({
+  openMobileFormModal,
 })
-
-function validateField(field: 'title' | 'year' | 'image', value: string | number) {
-  if (field === 'title') {
-    const result = required(value)
-    errors.value.title = typeof result === 'string' ? result : ''
-  } else if (field === 'year') {
-    const result = required(value)
-    if (typeof result === 'string') {
-      errors.value.year = result
-    } else {
-      const yearResult = isYear(value)
-      errors.value.year = typeof yearResult === 'string' ? yearResult : ''
-    }
-  } else if (field === 'image') {
-    const result = required(value)
-    errors.value.image = typeof result === 'string' ? result : ''
-  }
-}
-
-
-async function handleSubmit() {
-  const titleResult = required(title.value)
-  const yearResult = required(year.value)
-  const yearValidResult = isYear(year.value)
-  const imageResult = required(image.value)
-
-  errors.value = {
-    title: typeof titleResult === 'string' ? titleResult : '',
-    year:
-      typeof yearResult === 'string'
-        ? yearResult
-        : (typeof yearValidResult === 'string' ? yearValidResult : ''),
-    image: typeof imageResult === 'string' ? imageResult : '',
-  }
-
-  if (!errors.value.title && !errors.value.year && !errors.value.image) {
-    try {
-      let movieData: Omit<Movie, 'id'> = {
-        title: title.value.trim(),
-        year: year.value,
-        image: image.value,
-        platform: platform.value || '',
-        synopsis: synopsis.value || '',
-      }
-
-      if (selectedMovieId.value) {
-        const fullMovieData = await getMovieFullData(selectedMovieId.value)
-
-        movieData = {
-          tmdbId: selectedMovieId.value,
-          title: fullMovieData.title,
-          year: fullMovieData.year,
-          image: fullMovieData.image || image.value,
-          platform: platform.value || '',
-          synopsis: synopsis.value || fullMovieData.synopsis,
-          genres: fullMovieData.genres,
-          runtime: fullMovieData.runtime,
-          rating: fullMovieData.rating,
-          directors: fullMovieData.directors,
-          mainActors: fullMovieData.mainActors,
-          writers: fullMovieData.writers,
-        }
-      }
-
-      moviesStore.addMovie(movieData)
-
-      title.value = ''
-      year.value = ''
-      image.value = ''
-      platform.value = ''
-      synopsis.value = ''
-      selectedMovieId.value = null
-      errors.value = { title: '', year: '', image: '', platform: '' }
-
-      showMobileFormModal.value = false
-    } catch (e) {
-      console.error(e)
-    }
-  }
-}
 </script>
+
 <template>
   <div
     v-if="!isMobile"
@@ -177,7 +78,7 @@ async function handleSubmit() {
       {{ t('form.description') }}
     </p>
 
-    <form @submit.prevent="handleSubmit" class="space-y-5">
+    <form @submit.prevent="submitForm" class="space-y-5">
       <MoviePosterSearch @select-movie="handleSelectMovie" />
 
       <div class="space-y-2">
@@ -191,7 +92,7 @@ async function handleSubmit() {
             type="text"
             :class="[
               'w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none transition-all placeholder:text-slate-600',
-              errors.title
+              errors?.title
                 ? 'bg-white/5 border border-rose-500/50 focus:ring-rose-500/20'
                 : title
                   ? 'bg-white/5 border border-emerald-500/50 focus:ring-emerald-500/20'
@@ -203,12 +104,12 @@ async function handleSubmit() {
           <span
             v-if="title"
             class="material-symbols-outlined absolute right-3 top-3"
-            :class="errors.title ? 'text-rose-500' : 'text-emerald-500'"
+            :class="errors?.title ? 'text-rose-500' : 'text-emerald-500'"
           >
-            {{ errors.title ? 'warning' : 'check_circle' }}
+            {{ errors?.title ? 'warning' : 'check_circle' }}
           </span>
         </div>
-        <p v-if="errors.title" class="text-xs text-rose-500 font-medium">{{ t('form.warning') }}</p>
+        <p v-if="errors?.title" class="text-xs text-rose-500 font-medium">{{ t('form.warning') }}</p>
         <p v-else-if="title" class="text-xs text-emerald-500 font-medium">{{ t('form.looksGood') }}</p>
       </div>
 
@@ -224,7 +125,7 @@ async function handleSubmit() {
             type="url"
             :class="[
               'w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none transition-all placeholder:text-slate-600',
-              errors.image
+              errors?.image
                 ? 'bg-white/5 border border-rose-500/50 focus:ring-rose-500/20'
                 : image
                   ? 'bg-white/5 border border-emerald-500/50 focus:ring-emerald-500/20'
@@ -236,12 +137,12 @@ async function handleSubmit() {
           <span
             v-if="image"
             class="material-symbols-outlined absolute right-3 top-3"
-            :class="errors.image ? 'text-rose-500' : 'text-emerald-500'"
+            :class="errors?.image ? 'text-rose-500' : 'text-emerald-500'"
           >
-            {{ errors.image ? 'warning' : 'check_circle' }}
+            {{ errors?.image ? 'warning' : 'check_circle' }}
           </span>
         </div>
-        <p v-if="errors.image" class="text-xs text-rose-500 font-medium">{{ errors.image }}</p>
+        <p v-if="errors?.image" class="text-xs text-rose-500 font-medium">{{ errors?.image }}</p>
         <p v-else-if="image" class="text-xs text-emerald-500 font-medium">{{ t('form.looksGood') }}</p>
       </div>
 
@@ -256,7 +157,7 @@ async function handleSubmit() {
             type="number"
             :class="[
               'w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none transition-all placeholder:text-slate-600',
-              errors.year
+              errors?.year
                 ? 'bg-white/5 border border-rose-500/50 focus:ring-rose-500/20'
                 : year
                   ? 'bg-white/5 border border-emerald-500/50 focus:ring-emerald-500/20'
@@ -266,20 +167,20 @@ async function handleSubmit() {
             @blur="validateField('year', year)"
           />
           <span
-            v-if="year && !errors.year"
+            v-if="year && !errors?.year"
             class="material-symbols-outlined absolute right-3 top-3 text-emerald-500"
           >
             check_circle
           </span>
           <span
-            v-else-if="errors.year"
+            v-else-if="errors?.year"
             class="material-symbols-outlined absolute right-3 top-3 text-rose-500"
           >
             warning
           </span>
         </div>
-        <p v-if="errors.year" class="text-xs text-rose-500 font-medium">{{ errors.year }}</p>
-        <p v-else-if="year && !errors.year" class="text-xs text-emerald-500 font-medium">{{ t('form.looksGood') }}</p>
+        <p v-if="errors?.year" class="text-xs text-rose-500 font-medium">{{ errors?.year }}</p>
+        <p v-else-if="year && !errors?.year" class="text-xs text-emerald-500 font-medium">{{ t('form.looksGood') }}</p>
       </div>
 
       <div class="pt-4 flex items-center justify-between">
@@ -360,7 +261,7 @@ async function handleSubmit() {
               </div>
 
               <div class="overflow-y-auto px-4 py-5 pb-28">
-                <form @submit.prevent="handleSubmit" class="space-y-5">
+                <form @submit.prevent="submitForm" class="space-y-5">
                   <MoviePosterSearch @select-movie="handleSelectMovie" />
 
                   <div class="space-y-2">
@@ -374,7 +275,7 @@ async function handleSubmit() {
                         type="text"
                         :class="[
                           'w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none transition-all placeholder:text-slate-600',
-                          errors.title
+                          errors?.title
                             ? 'bg-white/5 border border-rose-500/50 focus:ring-rose-500/20'
                             : title
                               ? 'bg-white/5 border border-emerald-500/50 focus:ring-emerald-500/20'
@@ -386,12 +287,12 @@ async function handleSubmit() {
                       <span
                         v-if="title"
                         class="material-symbols-outlined absolute right-3 top-3"
-                        :class="errors.title ? 'text-rose-500' : 'text-emerald-500'"
+                        :class="errors?.title ? 'text-rose-500' : 'text-emerald-500'"
                       >
-                        {{ errors.title ? 'warning' : 'check_circle' }}
+                        {{ errors?.title ? 'warning' : 'check_circle' }}
                       </span>
                     </div>
-                    <p v-if="errors.title" class="text-xs text-rose-500 font-medium">{{ t('form.warning') }}</p>
+                    <p v-if="errors?.title" class="text-xs text-rose-500 font-medium">{{ t('form.warning') }}</p>
                     <p v-else-if="title" class="text-xs text-emerald-500 font-medium">{{ t('form.looksGood') }}</p>
                   </div>
 
@@ -407,7 +308,7 @@ async function handleSubmit() {
                         type="url"
                         :class="[
                           'w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none transition-all placeholder:text-slate-600',
-                          errors.image
+                          errors?.image
                             ? 'bg-white/5 border border-rose-500/50 focus:ring-rose-500/20'
                             : image
                               ? 'bg-white/5 border border-emerald-500/50 focus:ring-emerald-500/20'
@@ -419,12 +320,12 @@ async function handleSubmit() {
                       <span
                         v-if="image"
                         class="material-symbols-outlined absolute right-3 top-3"
-                        :class="errors.image ? 'text-rose-500' : 'text-emerald-500'"
+                        :class="errors?.image ? 'text-rose-500' : 'text-emerald-500'"
                       >
-                        {{ errors.image ? 'warning' : 'check_circle' }}
+                        {{ errors?.image ? 'warning' : 'check_circle' }}
                       </span>
                     </div>
-                    <p v-if="errors.image" class="text-xs text-rose-500 font-medium">{{ errors.image }}</p>
+                    <p v-if="errors?.image" class="text-xs text-rose-500 font-medium">{{ errors?.image }}</p>
                     <p v-else-if="image" class="text-xs text-emerald-500 font-medium">{{ t('form.looksGood') }}</p>
                   </div>
 
@@ -439,7 +340,7 @@ async function handleSubmit() {
                         type="number"
                         :class="[
                           'w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none transition-all placeholder:text-slate-600',
-                          errors.year
+                          errors?.year
                             ? 'bg-white/5 border border-rose-500/50 focus:ring-rose-500/20'
                             : year
                               ? 'bg-white/5 border border-emerald-500/50 focus:ring-emerald-500/20'
@@ -449,20 +350,20 @@ async function handleSubmit() {
                         @blur="validateField('year', year)"
                       />
                       <span
-                        v-if="year && !errors.year"
+                        v-if="year && !errors?.year"
                         class="material-symbols-outlined absolute right-3 top-3 text-emerald-500"
                       >
                         check_circle
                       </span>
                       <span
-                        v-else-if="errors.year"
+                        v-else-if="errors?.year"
                         class="material-symbols-outlined absolute right-3 top-3 text-rose-500"
                       >
                         warning
                       </span>
                     </div>
-                    <p v-if="errors.year" class="text-xs text-rose-500 font-medium">{{ errors.year }}</p>
-                    <p v-else-if="year && !errors.year" class="text-xs text-emerald-500 font-medium">{{ t('form.looksGood') }}</p>
+                    <p v-if="errors?.year" class="text-xs text-rose-500 font-medium">{{ errors?.year }}</p>
+                    <p v-else-if="year && !errors?.year" class="text-xs text-emerald-500 font-medium">{{ t('form.looksGood') }}</p>
                   </div>
 
                   <div class="pt-2 flex items-center justify-between">

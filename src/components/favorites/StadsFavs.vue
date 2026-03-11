@@ -4,11 +4,11 @@ import { useI18n } from 'vue-i18n'
 import { useMoviesStore } from '@/stores/movies'
 
 const { t } = useI18n()
-import FavoriteDecadesCard from '@/components/FavoriteDecadesCard.vue'
-import FavoriteGenresCard from '@/components/FavoriteGenresCard.vue'
-import FavDirectos from '@/components/FavDirectos.vue'
-import FavActors from '@/components/FavActors.vue'
-import FavWritters from '@/components/FavWritters.vue'
+import FavoriteDecadesCard from '@/components/favorites/FavoriteDecadesCard.vue'
+import FavoriteGenresCard from '@/components/favorites/FavoriteGenresCard.vue'
+import FavDirectos from '@/components/favorites/FavDirectos.vue'
+import FavActors from '@/components/favorites/FavActors.vue'
+import FavWritters from '@/components/favorites/FavWritters.vue'
 
 const moviesStore = useMoviesStore()
 

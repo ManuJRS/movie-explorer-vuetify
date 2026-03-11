@@ -3,8 +3,7 @@ import { ref, computed, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
 import { useMoviesStore } from '@/stores/movies';
-import CustomSelect from '@/components/CustomSelect.vue';
-import SynopsisModal from '@/components/SynopsisModal.vue';
+import CustomSelect from '@/components/shared/CustomSelect.vue';
 import PageLoader from '@/components/ui/PageLoader.vue'
 import { useI18n } from 'vue-i18n';
 
@@ -29,12 +28,7 @@ const year = ref('');
 const image = ref('');
 const platform = ref('');
 const synopsis = ref('');
-const showSynopsisModal = ref(false);
 const errors = ref<FormErrors>({ title: '', year: '', image: '' });
-
-function openSynopsisModal() {
-    showSynopsisModal.value = true;
-}
 
 const platformOptions = [
     { value: 'netflix', label: 'Netflix' },

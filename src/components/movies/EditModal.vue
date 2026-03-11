@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
 import type { Movie } from '@/types/movie'
-import CustomSelect from '@/components/CustomSelect.vue'
+import CustomSelect from '@/components/shared/CustomSelect.vue'
 import { useI18n } from 'vue-i18n';
-import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue';
+import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.vue';
 
 const { t } = useI18n();
 type FormErrors = { title: string; year: string; image: string; platform?: string };

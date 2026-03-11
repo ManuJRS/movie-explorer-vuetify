@@ -1,83 +1,27 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-const { t, locale } = useI18n()
-import { storeToRefs } from 'pinia'
-import { useThemeStore } from '@/stores/theme'
-const themeStore = useThemeStore()
-const { isDark } = storeToRefs(themeStore)
-import { useAuthStore } from '@/stores/auth'
-const authStore = useAuthStore()
-const { user } = storeToRefs(authStore)
-import { useRouter, useRoute } from 'vue-router'
-const router = useRouter()
-const route = useRoute()
-import { useWindowWidth } from '@/composables/useWindowWidth'
-const windowWidth = useWindowWidth()
-const isMobile = computed(() => windowWidth.value < 640)
+import { useFloatingHeader } from '@/composables/useFloatingHeader'
+import { DEFAULT_HEADER_LINKS, type FloatingHeaderProps } from '@/types/header'
 
-function changeLanguage() {
-    const next = locale.value === 'en' ? 'es' : 'en'
-    locale.value = next
-    localStorage.setItem('lang', next)
-}
-
-const isActive = (path: string) => {
-  return route.path === path
-}
-
-type HeaderLink = {
-  label: string
-  href: string
-}
-
-interface Props {
-  brand?: string
-  links?: HeaderLink[]
-  loginText?: string
-  signInText?: string
-  getStartedText?: string
-}
-
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<FloatingHeaderProps>(), {
   brand: 'SYM',
   loginText: 'Login',
   signInText: 'Sign In',
   getStartedText: 'Get Started',
-  links: () => [
-    { label: 'nav.recommendations', href: '/recommendations' },
-    { label: 'nav.statistics', href: '/stads' },
-    { label: 'nav.watchList', href: '/watch-list' },
-    { label: 'nav.settings', href: '/user-settings' },
-    { label: 'nav.favorites', href: '/favorites' },
-  ],
+  links: () => DEFAULT_HEADER_LINKS,
 })
 
-const open = ref(false)
-
-const toggleMenu = () => {
-  open.value = !open.value
-}
-
-const closeMenu = () => {
-  open.value = false
-}
-
-watch(open, (isOpen) => {
-  if (typeof document === 'undefined') return
-
-  if (isOpen) {
-    document.body.style.overflow = 'hidden'
-  } else {
-    document.body.style.overflow = ''
-  }
-})
-
-
-async function logout() {
-    await authStore.signOut()
-    router.push('/login')
-}
+const {
+  t,
+  locale,
+  user,
+  open,
+  isMobile,
+  changeLanguage,
+  toggleMenu,
+  closeMenu,
+  logout,
+  goToLogin,
+} = useFloatingHeader()
 </script>
 
 <template>
@@ -85,7 +29,6 @@ async function logout() {
     class="py-2 sticky top-0 z-50 mx-auto w-full border border-black/10 dark:border-white/10 bg-white/95 shadow backdrop-blur-lg supports-[backdrop-filter]:bg-white/80 dark:bg-slate-950/95 dark:supports-[backdrop-filter]:bg-slate-950/80"
   >
     <nav class="mx-auto flex items-center justify-between p-1.5">
-      <!-- Brand -->
       <router-link
         to="/"
         class="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 transition duration-100 hover:bg-black/5 dark:hover:bg-white/5"
@@ -94,7 +37,6 @@ async function logout() {
         <p class="font-mono text-base font-bold">{{ brand }}</p>
       </router-link>
 
-      <!-- Desktop links -->
       <div class="hidden items-center gap-1 lg:flex">
         <router-link
           v-if="user"
@@ -107,7 +49,6 @@ async function logout() {
         </router-link>
       </div>
 
-      <!-- Actions -->
       <div class="flex items-center gap-2">
 
         <button @click="changeLanguage" class="hover:text-gray-500 hover:scale-105 transition-all duration-300 py-2 text-sm rounded-lg hover:cursor-pointer text-white transition inline-flex items-center gap-2">
@@ -130,7 +71,7 @@ async function logout() {
             v-if="!user"
             type="button"
             class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md border border-black/10 bg-white px-4 text-sm font-medium transition-colors hover:bg-black/5 dark:border-white/10 dark:bg-slate-950 dark:hover:bg-white/5"
-            @click="router.push('/login'); closeMenu();"
+            @click="goToLogin(); closeMenu();"
           >
             {{ t('nav.signIn') }}
           </button>
@@ -156,7 +97,6 @@ async function logout() {
     </nav>
   </header>
 
-  <!-- Mobile sheet -->
   <Teleport to="body">
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -185,7 +125,6 @@ async function logout() {
         v-if="open"
         class="fixed inset-y-0 left-0 z-[60] flex h-full w-3/4 max-w-sm flex-col border-r border-black/10 bg-white/95 shadow-lg backdrop-blur-lg dark:border-white/10 dark:bg-slate-950/95"
       >
-        <!-- Close button -->
         <button
           type="button"
           @click="closeMenu"
@@ -217,7 +156,6 @@ async function logout() {
           </router-link>
         </div>
 
-        <!-- Footer -->
         <div class="mt-auto flex flex-col gap-2 border-t border-black/10 bg-black/5 p-4 dark:border-white/10 dark:bg-white/5">
           <button
             v-if="user"
@@ -232,7 +170,7 @@ async function logout() {
             v-else
             type="button"
             class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md border border-black/10 bg-white px-4 text-sm font-medium transition-colors hover:bg-black/5 dark:border-white/10 dark:bg-slate-950 dark:hover:bg-white/5"
-            @click="router.push('/login'); closeMenu();"
+            @click="goToLogin(); closeMenu();"
           >
             {{ signInText }}
           </button>
