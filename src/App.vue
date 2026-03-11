@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { watch } from 'vue'
-import Navbar from '@/components/Navbar.vue'
-import FloatingHeader from '@/components/FloatingHeader.vue'
+import FloatingHeader from '@/components/layout/FloatingHeader.vue'
+import Footer from '@/components/layout/Footer.vue'
 import { storeToRefs } from 'pinia'
 import { useThemeStore } from '@/stores/theme'
 
@@ -19,4 +19,5 @@ watch(isDark, (value) => {
 <template>
   <FloatingHeader />
   <router-view />
+  <Footer />
 </template>

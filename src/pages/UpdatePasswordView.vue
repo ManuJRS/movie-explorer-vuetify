@@ -4,7 +4,7 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '@/lib/supabase'
 import { useI18n } from 'vue-i18n'
-import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue'
+import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.vue'
 
 const { t } = useI18n() 
 const router = useRouter()

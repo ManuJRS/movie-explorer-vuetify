@@ -4,14 +4,14 @@ import { storeToRefs } from 'pinia'
 import i18n from '@/i18n'
 
 
-import AddMovieForm from '@/components/AddMovieForm.vue'
-import MovieCard from '@/components/MovieCard.vue'
-import MovieDetailModal from '@/components/MovieDetailModal.vue'
-import MoviesCounter from '@/components/MoviesCounter.vue'
-import FloatingActionMenu from '@/components/FloatingActionMenu.vue'
+import AddMovieForm from '@/components/movies/AddMovieForm.vue'
+import MovieCard from '@/components/favorites/MovieCard.vue'
+import MovieDetailModal from '@/components/shared/MovieDetailModal.vue'
+import MoviesCounter from '@/components/shared/MoviesCounter.vue'
+import FloatingActionMenu from '@/components/movies/FloatingActionMenu.vue'
 import { useWindowWidth } from '@/composables/useWindowWidth'
-import Paginator from '@/components/Paginator.vue'
-import TitleIntro from '@/components/TitleIntro.vue'
+import Paginator from '@/components/shared/Paginator.vue'
+import TitleIntro from '@/components/movies/TitleIntro.vue'
 import PageLoader from '@/components/ui/PageLoader.vue'
 
 const windowWidth = useWindowWidth()

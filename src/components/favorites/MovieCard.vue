@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useMoviesStore } from '@/stores/movies';
-import DelateMovieModal from '@/components/DelateMovieModal.vue';
-import Tooltip from '@/components/Tooltip.vue';
+import DelateMovieModal from '@/components/shared/DelateMovieModal.vue';
+import Tooltip from '@/components/movies/Tooltip.vue';
 import type { Movie } from '@/types/movie';
 
 const moviesStore = useMoviesStore();

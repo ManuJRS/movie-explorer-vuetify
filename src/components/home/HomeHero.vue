@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
-import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue'
+import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.vue'
 </script>
 
 <template>

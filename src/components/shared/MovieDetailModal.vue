@@ -2,9 +2,9 @@
 import { ref } from 'vue';
 import { useMoviesStore } from '@/stores/movies'
 import type { Movie } from '@/types/movie'
-import EditModal from '@/components/EditModal.vue';
+import EditModal from '@/components/movies/EditModal.vue';
 import { useI18n } from 'vue-i18n';
-import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue';
+import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.vue';
 
 const { t } = useI18n();
 

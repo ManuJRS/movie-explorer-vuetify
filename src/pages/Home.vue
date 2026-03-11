@@ -2,12 +2,11 @@
 import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
-import HomeHero from '@/components/HomeHero.vue'
-import HomeMockup from '@/components/HomeMockup.vue'
-import HomeCards from '@/components/HomeCards.vue'
-import Footer from '@/components/Footer.vue'
-import CardVideo from '@/components/CardVideo.vue'
-import ExplicationProject from '@/components/ExplicationProject.vue'
+import HomeHero from '@/components/home/HomeHero.vue'
+import HomeMockup from '@/components/home/HomeMockup.vue'
+import HomeCards from '@/components/home/HomeCards.vue'
+import CardVideo from '@/components/home/CardVideo.vue'
+import ExplicationProject from '@/components/home/ExplicationProject.vue'
 import PageLoader from '@/components/ui/PageLoader.vue'
 
 const authStore = useAuthStore()
@@ -33,7 +32,6 @@ onMounted(async () => {
       <HomeCards />
       <CardVideo />
       <ExplicationProject />
-      <Footer />
     </template>
   </main>
 </template>

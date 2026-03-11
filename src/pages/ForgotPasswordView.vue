@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { useI18n } from 'vue-i18n'
-import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue'
+import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.vue'
 import PageLoader from '@/components/ui/PageLoader.vue'
 
 const isLoading = ref(true)
