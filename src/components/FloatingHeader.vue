@@ -9,8 +9,9 @@ const { isDark } = storeToRefs(themeStore)
 import { useAuthStore } from '@/stores/auth'
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
+const route = useRoute()
 import { useWindowWidth } from '@/composables/useWindowWidth'
 const windowWidth = useWindowWidth()
 const isMobile = computed(() => windowWidth.value < 640)
@@ -19,6 +20,10 @@ function changeLanguage() {
     const next = locale.value === 'en' ? 'es' : 'en'
     locale.value = next
     localStorage.setItem('lang', next)
+}
+
+const isActive = (path: string) => {
+  return route.path === path
 }
 
 type HeaderLink = {
@@ -40,10 +45,11 @@ const props = withDefaults(defineProps<Props>(), {
   signInText: 'Sign In',
   getStartedText: 'Get Started',
   links: () => [
-    { label: 'nav.statistics', href: '/stads' },
-    { label: 'nav.settings', href: '/user-settings' },
     { label: 'nav.recommendations', href: '/recommendations' },
+    { label: 'nav.statistics', href: '/stads' },
     { label: 'nav.watchList', href: '/watch-list' },
+    { label: 'nav.settings', href: '/user-settings' },
+    { label: 'nav.favorites', href: '/favorites' },
   ],
 })
 
@@ -95,7 +101,7 @@ async function logout() {
           v-for="link in links"
           :key="link.label"
           :to="link.href"
-          class="inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/5"
+          class="inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/5 [&.router-link-exact-active]:bg-primary/15 [&.router-link-exact-active]:text-primary [&.router-link-exact-active]:dark:bg-slate-500/20"
         >
           {{ t(link.label) }}
         </router-link>
@@ -204,7 +210,7 @@ async function logout() {
             v-for="link in links"
             :key="link.label"
             :to="link.href"
-            class="inline-flex h-10 items-center justify-start rounded-md px-3 text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/5"
+            class="inline-flex h-10 items-center justify-start rounded-md px-3 text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/5 [&.router-link-exact-active]:bg-primary/15 [&.router-link-exact-active]:text-primary [&.router-link-exact-active]:dark:dark:bg-slate-500/20"
             @click="closeMenu"
           >
             {{ t(link.label) }}
