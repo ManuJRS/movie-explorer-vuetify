@@ -22,6 +22,11 @@ defineProps({
             platform: '',
             synopsis: ''
         })
+    },
+    /** Si false, no se muestra el botón de editar (p. ej. en detalle de recomendación). */
+    showEditButton: {
+        type: Boolean,
+        default: true
     }
 });
 
@@ -80,6 +85,7 @@ async function onEditSave(updatedMovie: Movie) {
                     <div class="mb-2 md:mb-8">
                         <div class="flex items-center gap-3 mb-2 items-start md:items-center">
                             <button
+                                v-if="showEditButton"
                                 type="button"
                                 @click="openEditModal"
                                 class="hover:cursor-pointer p-2 rounded-full hover:text-blue-500 transition-colors"
@@ -165,6 +171,7 @@ async function onEditSave(updatedMovie: Movie) {
     </Teleport>
 
     <EditModal
+        v-if="showEditButton"
         v-model:open="showEditModal"
         :movie="movie"
         @save="onEditSave"
