@@ -10,7 +10,8 @@
     "language": "Idioma",
     "signIn": "Iniciar sesión",
     "recommendations": "Recomendaciones",
-    "watchList": "Ver mas tarde"
+    "watchList": "Ver mas tarde",
+    "favorites": "Favoritos"
   },
   "form": {
     "title": "Guardar una película",
@@ -201,10 +202,39 @@
     "empty": "No tienes películas en tu lista de pendientes. Guarda películas desde las recomendaciones.",
     "remove": "Quitar"
   },
+  "statsFavs": {
+    "title": "Descubre tus estadísticas favoritas",
+    "moviesLabel": "Películas que me gustan",
+    "hoursLabel": "Tiempo viendo lo que amo",
+    "hoursSuffix": "hrs",
+    "decadesTitle": "Décadas favoritas",
+    "genresTitle": "Géneros favoritos",
+    "directorsTitle": "Directores favoritos",
+    "actorsTitle": "Actores favoritos",
+    "writersTitle": "Guionistas favoritos",
+    "director": "Director",
+    "actor": "Actor",
+    "writer": "Escritor",
+    "movie_one": "película",
+    "movie_other": "películas",
+    "percentTotal": "% Total",
+    "noDecades": "No hay suficientes películas favoritas con año válido.",
+    "noGenres": "No hay suficientes datos de género.",
+    "noDirectors": "No hay directores en tus películas favoritas.",
+    "noActors": "No hay actores en tus películas favoritas.",
+    "noWriters": "No hay guionistas en tus películas favoritas."
+  },
+  "favorites": {
+    "title": "Películas favoritas",
+    "description": "Aquí se muestran solo las películas que marcaste con el corazón en tu colección.",
+    "counterLabel": "Favoritas",
+    "empty": "Aún no tienes películas favoritas. Marca con ♥ las que te gusten en la página de películas.",
+    "loading": "Cargando favoritos..."
+  },
   "recommendations": {
     "title": "Recomendadas para ti",
     "subtitle": "Basado en tus películas guardadas y tus preferencias, aquí tienes 12 películas que podrían gustarte.",
-    "emptyMinimum": "Agrega al menos 3 películas para poder recomendarte títulos según tus preferencias.",
+    "emptyMinimum": "Marca al menos 3 películas como favoritas (♥) en tu colección para que podamos recomendarte títulos según tu gusto.",
     "noResults": "No pudimos encontrar recomendaciones por ahora. Intenta agregando más películas.",
     "noOverview": "No hay descripción disponible.",
     "saveButton": "Guardar película",
@@ -212,6 +242,7 @@
     "seeMore": "Ver más",
     "seeLess": "Ver menos",
     "addToShell": "Guardar",
-    "addToWatchlist": "ver después"
+    "addToWatchlist": "ver después",
+    "refresh": "Cargar nuevas recomendaciones"
   }
 }
