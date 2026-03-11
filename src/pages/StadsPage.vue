@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed, onMounted, watch, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import InsightsIntro from '@/components/InsightsIntro.vue'
-import InsightsActors from '@/components/InsightsActors.vue'
-import InsightsDirectors from '@/components/InsightsDirectors.vue'
-import InsightsGenere from '@/components/InsightsGenere.vue'
-import InsightsWriters from '@/components/InsightsWriters.vue'
+import InsightsIntro from '@/components/stads/InsightsIntro.vue'
+import InsightsActors from '@/components/stads/InsightsActors.vue'
+import InsightsDirectors from '@/components/stads/InsightsDirectors.vue'
+import InsightsGenere from '@/components/stads/InsightsGenere.vue'
+import InsightsWriters from '@/components/stads/InsightsWriters.vue'
+import PageLoader from '@/components/ui/PageLoader.vue'
 import { useMoviesStore } from '@/stores/movies'
 import { useAuthStore } from '@/stores/auth'
-import PageLoader from '@/components/ui/PageLoader.vue'
 
 const isLoading = ref(true)
 

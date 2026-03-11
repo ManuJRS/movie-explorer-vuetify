@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import InfoVideoComponent from '@/components/InfoVideoComponent.vue';
-import AccordionFAQS from '@/components/AccordionFAQS.vue';
+import InfoVideoComponent from '@/components/info/InfoVideoComponent.vue';
+import AccordionFAQS from '@/components/info/AccordionFAQS.vue';
 import { useI18n } from 'vue-i18n'
 import PageLoader from '@/components/ui/PageLoader.vue'
 const { t } = useI18n()

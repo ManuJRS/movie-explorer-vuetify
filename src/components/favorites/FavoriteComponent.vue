@@ -4,8 +4,8 @@ import { storeToRefs } from 'pinia'
 import { useMoviesStore } from '@/stores/movies'
 import { useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
-import MoviesCounter from '@/components/MoviesCounter.vue'
-import MovieCard from '@/components/MovieCard.vue'
+import MoviesCounter from '@/components/shared/MoviesCounter.vue'
+import MovieCard from '@/components/favorites/MovieCard.vue'
 import type { Movie } from '@/types/movie'
 
 const moviesStore = useMoviesStore()

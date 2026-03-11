@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router'
 const themeStore = useThemeStore()
 import { useI18n } from 'vue-i18n'
 const { isDark } = storeToRefs(themeStore)
-import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue'
+import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.vue'
 const { t, locale } = useI18n()
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
