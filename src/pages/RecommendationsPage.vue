@@ -5,6 +5,18 @@ import { useMoviesStore } from '@/stores/movies'
 import { useWatchlistStore } from '@/stores/watchlist'
 import { getMovieFullData } from '@/lib/tmdb'
 import { useI18n } from 'vue-i18n'
+import PageLoader from '@/components/ui/PageLoader.vue'
+
+const isLoading = ref(true)
+
+onMounted(async () => {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 1800))
+  } finally {
+    isLoading.value = false
+  }
+})
+
 
 const { t } = useI18n()
 const moviesStore = useMoviesStore()
@@ -30,6 +42,7 @@ async function seedToMovies(movie: { id: number; poster_path: string | null }) {
       directors: fullData.directors,
       mainActors: fullData.mainActors,
       writers: fullData.writers,
+      favorite: false,
     })
     await removeAndReplaceMovie(movie.id)
   } catch {
@@ -84,19 +97,36 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section class="min-h-screen px-6 py-10 bg-slate-950 text-white">
+  <PageLoader v-if="isLoading" />
+  <section class="min-h-screen px-6 py-10 text-white">
     <div class="max-w-7xl mx-auto">
       <div class="mb-10">
-        <h1 class="text-3xl md:text-4xl font-bold mb-3">
-          {{ t('recommendations.title') }}
-        </h1>
+        <div class="flex items-center gap-3 mb-3">
+          <h1 class="text-3xl md:text-4xl font-bold">
+            {{ t('recommendations.title') }}
+          </h1>
+          <button
+            type="button"
+            class="rounded-full p-2 text-slate-400 hover:text-white hover:bg-white/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            :aria-label="t('recommendations.refresh')"
+            :disabled="loading"
+            @click="getRecommendations()"
+          >
+            <span
+              class="material-symbols-outlined text-2xl block"
+              :class="{ 'animate-spin': loading }"
+            >
+              refresh
+            </span>
+          </button>
+        </div>
         <p class="text-slate-400 max-w-2xl">
           {{ t('recommendations.subtitle') }}
         </p>
       </div>
 
       <div
-        v-if="moviesStore.movies.filter(movie => movie.tmdbId != null).length < 3"
+        v-if="moviesStore.movies.filter(m => m.favorite && m.tmdbId != null).length < 3"
         class="rounded-2xl border border-white/10 bg-white/5 p-6 text-slate-300"
       >
         {{ t('recommendations.emptyMinimum') }}
@@ -136,67 +166,83 @@ onMounted(async () => {
 
       <div
         v-else
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
       >
         <article
           v-for="movie in recommendations"
           :key="movie.id"
-          class="group rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300"
+          class="group relative glass rounded-xl overflow-hidden hover:scale-[1.02] transition-all duration-300 border border-black/10 dark:border-white/10"
         >
-          <img
-            :src="getPosterUrl(movie.poster_path)"
-            :alt="movie.title"
-            class="w-full md:h-[360px] object-cover"
-          />
+          <div
+            class="relative h-[200px] sm:h-[260px] md:h-[360px] overflow-hidden cursor-pointer"
+            @click="toggleOverview(movie.id)"
+          >
+            <img
+              :src="getPosterUrl(movie.poster_path)"
+              :alt="movie.title"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+            <div
+              class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 sm:gap-4"
+            >
+              <button
+                type="button"
+                class="hover:cursor-pointer h-10 w-10 sm:h-12 sm:w-12 rounded-full glass flex items-center justify-center hover:bg-white/20 transition-colors"
+                @click.stop="toggleOverview(movie.id)"
+              >
+                <span class="material-symbols-outlined text-white">info</span>
+              </button>
+            </div>
+          </div>
 
-          <div class="p-4">
-            <h2 class="text-lg font-bold line-clamp-1 mb-1">
+          <div class="p-2.5 sm:p-4">
+            <h2 class="font-bold text-sm sm:text-base line-clamp-1 mb-1 text-slate-900 dark:text-white">
               {{ movie.title }}
             </h2>
 
-            <p class="text-sm text-slate-400 mb-3">
+            <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mb-2">
               {{ movie.release_date?.slice(0, 4) || 'N/A' }}
             </p>
 
             <p
               :class="[
-                'text-sm text-slate-300 mb-2',
+                'text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mb-2',
                 expandedOverviewIds.has(movie.id) ? '' : 'line-clamp-3',
               ]"
             >
               {{ movie.overview || t('recommendations.noOverview') }}
             </p>
             <button
-              v-if="movie.overview && movie.overview.length > 150"
+              v-if="movie.overview && movie.overview.length > 100"
               type="button"
               class="text-xs text-primary hover:underline mb-3"
               @click="toggleOverview(movie.id)"
             >
               {{ expandedOverviewIds.has(movie.id) ? t('recommendations.seeLess') : t('recommendations.seeMore') }}
             </button>
-            <div class="flex items-center justify-between gap-2">
-                <button
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-2">
+              <button
                 type="button"
-                class="w-full rounded-xl px-4 py-2 font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed"
+                class="w-full rounded-lg px-4 py-2 text-sm font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed border border-black/10 dark:border-white/10 bg-white/5 hover:bg-white/10 dark:bg-white/5 dark:hover:bg-white/10"
                 :class="isInMovies(movie.id)
-                  ? 'bg-slate-600 text-slate-300 cursor-default'
-                  : 'bg-slate-700 text-white hover:bg-slate-600'"
+                  ? 'text-slate-500 dark:text-slate-400 cursor-default'
+                  : 'text-slate-900 dark:text-white'"
                 :disabled="seedingId === movie.id || isInMovies(movie.id)"
                 @click="seedToMovies(movie)"
-                >
+              >
                 {{ seedingId === movie.id ? '...' : isInMovies(movie.id) ? t('recommendations.seeded') : t('recommendations.addToShell') }}
-                </button>
-                <button
+              </button>
+              <button
                 type="button"
-                class="w-full rounded-xl px-4 py-2 font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed"
+                class="w-full rounded-lg px-4 py-2 text-sm font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed border border-black/10 dark:border-white/10 bg-white/5 hover:bg-white/10 dark:bg-white/5 dark:hover:bg-white/10"
                 :class="watchlistStore.isInWatchlist(movie.id)
-                  ? 'bg-slate-600 text-slate-300 cursor-default'
-                  : 'bg-slate-700 text-white hover:bg-slate-600'"
+                  ? 'text-slate-500 dark:text-slate-400 cursor-default'
+                  : 'text-slate-900 dark:text-white'"
                 :disabled="savingId === movie.id || watchlistStore.isInWatchlist(movie.id)"
                 @click="saveToWatchlist(movie)"
-                >
+              >
                 {{ savingId === movie.id ? '...' : watchlistStore.isInWatchlist(movie.id) ? t('watchlist.saved') : t('recommendations.addToWatchlist') }}
-                </button>
+              </button>
             </div>
           </div>
         </article>
