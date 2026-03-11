@@ -10,11 +10,24 @@ import InteractiveHoverButton from '@/components/InteractiveHoverButton.vue'
       <video
         autoplay
         muted
-        loop  
+        loop
+        playsinline
+        preload="metadata"
+        poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Crect fill='%231e293b' width='1' height='1'/%3E%3C/svg%3E"
         class="w-full h-full object-cover object-bottom opacity-60 scale-105 blur-xs"
-        type="video/mp4"
       >
-        <source src="https://res.cloudinary.com/dronteu5m/video/upload/v1773004245/Dise%C3%B1o_sin_t%C3%ADtulo_5_wah75m.mp4" type="video/mp4">
+        <!-- Móvil: versión más ligera (menor resolución y calidad) -->
+        <source
+          media="(max-width: 768px)"
+          src="https://res.cloudinary.com/dronteu5m/video/upload/w_640,c_scale,q_auto:low/v1773004245/Dise%C3%B1o_sin_t%C3%ADtulo_5_wah75m.mp4"
+          type="video/mp4"
+        >
+        <!-- Escritorio: video completo -->
+        <source
+          media="(min-width: 769px)"
+          src="https://res.cloudinary.com/dronteu5m/video/upload/v1773004245/Dise%C3%B1o_sin_t%C3%ADtulo_5_wah75m.mp4"
+          type="video/mp4"
+        >
       </video>
       <div
         class="absolute inset-0 bg-gradient-to-b via-background-dark/10 to-background-dark"
