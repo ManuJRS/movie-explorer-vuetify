@@ -77,19 +77,20 @@ onMounted(async () => {
               {{ item.overview }}
             </p>
             <div class="flex items-center justify-between gap-2">
+
                 <button
                 type="button"
-                class="w-full rounded-xl px-4 py-2 bg-slate-700 text-white font-semibold hover:bg-slate-600 transition"
-                @click="watchlistStore.removeFromWatchlist(item.id)"
-                >
-                {{ t('watchlist.remove') }}
-                </button>
-                <button
-                type="button"
-                class="w-full rounded-xl px-4 py-2 bg-slate-700 text-white font-semibold hover:bg-slate-600 transition"
+                class="hover:cursor-pointer w-full rounded-xl px-4 py-2 bg-slate-700 text-white font-semibold hover:bg-slate-600 transition"
                 @click="watchlistStore.removeFromWatchlist(item.id)"
                 >
                 {{ t('recommendations.addToShell') }}
+                </button>
+                <button
+                type="button"
+                class="hover:cursor-pointer w-full rounded-xl px-4 py-2 bg-slate-700 text-white font-semibold hover:bg-slate-600 transition"
+                @click="watchlistStore.removeFromWatchlist(item.id)"
+                >
+                {{ t('watchlist.remove') }}
                 </button>
             </div>
           </div>

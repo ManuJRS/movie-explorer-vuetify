@@ -16,7 +16,8 @@ import PageLoader from '@/components/ui/PageLoader.vue'
 
 const windowWidth = useWindowWidth()
 const isMobile = computed(() => windowWidth.value < 640)
-import { useMoviesStore, type Movie } from '@/stores/movies'
+import { useMoviesStore } from '@/stores/movies'
+import type { Movie } from '@/types/movie'
 import { useAuthStore } from '@/stores/auth'
 
 const isLoading = ref(true)
@@ -76,14 +77,12 @@ function openAddMovieModal() {
   if (form && 'openMobileFormModal' in form) form.openMobileFormModal()
 }
 
-// Carga movies solo si hay user
 watch(user, async (u) => {
   if (u) await moviesStore.loadMovies()
   else moviesStore.resetMovies()
 }, { immediate: true })
 
 onMounted(async () => {
-  // por si ya hay sesión cuando montas
   if (user.value) await moviesStore.loadMovies()
 })
 </script>
@@ -93,7 +92,6 @@ onMounted(async () => {
 
   <main class="mt-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-    <!-- Si NO hay user: redirigir a login -->
     <div v-if="!user" class="max-w-md mx-auto text-center py-16">
       <p class="text-slate-600 dark:text-slate-300 mb-4">Log in to save and manage your movies.</p>
       <router-link
@@ -104,7 +102,6 @@ onMounted(async () => {
       </router-link>
     </div>
 
-    <!-- Si SÍ hay user: mostrar dashboard -->
     <div v-else class="flex flex-col min-w-0 md:flex-row flex-wrap gap-6">
       <div class="w-full md:w-1/3 lg:max-w-md">
         <AddMovieForm ref="addMovieFormRef" />
