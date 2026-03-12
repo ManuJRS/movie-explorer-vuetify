@@ -8,7 +8,6 @@ import ForgotPasswordView from '@/pages/ForgotPasswordView.vue'
 import UpdatePasswordView from '@/pages/UpdatePasswordView.vue'
 import UserSettings from '@/pages/UserSettings.vue' 
 import InfoPage from '@/pages/InfoPage.vue'
-import StadsPage from '@/pages/StadsPage.vue'
 import RecommendationsPage from '@/pages/RecommendationsPage.vue'
 import WatchList from '@/pages/WatchList.vue'
 import FavoritesPage from '@/pages/FavoritesPage.vue'
@@ -24,7 +23,6 @@ const router = createRouter({
     { path: '/update-password', name: 'update-password', component: UpdatePasswordView },
     { path: '/user-settings', name: 'user-settings', component: UserSettings, meta: { requiresAuth: true } },
     { path: '/info', name: 'info', component: InfoPage, meta: { requiresAuth: true } },
-    { path: '/stads', name: 'stads', component: StadsPage, meta: { requiresAuth: true } },
     { path: '/recommendations', name: 'recommendations', component: RecommendationsPage, meta: { requiresAuth: true } },
     { path: '/watch-list', name: 'watch-list', component: WatchList, meta: { requiresAuth: true } },
     { path: '/favorites', name: 'favorites', component: FavoritesPage, meta: { requiresAuth: true } },

@@ -21,6 +21,7 @@ const {
   closeMenu,
   logout,
   goToLogin,
+  isActive,
 } = useFloatingHeader()
 </script>
 
@@ -43,7 +44,8 @@ const {
           v-for="link in links"
           :key="link.label"
           :to="link.href"
-          class="hover:cursor-pointer inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/5 [&.router-link-exact-active]:bg-primary/15 [&.router-link-exact-active]:text-primary [&.router-link-exact-active]:dark:bg-slate-500/20"
+          class="hover:cursor-pointer inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/5"
+          :class="isActive(link.href) ? 'bg-primary/15 text-primary dark:bg-slate-500/20' : ''"
         >
           {{ t(link.label) }}
         </router-link>
@@ -149,7 +151,8 @@ const {
             v-for="link in links"
             :key="link.label"
             :to="link.href"
-            class="inline-flex h-10 items-center justify-start rounded-md px-3 text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/5 [&.router-link-exact-active]:bg-primary/15 [&.router-link-exact-active]:text-primary [&.router-link-exact-active]:dark:dark:bg-slate-500/20"
+            class="inline-flex h-10 items-center justify-start rounded-md px-3 text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/5"
+            :class="isActive(link.href) ? 'bg-primary/15 text-primary dark:bg-slate-500/20' : ''"
             @click="closeMenu"
           >
             {{ t(link.label) }}
