@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import HomeHero from '@/components/home/HomeHero.vue'
@@ -16,7 +16,8 @@ const isLoading = ref(true)
 
 onMounted(async () => {
   try {
-    await new Promise((resolve) => setTimeout(resolve, 1800))
+    await authStore.init()
+    await nextTick()
   } finally {
     isLoading.value = false
   }
