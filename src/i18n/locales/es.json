@@ -43,7 +43,11 @@
     "botoClose": "Cerrar",
     "directors": "Directores",
     "cast": "Reparto",
-    "writers": "Escritores"
+    "writers": "Escritores",
+    "availableIn": "Disponible en",
+    "countryMX": "México",
+    "countryUS": "Estados Unidos",
+    "watchTrailer": "Ver trailer"
   },
   "modalModify": {
     "title": "Editar",

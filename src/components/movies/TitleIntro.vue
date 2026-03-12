@@ -49,7 +49,7 @@ function onInput(e: Event) {
       <button
         v-if="search"
         type="button"
-        class="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-white/10 transition-colors"
+        class="absolute pt-3 right-3 top-1/2 -translate-y-1/2 p-1 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
         aria-label="Clear search"
         @click="emit('update:search', '')"
       >
