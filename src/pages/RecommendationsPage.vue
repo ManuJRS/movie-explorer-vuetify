@@ -21,6 +21,8 @@ const selectedMovieForModal = ref<{
   directors?: string[]
   mainActors?: string[]
   writers?: string[]
+  watchProviders?: { mx: string[]; us: string[] }
+  trailerEmbedUrl?: string | null
 } | null>(null)
 
 const {
@@ -60,6 +62,8 @@ async function openRecommendationDetail(movie: TMDbMovie | import('@/types/movie
       directors: full.directors,
       mainActors: full.mainActors,
       writers: full.writers,
+      watchProviders: full.watchProviders,
+      trailerEmbedUrl: full.trailerEmbedUrl,
     }
     showMovieDetailModal.value = true
   } catch {
