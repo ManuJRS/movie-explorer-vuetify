@@ -94,7 +94,7 @@ const recommendationLabels = computed(() => ({
           </h1>
           <button
             type="button"
-            class="rounded-full p-2 text-slate-400 hover:text-white hover:bg-white/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            class="rounded-full p-2 text-slate-400 hover:text-white hover:cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             :aria-label="t('recommendations.refresh')"
             :disabled="loading"
             @click="getRecommendations()"

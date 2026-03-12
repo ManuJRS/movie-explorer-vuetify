@@ -26,12 +26,12 @@ const {
 
 <template>
   <header
-    class="py-2 sticky top-0 z-50 mx-auto w-full border border-black/10 dark:border-white/10 bg-white/95 shadow backdrop-blur-lg supports-[backdrop-filter]:bg-white/80 dark:bg-slate-950/95 dark:supports-[backdrop-filter]:bg-slate-950/80"
+    class="py-2 sticky top-0 z-50 mx-auto w-full border-b border-black/10 dark:border-white/10 bg-white/95 shadow backdrop-blur-lg supports-[backdrop-filter]:bg-white/80 dark:bg-slate-950/95 dark:supports-[backdrop-filter]:bg-slate-950/80"
   >
     <nav class="mx-auto flex items-center justify-between p-1.5">
       <router-link
         to="/"
-        class="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 transition duration-100 hover:bg-black/5 dark:hover:bg-white/5"
+        class="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 transition duration-100"
       >
         <span class="material-symbols-outlined text-lg">movie</span>
         <p class="font-mono text-base font-bold">{{ brand }}</p>
@@ -43,7 +43,7 @@ const {
           v-for="link in links"
           :key="link.label"
           :to="link.href"
-          class="inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/5 [&.router-link-exact-active]:bg-primary/15 [&.router-link-exact-active]:text-primary [&.router-link-exact-active]:dark:bg-slate-500/20"
+          class="hover:cursor-pointer inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/5 [&.router-link-exact-active]:bg-primary/15 [&.router-link-exact-active]:text-primary [&.router-link-exact-active]:dark:bg-slate-500/20"
         >
           {{ t(link.label) }}
         </router-link>
@@ -70,7 +70,7 @@ const {
         <button
             v-if="!user"
             type="button"
-            class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md border border-black/10 bg-white px-4 text-sm font-medium transition-colors hover:bg-black/5 dark:border-white/10 dark:bg-slate-950 dark:hover:bg-white/5"
+            class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md border border-black/10 bg-white px-4 text-sm font-medium transition-colors hover:cursor-pointer hover:bg-black/5 dark:border-white/10 dark:bg-slate-950 dark:hover:bg-white/5"
             @click="goToLogin(); closeMenu();"
           >
             {{ t('nav.signIn') }}
