@@ -75,10 +75,7 @@ export function useMoviesPage() {
       isLoading.value = false
     }
   })
-
-  onMounted(async () => {
-    if (user.value) await moviesStore.loadMovies()
-  })
+  // Las películas se cargan solo desde el watch(user) con immediate: true para evitar doble carga.
 
   return {
     user,
