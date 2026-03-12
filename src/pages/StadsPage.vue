@@ -52,7 +52,6 @@ const totalWatchTimeFormatted = computed(() =>
   formatWatchTime(totalRuntimeMinutes.value)
 )
 
-/** Top 5 actores más repetidos según las películas guardadas */
 const topActors = computed(() => {
   const count: Record<string, number> = {}
   for (const movie of movies.value) {
@@ -66,7 +65,6 @@ const topActors = computed(() => {
     .map(([name]) => name)
 })
 
-/** Top 3 directores más repetidos según las películas guardadas */
 const topDirectors = computed(() => {
   const count: Record<string, number> = {}
   for (const movie of movies.value) {
@@ -80,7 +78,6 @@ const topDirectors = computed(() => {
     .map(([name]) => name)
 })
 
-/** Top 3 géneros más repetidos con porcentaje según las películas guardadas */
 const topGenres = computed(() => {
   const count: Record<string, number> = {}
   let total = 0
@@ -102,7 +99,6 @@ const topGenres = computed(() => {
     }))
 })
 
-/** Top 3 escritores más repetidos según las películas guardadas */
 const topWriters = computed(() => {
   const count: Record<string, number> = {}
   for (const movie of movies.value) {
@@ -118,12 +114,18 @@ const topWriters = computed(() => {
 </script>
 
 <template>
-    <main class="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <PageLoader v-if="isLoading" />
-        <InsightsIntro :total-movies="totalMovies" :total-watch-time="totalWatchTimeFormatted" />
+  <main class="min-h-screen mt-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <PageLoader v-if="isLoading" />
+    <div class="space-y-12 sm:space-y-16">
+      <InsightsIntro :total-movies="totalMovies" :total-watch-time="totalWatchTimeFormatted" />
+      <div class="space-y-12 sm:space-y-14">
         <InsightsActors :actors="topActors" />
-        <InsightsDirectors :directors="topDirectors" />
-        <InsightsGenere :genres="topGenres" />
-        <InsightsWriters :writers="topWriters" />
-    </main>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <InsightsDirectors :directors="topDirectors" />
+          <InsightsGenere :genres="topGenres" />
+          <InsightsWriters :writers="topWriters" />
+        </div>
+      </div>
+    </div>
+  </main>
 </template>
