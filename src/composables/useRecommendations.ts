@@ -26,6 +26,43 @@ const SEEN_IDS_KEY = 'movie-explorer-recommendations-shown'
 const MAX_SEEN_IDS = 300
 const POOL_SIZE = 36
 
+const TMDB_MAX_CONCURRENT = 4
+const TMDB_CACHE_TTL_MS = 5 * 60 * 1000 // 5 min
+const TMDB_429_RETRIES = 2
+const TMDB_429_DELAY_MS = 1500
+
+interface CacheEntry {
+  data: unknown
+  ts: number
+}
+
+const tmdbCache = new Map<string, CacheEntry>()
+let tmdbRunning = 0
+const tmdbQueue: Array<() => void> = []
+
+function withTMDbConcurrency<T>(fn: () => Promise<T>): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const run = async () => {
+      tmdbRunning++
+      try {
+        const result = await fn()
+        resolve(result)
+      } catch (e) {
+        reject(e)
+      } finally {
+        tmdbRunning--
+        if (tmdbQueue.length > 0) tmdbQueue.shift()!()
+      }
+    }
+    if (tmdbRunning < TMDB_MAX_CONCURRENT) run()
+    else tmdbQueue.push(run)
+  })
+}
+
+function delay(ms: number): Promise<void> {
+  return new Promise((r) => setTimeout(r, ms))
+}
+
 function getSeenRecommendationIds(): Set<number> {
   try {
     const raw = localStorage.getItem(SEEN_IDS_KEY)
@@ -60,14 +97,31 @@ export function useRecommendations() {
   const loading = ref(false)
   const error = ref('')
 
-  async function fetchFromTMDb(endpoint: string) {
-    const res = await fetch(`${TMDB_BASE_URL}${endpoint}&api_key=${TMDB_API_KEY}`)
+  async function fetchFromTMDb(endpoint: string): Promise<unknown> {
+    const url = `${TMDB_BASE_URL}${endpoint}&api_key=${TMDB_API_KEY}`
+    const cacheKey = url
+    const cached = tmdbCache.get(cacheKey)
+    if (cached && Date.now() - cached.ts < TMDB_CACHE_TTL_MS) return cached.data
 
-    if (!res.ok) {
+    const doFetch = async (): Promise<unknown> => {
+      for (let attempt = 0; attempt <= TMDB_429_RETRIES; attempt++) {
+        const res = await fetch(url)
+        if (res.status === 429) {
+          if (attempt < TMDB_429_RETRIES) {
+            await delay(TMDB_429_DELAY_MS * (attempt + 1))
+            continue
+          }
+          throw new Error('TMDb rate limit (429). Try again in a moment.')
+        }
+        if (!res.ok) throw new Error('Error fetching TMDb data')
+        const data = await res.json()
+        tmdbCache.set(cacheKey, { data, ts: Date.now() })
+        return data
+      }
       throw new Error('Error fetching TMDb data')
     }
 
-    return res.json()
+    return withTMDbConcurrency(doFetch)
   }
 
   function removeDuplicates(movies: TMDbMovie[]) {
@@ -92,7 +146,9 @@ export function useRecommendations() {
   }
 
   async function getGenreIdToName(): Promise<Record<number, string>> {
-    const data = await fetchFromTMDb('/genre/movie/list?language=en-US')
+    const data = (await fetchFromTMDb('/genre/movie/list?language=en-US')) as {
+      genres?: { id: number; name: string }[]
+    }
     const map: Record<number, string> = {}
     for (const g of data.genres || []) {
       map[g.id] = g.name
@@ -106,9 +162,12 @@ export function useRecommendations() {
     writers: string[]
   }> {
     try {
-      const data = await fetchFromTMDb(`/movie/${movieId}/credits?language=en-US`)
-      const cast = (data.cast ?? []) as { name: string; order: number }[]
-      const crew = (data.crew ?? []) as { name: string; job: string }[]
+      const data = (await fetchFromTMDb(`/movie/${movieId}/credits?language=en-US`)) as {
+        cast?: { name: string; order: number }[]
+        crew?: { name: string; job: string }[]
+      }
+      const cast = data.cast ?? []
+      const crew = data.crew ?? []
 
       const director = crew.find((c) => c.job === 'Director')?.name
       const actors = [...cast]
@@ -127,10 +186,10 @@ export function useRecommendations() {
   async function enrichCandidatesWithCredits(
     rawMovies: TMDbMovie[],
     genreMap: Record<number, string>,
-    maxToEnrich = 80
+    maxToEnrich = 48
   ): Promise<CandidateMovie[]> {
     const toEnrich = rawMovies.slice(0, maxToEnrich)
-    const BATCH_SIZE = 5
+    const BATCH_SIZE = 4 // Alineado con TMDB_MAX_CONCURRENT para no saturar
     const enriched: CandidateMovie[] = []
 
     for (let i = 0; i < toEnrich.length; i += BATCH_SIZE) {
@@ -183,20 +242,22 @@ export function useRecommendations() {
         return
       }
 
-      const seedMovies = favoriteWithTmdbId.slice(0, 30)
-      const pages = [1, 2, 3, 4, 5, 6]
+      const MAX_SEED_MOVIES = 8
+      const PAGES = [1, 2, 3]
+      const seedMovies = favoriteWithTmdbId.slice(0, MAX_SEED_MOVIES)
 
-      const [genreMap, ...results] = await Promise.all([
-        getGenreIdToName(),
-        ...seedMovies.flatMap((movie) =>
-          pages.flatMap((page) => [
-            fetchFromTMDb(`/movie/${movie.tmdbId}/recommendations?language=en-US&page=${page}`),
-            fetchFromTMDb(`/movie/${movie.tmdbId}/similar?language=en-US&page=${page}`),
-          ])
-        ),
-      ])
+      const genrePromise = getGenreIdToName()
+      const discoveryPromises = seedMovies.flatMap((movie) =>
+        PAGES.flatMap((page) => [
+          fetchFromTMDb(`/movie/${movie.tmdbId}/recommendations?language=en-US&page=${page}`),
+          fetchFromTMDb(`/movie/${movie.tmdbId}/similar?language=en-US&page=${page}`),
+        ])
+      )
+      const [genreMap, ...results] = await Promise.all([genrePromise, ...discoveryPromises])
 
-      const rawCandidates: TMDbMovie[] = results.flatMap((r: { results?: TMDbMovie[] }) => r.results || [])
+      const rawCandidates: TMDbMovie[] = (results as unknown[]).flatMap(
+        (r: unknown) => (r as { results?: TMDbMovie[] }).results || []
+      )
       let withPoster = filterNotInWatchlist(filterValidPosters(removeDuplicates(rawCandidates)))
 
       const seenIds = getSeenRecommendationIds()
@@ -229,7 +290,8 @@ export function useRecommendations() {
         .filter((m): m is TMDbMovie => m != null)
     } catch (err) {
       console.error(err)
-      error.value = 'Could not load recommendations.'
+      error.value =
+        err instanceof Error ? err.message : 'Could not load recommendations.'
     } finally {
       loading.value = false
     }
@@ -254,7 +316,7 @@ export function useRecommendations() {
       )
       if (favoriteWithTmdbId.length < 3) return
 
-      const seedMovies = favoriteWithTmdbId.slice(0, 5)
+      const seedMovies = favoriteWithTmdbId.slice(0, 3)
       const [genreMap, ...pageResults] = await Promise.all([
         getGenreIdToName(),
         ...seedMovies.flatMap((movie) => [
@@ -265,10 +327,12 @@ export function useRecommendations() {
         ]),
       ])
 
-      const rawCandidates: TMDbMovie[] = pageResults.flatMap((r: { results?: TMDbMovie[] }) => r.results || [])
+      const rawCandidates: TMDbMovie[] = (pageResults as unknown[]).flatMap(
+        (r: unknown) => (r as { results?: TMDbMovie[] }).results || []
+      )
       const withPoster = filterNotInWatchlist(filterValidPosters(removeDuplicates(rawCandidates)))
       const filtered = filterNotInCurrent(withPoster, excludeIds)
-      const candidateMovies = await enrichCandidatesWithCredits(filtered, genreMap, 40)
+      const candidateMovies = await enrichCandidatesWithCredits(filtered, genreMap, 24)
       const scored = getScoredRecommendations({
         allUserMovies: moviesStore.movies,
         candidateMovies,
