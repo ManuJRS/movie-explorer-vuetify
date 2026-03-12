@@ -12,6 +12,9 @@ import StadsFavs from '@/components/favorites/StadsFavs.vue'
 import type { Movie } from '@/types/movie'
 import { useI18n } from 'vue-i18n'
 import { buildFavoriteProfile } from '@/lib/recommendations'
+import PageLoader from '@/components/ui/PageLoader.vue'
+
+
 
 const { t } = useI18n()
 const moviesStore = useMoviesStore()
@@ -19,7 +22,7 @@ const authStore = useAuthStore()
 const { movies } = storeToRefs(moviesStore)
 const { getRecommendations } = useRecommendations()
 
-const loading = ref(false)
+const loading = ref(true)
 const showMovieDetailModal = ref(false)
 const selectedMovie = ref<Movie | null>(null)
 
@@ -39,12 +42,10 @@ function openMovieDetail(movie: Movie) {
 }
 
 onMounted(async () => {
-  loading.value = true
   try {
     if (!movies.value.length) {
       await moviesStore.loadMovies()
     }
-    // Log del perfil de favoritas en consola (si hay favoritas)
     const favorites = movies.value.filter((m) => m.favorite === true)
     if (favorites.length) {
       const profile = buildFavoriteProfile(favorites)
@@ -53,7 +54,6 @@ onMounted(async () => {
       console.log('Perfil (géneros, directores, actores, guionistas):', profile)
       console.groupEnd()
     }
-    // Ejecutar recomendaciones para que se calculen y logueen las puntuaciones en consola
     await getRecommendations()
   } finally {
     loading.value = false
@@ -62,6 +62,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <PageLoader v-if="loading" />
   <main class="mt-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <div class="mb-8 text-left">
       <h1 class="text-2xl md:text-3xl font-bold text-white">
