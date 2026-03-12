@@ -1,4 +1,4 @@
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import AddMovieForm from '@/components/movies/AddMovieForm.vue'
 import { useWindowWidth } from '@/composables/useWindowWidth'
@@ -8,7 +8,6 @@ import { useAuthStore } from '@/stores/auth'
 import type { Movie } from '@/types/movie'
 
 const ITEMS_PER_PAGE = 12
-const INITIAL_LOAD_DELAY_MS = 1800
 
 export function useMoviesPage() {
   const windowWidth = useWindowWidth()
@@ -67,15 +66,7 @@ export function useMoviesPage() {
     },
     { immediate: true }
   )
-
-  onMounted(async () => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, INITIAL_LOAD_DELAY_MS))
-    } finally {
-      isLoading.value = false
-    }
-  })
-  // Las películas se cargan solo desde el watch(user) con immediate: true para evitar doble carga.
+  // isLoading lo controla la página (MoviesPage) hasta que loadMovies() termine.
 
   return {
     user,

@@ -6,17 +6,18 @@ import { useI18n } from 'vue-i18n'
 import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.vue'
 import PageLoader from '@/components/ui/PageLoader.vue'
 
+const router = useRouter()
+const auth = useAuthStore()
+
 const isLoading = ref(true)
 
 onMounted(async () => {
   try {
-    await new Promise((resolve) => setTimeout(resolve, 1800))
+    await auth.init()
   } finally {
     isLoading.value = false
   }
 })
-const router = useRouter()
-const auth = useAuthStore()
 const mode = ref<'login' | 'register'>('login')
 const { t } = useI18n()
 
