@@ -2,9 +2,10 @@
 import { ref } from 'vue';
 import { useMoviesStore } from '@/stores/movies'
 import type { Movie } from '@/types/movie'
-import EditModal from '@/components/movies/EditModal.vue';
-import { useI18n } from 'vue-i18n';
-import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.vue';
+import EditModal from '@/components/movies/EditModal.vue'
+import WatchModal from '@/components/shared/WatchModal.vue'
+import { useI18n } from 'vue-i18n'
+import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.vue'
 
 const { t } = useI18n();
 
@@ -23,7 +24,6 @@ defineProps({
             synopsis: ''
         })
     },
-    /** Si false, no se muestra el botón de editar (p. ej. en detalle de recomendación). */
     showEditButton: {
         type: Boolean,
         default: true
@@ -32,8 +32,9 @@ defineProps({
 
 const emit = defineEmits(['update:open', 'save']);
 
-const moviesStore = useMoviesStore();
-const showEditModal = ref(false);
+const moviesStore = useMoviesStore()
+const showEditModal = ref(false)
+const showWatchModal = ref(false)
 
 function close() {
     emit('update:open', false);
@@ -52,6 +53,7 @@ function openEditModal() {
 async function onEditSave(updatedMovie: Movie) {
     await moviesStore.updateMovie(updatedMovie);
 }
+
 </script>
 
 <template>
@@ -105,7 +107,7 @@ async function onEditSave(updatedMovie: Movie) {
                         </div>
                         <div class="flex flex-wrap gap-2 mt-2 md:mt-4">
                             <span
-                                v-if="movie?.platform"
+                                v-if="movie?.platform && !movie?.watchProviders"
                                 class="px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-medium uppercase tracking-wide"
                             >
                                 {{ movie.platform }}
@@ -117,6 +119,35 @@ async function onEditSave(updatedMovie: Movie) {
                             >
                                 {{ genre }}
                             </span>
+                        </div>
+                        <div
+                            v-if="movie?.watchProviders && (movie.watchProviders.mx?.length || movie.watchProviders.us?.length)"
+                            class="mt-3 space-y-1.5"
+                        >
+                            <p
+                                v-if="movie.watchProviders.mx?.length"
+                                class="text-sm text-slate-600 dark:text-slate-300"
+                            >
+                                <span class="font-semibold text-slate-500 dark:text-slate-400">{{ t('modalDetails.availableIn') }} {{ t('modalDetails.countryMX') }}:</span>
+                                {{ movie.watchProviders.mx.join(', ') }}
+                            </p>
+                            <p
+                                v-if="movie.watchProviders.us?.length"
+                                class="text-sm text-slate-600 dark:text-slate-300"
+                            >
+                                <span class="font-semibold text-slate-500 dark:text-slate-400">{{ t('modalDetails.availableIn') }} {{ t('modalDetails.countryUS') }}:</span>
+                                {{ movie.watchProviders.us.join(', ') }}
+                            </p>
+                        </div>
+                        <div v-if="movie?.trailerEmbedUrl" class="mt-3 mb-3">
+                            <button
+                                type="button"
+                                class="hover:cursor-pointer inline-flex items-center gap-2 rounded-lg bg-slate-900 dark:bg-slate-800 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+                                @click="showWatchModal = true"
+                            >
+                                <span class="material-symbols-outlined text-lg">play_circle</span>
+                                {{ t('modalDetails.watchTrailer') }}
+                            </button>
                         </div>
                         <div v-if="movie?.runtime || movie?.rating" class="flex flex-wrap gap-3 mt-2 text-sm text-slate-500 dark:text-slate-400">
                             <span v-if="movie?.runtime">{{ movie.runtime }} min</span>
@@ -175,5 +206,12 @@ async function onEditSave(updatedMovie: Movie) {
         v-model:open="showEditModal"
         :movie="movie"
         @save="onEditSave"
+    />
+
+    <WatchModal
+        :is-open="showWatchModal"
+        :trailer-url="movie?.trailerEmbedUrl ?? null"
+        :title="movie?.title ? `${movie.title} - Trailer` : 'Trailer'"
+        @close="showWatchModal = false"
     />
 </template>
