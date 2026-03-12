@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 
 type PageItem = number | 'dots'
 
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  maxVisiblePages: 7,
+  maxVisiblePages: 5,
   className: '',
 })
 
@@ -22,6 +22,15 @@ const emit = defineEmits<{
 
 const containerRef = ref<HTMLElement | null>(null)
 const buttonRefs = ref<Record<number, HTMLButtonElement | null>>({})
+
+const MOBILE_BREAKPOINT = 768
+const mobileQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`)
+const isMobile = ref(mobileQuery.matches)
+const updateMobile = () => {
+  isMobile.value = mobileQuery.matches
+}
+mobileQuery.addEventListener('change', updateMobile)
+onUnmounted(() => mobileQuery.removeEventListener('change', updateMobile))
 
 const underlineStyle = ref({
   left: 0,
@@ -39,41 +48,50 @@ const handlePageChange = (page: number) => {
   emit('page-change', page)
 }
 
+const effectiveMaxVisible = computed(() =>
+  isMobile.value ? 4 : props.maxVisiblePages
+)
+
+/**
+ * Sliding Window Pagination: muestra una ventana deslizante de páginas
+ * centrada en la página actual. Soporta cualquier cantidad total de páginas.
+ */
 const generatePages = (): PageItem[] => {
   const total = props.totalPages
   const current = props.currentPage
-  const maxVisible = props.maxVisiblePages
+  const maxVisible = Math.min(effectiveMaxVisible.value, total)
 
   if (total <= maxVisible) {
     return Array.from({ length: total }, (_, i) => i + 1)
   }
 
-  const pages: PageItem[] = []
-  const first = 1
-  const last = total
-  const sideCount = 1
-  const middleCount = maxVisible - 2 * sideCount - 2
+  const half = Math.floor((maxVisible - 1) / 2)
+  let start = Math.max(1, current - half)
+  let end = Math.min(total, start + maxVisible - 1)
 
-  pages.push(first)
-
-  let left = Math.max(current - Math.floor(middleCount / 2), sideCount + 1)
-  let right = Math.min(current + Math.floor(middleCount / 2), total - sideCount)
-
-  if (left > sideCount + 1) {
-    pages.push('dots')
-  } else {
-    left = sideCount + 1
+  if (end - start + 1 < maxVisible) {
+    start = Math.max(1, end - maxVisible + 1)
   }
 
-  for (let i = left; i <= right; i++) {
+  const pages: PageItem[] = []
+  // 1... solo cuando hay 2+ páginas ocultas al inicio Y no estamos al final
+  const showFirstDots = start > 2 && end < total
+  // ...último solo cuando hay 2+ ocultas al final Y no estamos al inicio
+  const showLastDots = end < total - 1 && start > 1
+
+  if (showFirstDots) {
+    pages.push(1)
+    pages.push('dots')
+  }
+
+  for (let i = start; i <= end; i++) {
     pages.push(i)
   }
 
-  if (right < total - sideCount) {
+  if (showLastDots) {
     pages.push('dots')
+    pages.push(total)
   }
-
-  pages.push(last)
 
   return pages
 }
@@ -102,10 +120,8 @@ const updateUnderline = async () => {
 }
 
 watch(
-  () => [props.currentPage, props.totalPages, props.maxVisiblePages],
-  () => {
-    updateUnderline()
-  },
+  () => [props.currentPage, props.totalPages, props.maxVisiblePages, isMobile.value],
+  updateUnderline,
   { immediate: true }
 )
 
