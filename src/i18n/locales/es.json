@@ -204,6 +204,7 @@
   },
   "statsFavs": {
     "title": "Descubre tus estadísticas favoritas",
+    "description": "Analiza tus hábitos de visualización. La aplicación genera estadísticas basadas en las películas que guardas.",
     "moviesLabel": "Películas que me gustan",
     "hoursLabel": "Tiempo viendo lo que amo",
     "hoursSuffix": "hrs",
@@ -225,6 +226,8 @@
     "noWriters": "No hay guionistas en tus películas favoritas."
   },
   "favorites": {
+    "tabFavorites": "Favoritas",
+    "tabStatistics": "Estadísticas",
     "title": "Películas favoritas",
     "description": "Aquí se muestran solo las películas que marcaste con el corazón en tu colección.",
     "counterLabel": "Favoritas",
@@ -244,5 +247,9 @@
     "addToShell": "Guardar",
     "addToWatchlist": "ver después",
     "refresh": "Cargar nuevas recomendaciones"
+  },
+  "paginator": {
+    "prev": "Anterior",
+    "next": "Siguiente"
   }
 }
