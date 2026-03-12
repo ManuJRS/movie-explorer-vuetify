@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import AddMovieForm from '@/components/movies/AddMovieForm.vue'
 import MovieCard from '@/components/favorites/MovieCard.vue'
 import MovieDetailModal from '@/components/shared/MovieDetailModal.vue'
@@ -23,6 +24,17 @@ const {
   openMovieDetail,
   openAddMovieModal,
 } = useMoviesPage()
+import { useMoviesStore } from '@/stores/movies'
+
+const moviesStore = useMoviesStore()
+
+onMounted(async () => {
+  try {
+    await moviesStore.loadMovies()
+  } finally {
+    isLoading.value = false
+  }
+})
 </script>
 
 <template>
