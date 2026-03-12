@@ -12,9 +12,9 @@ export interface FloatingHeaderProps {
 }
 
 export const DEFAULT_HEADER_LINKS: HeaderLink[] = [
+  { label: 'nav.home', href: '/movies' },
   { label: 'nav.recommendations', href: '/recommendations' },
-  { label: 'nav.statistics', href: '/stads' },
+  { label: 'nav.favorites', href: '/favorites' },
   { label: 'nav.watchList', href: '/watch-list' },
   { label: 'nav.settings', href: '/user-settings' },
-  { label: 'nav.favorites', href: '/favorites' },
 ]
