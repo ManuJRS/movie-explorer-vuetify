@@ -3,11 +3,13 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '@/lib/supabase'
+import { useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
 import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.vue'
 
-const { t } = useI18n() 
+const { t } = useI18n()
 const router = useRouter()
+const authStore = useAuthStore()
 
 const password = ref('')
 const confirmPassword = ref('')
@@ -32,13 +34,14 @@ onMounted(async () => {
         ready.value = true
         return
       }
+      await authStore.syncSession()
       // Limpiar el hash de la URL por seguridad
       window.history.replaceState(null, '', window.location.pathname + window.location.search)
     }
   }
 
-  const { data } = await supabase.auth.getSession()
-  if (!data.session) {
+  await authStore.init()
+  if (!authStore.user) {
     errorMsg.value = 'No hay sesión activa. Abre el enlace que te enviamos por correo para restablecer tu contraseña.'
   }
   ready.value = true
@@ -63,7 +66,7 @@ const handleUpdatePassword = async () => {
     if (error) throw error
 
     message.value = 'Password updated. Now sign in.'
-    await supabase.auth.signOut()
+    await authStore.signOut()
     setTimeout(() => router.push('/login'), 900)
   } catch (err: any) {
     errorMsg.value =

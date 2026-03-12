@@ -3,6 +3,11 @@ import type { User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
 import type { SignUpInput, SignInInput } from '@/types/auth'
 
+// Promesa compartida para evitar múltiples inits simultáneos (race condition).
+let initPromise: Promise<void> | null = null
+// Referencia al unsubscribe del listener para evitar múltiples listeners y memory leaks.
+let authUnsubscribe: (() => void) | undefined
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null as User | null,
@@ -13,13 +18,27 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async init() {
       if (this._sessionRestored) return
+      if (initPromise) return initPromise
+
+      initPromise = (async () => {
+        const { data: sessionData } = await supabase.auth.getSession()
+        this.user = sessionData.session?.user ?? null
+        this._sessionRestored = true
+
+        const changeResult = supabase.auth.onAuthStateChange((_event, session) => {
+          this.user = session?.user ?? null
+        })
+        const sub = (changeResult as { data?: { subscription?: { unsubscribe: () => void } } })?.data?.subscription
+        authUnsubscribe = typeof sub?.unsubscribe === 'function' ? sub.unsubscribe : undefined
+      })()
+
+      await initPromise
+    },
+
+    /** Sincroniza el estado del store con la sesión actual de Supabase (p. ej. tras setSession en otra vista). */
+    async syncSession() {
       const { data } = await supabase.auth.getSession()
       this.user = data.session?.user ?? null
-      this._sessionRestored = true
-
-      supabase.auth.onAuthStateChange((_event, session) => {
-        this.user = session?.user ?? null
-      })
     },
 
     async signUp({ email, password, username, wantsEmailNotifications }: SignUpInput) {

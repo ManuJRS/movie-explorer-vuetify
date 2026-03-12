@@ -22,12 +22,12 @@ const router = createRouter({
     { path: '/confirm-email', name: 'confirm-email', component: ConfirmEmail },
     { path: '/forgot-password', name: 'forgot-password', component: ForgotPasswordView },
     { path: '/update-password', name: 'update-password', component: UpdatePasswordView },
-    { path: '/user-settings', name: 'user-settings', component: UserSettings },
-    { path: '/info', name: 'info', component: InfoPage },
-    { path: '/stads', name: 'stads', component: StadsPage },
-    { path: '/recommendations', name: 'recommendations', component: RecommendationsPage },
-    { path: '/watch-list', name: 'watch-list', component: WatchList },
-    { path: '/favorites', name: 'favorites', component: FavoritesPage },
+    { path: '/user-settings', name: 'user-settings', component: UserSettings, meta: { requiresAuth: true } },
+    { path: '/info', name: 'info', component: InfoPage, meta: { requiresAuth: true } },
+    { path: '/stads', name: 'stads', component: StadsPage, meta: { requiresAuth: true } },
+    { path: '/recommendations', name: 'recommendations', component: RecommendationsPage, meta: { requiresAuth: true } },
+    { path: '/watch-list', name: 'watch-list', component: WatchList, meta: { requiresAuth: true } },
+    { path: '/favorites', name: 'favorites', component: FavoritesPage, meta: { requiresAuth: true } },
   ],
 })
 
@@ -58,30 +58,6 @@ router.beforeEach(async (to) => {
 
   if (to.name === 'forgot-password' && auth.user) {
     return { name: 'movies' }
-  }
-
-  if (to.name === 'user-settings' && !auth.user) {
-    return { name: 'login' }
-  }
-
-  if (to.name === 'info' && !auth.user) {
-    return { name: 'login' }
-  }
-
-  if (to.name === 'stads' && !auth.user) {
-    return { name: 'login' }
-  }
-
-  if (to.name === 'recommendations' && !auth.user) {
-    return { name: 'login' }
-  }
-
-  if (to.name === 'watch-list' && !auth.user) {
-    return { name: 'login' }
-  }
-
-  if (to.name === 'favorites' && !auth.user) {
-    return { name: 'login' }
   }
 
   return true
