@@ -28,7 +28,10 @@ const favoriteMovies = computed(() =>
 )
 
 const selectedTab = ref('Favorites')
-const tabOptions = ['Favorites', 'statistics']
+const tabOptions = computed(() => [
+  { value: 'Favorites', label: t('favorites.tabFavorites') },
+  { value: 'statistics', label: t('favorites.tabStatistics') },
+])
 
 function openMovieDetail(movie: Movie) {
   selectedMovie.value = movie
@@ -61,7 +64,7 @@ onMounted(async () => {
 <template>
   <main class="mt-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <div class="mb-8 text-left">
-      <h1 class="text-3xl font-bold text-white">
+      <h1 class="text-2xl md:text-3xl font-bold text-white">
         {{ t('favorites.title') }}
       </h1>
       <p class="text-slate-400 mt-2">

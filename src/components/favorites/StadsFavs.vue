@@ -102,14 +102,14 @@ const favoriteHoursChartOptions = computed(() => ({
 
 
 <template>
-  <main class="flex-1 max-w-7xl mx-auto w-full py-8">
+  <main class="flex-1 max-w-7xl mx-auto w-full">
     <section class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
       <div class="lg:col-span-2 flex flex-col gap-6">
         <h3 class="text-lg font-bold text-white">
           {{ t('statsFavs.title') }}
         </h3>
         <p class="text-slate-400 text-sm font-medium tracking-wider">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ullam ex rem officia?   
+          {{ t('statsFavs.description') }}
         </p>
         <div class="glass rounded-xl border border-white/10 bg-white/5 p-6">
           <div class="flex justify-between items-start">
