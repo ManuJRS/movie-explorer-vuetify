@@ -11,21 +11,13 @@ import { useMoviesStore } from '@/stores/movies'
 import PageLoader from '@/components/ui/PageLoader.vue'
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
-const isLoading = ref(true)
-
-onMounted(async () => {
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 1800))
-  } finally {
-    isLoading.value = false
-  }
-})
-
+const { t } = useI18n()
 const moviesStore = useMoviesStore()
+const authStore = useAuthStore()
 const { movies } = storeToRefs(moviesStore)
-const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
+const { user } = storeToRefs(authStore)
+
+const isLoading = ref(true)
 
 watch(user, async (u) => {
   if (u) await moviesStore.loadMovies()
@@ -33,7 +25,11 @@ watch(user, async (u) => {
 }, { immediate: true })
 
 onMounted(async () => {
-  if (user.value) await moviesStore.loadMovies()
+  try {
+    await moviesStore.loadMovies()
+  } finally {
+    isLoading.value = false
+  }
 })
 
 const totalMovies = computed(() => movies.value.length)
