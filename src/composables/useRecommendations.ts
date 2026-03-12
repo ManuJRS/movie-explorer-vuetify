@@ -22,6 +22,36 @@ const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY
 const TMDB_BASE_URL = import.meta.env.VITE_TMDB_BASE_URL
 const TMDB_IMAGE_BASE_URL = import.meta.env.VITE_TMDB_IMAGE_BASE_URL
 
+const SEEN_IDS_KEY = 'movie-explorer-recommendations-shown'
+const MAX_SEEN_IDS = 300
+const POOL_SIZE = 36
+
+function getSeenRecommendationIds(): Set<number> {
+  try {
+    const raw = localStorage.getItem(SEEN_IDS_KEY)
+    const arr = raw ? (JSON.parse(raw) as number[]) : []
+    return new Set(arr)
+  } catch {
+    return new Set()
+  }
+}
+
+function addSeenRecommendationIds(ids: number[]): void {
+  const current = getSeenRecommendationIds()
+  ids.forEach((id) => current.add(id))
+  const arr = Array.from(current).slice(-MAX_SEEN_IDS)
+  localStorage.setItem(SEEN_IDS_KEY, JSON.stringify(arr))
+}
+
+function shuffleArray<T>(arr: T[]): T[] {
+  const out = [...arr]
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[out[i], out[j]] = [out[j]!, out[i]!]
+  }
+  return out
+}
+
 export function useRecommendations() {
   const moviesStore = useMoviesStore()
   const watchlistStore = useWatchlistStore()
@@ -70,7 +100,58 @@ export function useRecommendations() {
     return map
   }
 
-  function tmdbToCandidate(raw: TMDbMovie, genreMap: Record<number, string>): CandidateMovie {
+  async function fetchMovieCredits(movieId: number): Promise<{
+    director?: string
+    actors: string[]
+    writers: string[]
+  }> {
+    try {
+      const data = await fetchFromTMDb(`/movie/${movieId}/credits?language=en-US`)
+      const cast = (data.cast ?? []) as { name: string; order: number }[]
+      const crew = (data.crew ?? []) as { name: string; job: string }[]
+
+      const director = crew.find((c) => c.job === 'Director')?.name
+      const actors = [...cast]
+        .sort((a, b) => (a.order ?? 99) - (b.order ?? 99))
+        .slice(0, 10)
+        .map((c) => c.name)
+      const writerJobs = new Set(['Screenplay', 'Writer', 'Story', 'Characters', 'Original Story'])
+      const writers = [...new Set(crew.filter((c) => writerJobs.has(c.job)).map((c) => c.name))]
+
+      return { director, actors, writers }
+    } catch {
+      return { actors: [], writers: [] }
+    }
+  }
+
+  async function enrichCandidatesWithCredits(
+    rawMovies: TMDbMovie[],
+    genreMap: Record<number, string>,
+    maxToEnrich = 80
+  ): Promise<CandidateMovie[]> {
+    const toEnrich = rawMovies.slice(0, maxToEnrich)
+    const BATCH_SIZE = 5
+    const enriched: CandidateMovie[] = []
+
+    for (let i = 0; i < toEnrich.length; i += BATCH_SIZE) {
+      const batch = toEnrich.slice(i, i + BATCH_SIZE)
+      const creditsList = await Promise.all(batch.map((m) => fetchMovieCredits(m.id)))
+      for (let j = 0; j < batch.length; j++) {
+        const raw = batch[j]
+        const credits = creditsList[j]
+        enriched.push(tmdbToCandidate(raw, genreMap, credits))
+      }
+    }
+
+    const rest = rawMovies.slice(maxToEnrich).map((r) => tmdbToCandidate(r, genreMap))
+    return [...enriched, ...rest]
+  }
+
+  function tmdbToCandidate(
+    raw: TMDbMovie,
+    genreMap: Record<number, string>,
+    credits?: { director?: string; actors: string[]; writers: string[] }
+  ): CandidateMovie {
     return {
       id: raw.id,
       title: raw.title,
@@ -79,6 +160,9 @@ export function useRecommendations() {
       overview: raw.overview ?? '',
       genres: (raw.genre_ids ?? []).map((id) => genreMap[id] ?? '').filter(Boolean),
       voteAverage: raw.vote_average,
+      director: credits?.director,
+      actors: credits?.actors,
+      writers: credits?.writers,
     }
   }
 
@@ -99,8 +183,8 @@ export function useRecommendations() {
         return
       }
 
-      const seedMovies = favoriteWithTmdbId.slice(0, 5)
-      const pages = [1, 2, 3]
+      const seedMovies = favoriteWithTmdbId.slice(0, 30)
+      const pages = [1, 2, 3, 4, 5, 6]
 
       const [genreMap, ...results] = await Promise.all([
         getGenreIdToName(),
@@ -114,35 +198,33 @@ export function useRecommendations() {
 
       const rawCandidates: TMDbMovie[] = results.flatMap((r: { results?: TMDbMovie[] }) => r.results || [])
       let withPoster = filterNotInWatchlist(filterValidPosters(removeDuplicates(rawCandidates)))
+
+      const seenIds = getSeenRecommendationIds()
+      const withoutSeen = withPoster.filter((m) => !seenIds.has(m.id))
+      if (withoutSeen.length >= 12) withPoster = withoutSeen
       if (currentIds.size > 0) {
         const withoutCurrent = withPoster.filter((m) => !currentIds.has(m.id))
         if (withoutCurrent.length >= 12) withPoster = withoutCurrent
       }
 
-      const candidateMovies: CandidateMovie[] = withPoster.map((r) => tmdbToCandidate(r, genreMap))
+      const candidateMovies: CandidateMovie[] = await enrichCandidatesWithCredits(
+        withPoster,
+        genreMap
+      )
 
-      const favoriteMovies = moviesStore.movies.filter((m) => m.favorite === true)
-      const profile = buildFavoriteProfile(favoriteMovies)
       const scored = getScoredRecommendations({
         allUserMovies: moviesStore.movies,
         candidateMovies,
-        limit: 12,
+        limit: POOL_SIZE,
       })
 
-      console.group('[Recomendaciones] Puntuaciones basadas en favoritas')
-      console.log('Perfil de gusto (favoritas):', profile)
-      console.log(
-        'Recomendaciones puntuadas:',
-        scored.map((s) => ({
-          id: s.id,
-          title: s.title,
-          recommendationScore: s.recommendationScore,
-        }))
-      )
-      console.groupEnd()
+      const shuffled = shuffleArray(scored)
+      const picked = shuffled.slice(0, 12)
+
+      addSeenRecommendationIds(picked.map((s) => s.id))
 
       const byId = new Map(withPoster.map((m) => [m.id, m]))
-      recommendations.value = scored
+      recommendations.value = picked
         .map((s) => byId.get(s.id))
         .filter((m): m is TMDbMovie => m != null)
     } catch (err) {
@@ -186,8 +268,7 @@ export function useRecommendations() {
       const rawCandidates: TMDbMovie[] = pageResults.flatMap((r: { results?: TMDbMovie[] }) => r.results || [])
       const withPoster = filterNotInWatchlist(filterValidPosters(removeDuplicates(rawCandidates)))
       const filtered = filterNotInCurrent(withPoster, excludeIds)
-
-      const candidateMovies = filtered.map((r) => tmdbToCandidate(r, genreMap))
+      const candidateMovies = await enrichCandidatesWithCredits(filtered, genreMap, 40)
       const scored = getScoredRecommendations({
         allUserMovies: moviesStore.movies,
         candidateMovies,
@@ -197,7 +278,10 @@ export function useRecommendations() {
       const replacement = scored[0]
       if (replacement) {
         const raw = filtered.find((m) => m.id === replacement.id)
-        if (raw) recommendations.value.push(raw)
+        if (raw) {
+          recommendations.value.push(raw)
+          addSeenRecommendationIds([raw.id])
+        }
       }
     } catch (err) {
       console.error('Error fetching replacement:', err)

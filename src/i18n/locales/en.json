@@ -203,6 +203,7 @@
     },
     "statsFavs": {
       "title": "Discover your favorite statistics",
+      "description": "Analyze your viewing habits. The app generates statistics from the movies you save to highlight your viewing preferences.",
       "moviesLabel": "Movies I like",
       "hoursLabel": "Time watching what I love",
       "hoursSuffix": "hrs",
@@ -224,6 +225,8 @@
       "noWriters": "No writers in your favorite movies."
     },
     "favorites": {
+      "tabFavorites": "Favorites",
+      "tabStatistics": "Statistics",
       "title": "Favorite Movies",
       "description": "Here you only see the movies you marked with a heart in your collection.",
       "counterLabel": "Favorites",
@@ -243,5 +246,9 @@
       "addToShell": "Add to shell",
       "addToWatchlist": "Watch later",
       "refresh": "Load new recommendations"
+    },
+    "paginator": {
+      "prev": "Prev",
+      "next": "Next"
     }
   }

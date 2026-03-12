@@ -1,10 +1,15 @@
 <script setup lang="ts">
+export interface TabOption {
+  value: string
+  label: string
+}
+
 interface Props {
-  options: string[]
+  options: TabOption[]
   modelValue: string
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
@@ -16,20 +21,20 @@ const selectTab = (value: string) => {
 </script>
 
 <template>
-  <div class="inline-flex w-fit rounded-full bg-white/10 p-1 backdrop-blur-sm">
+  <div class="inline-flex w-fit rounded-full bg-white/10 p-1 backdrop-blur-sm hover:cursor-pointer">
     <button
       v-for="option in options"
-      :key="option"
+      :key="option.value"
       type="button"
-      @click="selectTab(option)"
-      class="relative rounded-full px-4 py-2 text-sm font-semibold capitalize transition-all duration-300"
+      @click="selectTab(option.value)"
+      class="relative rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 hover:cursor-pointer"
       :class="
-        modelValue === option
+        modelValue === option.value
           ? 'bg-white text-black shadow-sm'
           : 'text-white hover:text-white/90'
       "
     >
-      {{ option }}
+      {{ option.label }}
     </button>
   </div>
 </template>

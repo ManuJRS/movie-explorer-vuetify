@@ -16,11 +16,11 @@ function avatarUrl(name: string): string {
                     <span class="material-symbols-outlined text-primary">movie_edit</span>
                     {{ t('insightsPage.WritersTitle') }}
                 </h3>
-                <div class="grid grid-cols-3 sm:grid-cols-3 gap-4">
+                <div class="flex flex-col gap-4">
                     <div
                         v-for="writer in writers"
                         :key="writer"
-                        class="glass p-4 rounded-2xl flex flex-col items-center text-center gap-3 hover:bg-primary/5 transition-colors"
+                        class="glass p-4 rounded-2xl flex items-center gap-3 hover:bg-primary/5 transition-colors"
                     >
                         <div class="size-16 rounded-full overflow-hidden">
                             <img
@@ -29,7 +29,9 @@ function avatarUrl(name: string): string {
                                 :src="avatarUrl(writer)"
                             />
                         </div>
-                        <span class="text-xs font-bold leading-tight line-clamp-2">{{ writer }}</span>
+                        <div>
+                            <span class="text-lg font-bold leading-tight line-clamp-2">{{ writer }}</span>
+                        </div>
                     </div>
                     <div v-if="!writers?.length" class="col-span-2 sm:col-span-3 text-slate-500 text-sm py-8 text-center">
                         No Writers data yet. Add movies from TMDB search to see your top writers.
