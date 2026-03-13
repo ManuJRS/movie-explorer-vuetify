@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useMoviesStore } from '@/stores/movies'
 import type { Movie } from '@/types/movie'
 import EditModal from '@/components/movies/EditModal.vue'
@@ -9,7 +9,33 @@ import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.v
 
 const { t } = useI18n();
 
-defineProps({
+const contentScrollRef = ref<HTMLElement | null>(null);
+const scrollBlurPx = ref(0);
+const isMobile = ref(false);
+
+function onContentScroll() {
+    if (!isMobile.value || !contentScrollRef.value) return;
+    const scrollTop = contentScrollRef.value.scrollTop;
+    // Progresión de 0 a 24px (backdrop-blur-xl) en ~120px de scroll
+    const maxBlur = 24;
+    const blurThreshold = 120;
+    scrollBlurPx.value = Math.min((scrollTop / blurThreshold) * maxBlur, maxBlur);
+}
+
+function checkMobile() {
+    isMobile.value = window.matchMedia('(max-width: 767px)').matches;
+}
+
+onMounted(() => {
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('resize', checkMobile);
+});
+
+const props = defineProps({
     open: {
         type: Boolean,
         default: false
@@ -28,6 +54,10 @@ defineProps({
         type: Boolean,
         default: true
     }
+});
+
+watch(() => props.open, (isOpen) => {
+    if (isOpen) scrollBlurPx.value = 0;
 });
 
 const emit = defineEmits(['update:open', 'save']);
@@ -73,20 +103,33 @@ async function onEditSave(updatedMovie: Movie) {
                 >
                     <span class="material-symbols-outlined">close</span>
                 </button>
+                <!-- Mobile: wrapper con scroll; desktop: layout row sin wrapper extra -->
                 <div
-                    class="w-full md:w-2/5 min-h-[60vh] md:min-h-0 md:h-auto relative bg-slate-200 dark:bg-slate-800 flex items-center justify-center border-r border-slate-200 dark:border-slate-800 rounded-none md:rounded-l-xl overflow-hidden"
+                    ref="contentScrollRef"
+                    class="flex flex-col md:flex-row flex-1 min-h-0 overflow-y-auto md:overflow-hidden"
+                    @scroll="onContentScroll"
                 >
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent z-10"></div>
                     <div
-                        class="w-full h-full bg-cover md:bg-center bg-top absolute inset-0"
-                        :style="movie?.image ? { backgroundImage: `url(${movie.image})` } : {}"
-                    ></div>
-                    <div class="absolute bottom-6 left-6 right-6 z-20"></div>
-                </div>
-                <div class="w-full md:w-3/5 p-6 md:p-8 overflow-y-auto flex flex-col flex-1 min-h-0 md:rounded-none md:rounded-r-xl px-4 md:px-8">
+                        class="w-full md:w-2/4 min-h-[60vh] md:min-h-0 md:h-auto relative bg-slate-200 dark:bg-slate-800 flex items-center justify-center border-r border-slate-200 dark:border-slate-800 rounded-none md:rounded-l-xl overflow-hidden shrink-0 sticky top-0 static z-10"
+                    >
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent z-10"></div>
+                        <div
+                            class="w-full h-full bg-cover md:bg-center bg-top absolute inset-0"
+                            :style="movie?.image ? { backgroundImage: `url(${movie.image})` } : {}"
+                        ></div>
+                        <div
+                            class="absolute inset-0 z-[15] md:pointer-events-none md:opacity-0 transition-[backdrop-filter] duration-150"
+                            :style="isMobile ? { backdropFilter: `blur(${scrollBlurPx}px)` } : {}"
+                            aria-hidden="true"
+                        ></div>
+                        <div class="absolute bottom-6 left-6 right-6 z-20"></div>
+                    </div>
+                    <div
+                        class="w-full md:w-3/5 p-6 md:p-8 overflow-hidden md:overflow-y-auto flex flex-col md:flex-1 min-h-0 md:rounded-none md:rounded-r-xl px-4 md:px-8 rounded-t-2xl md:rounded-none bg-background-light dark:bg-slate-900 md:bg-transparent relative z-20 shrink-0"
+                    >
                     <div class="mb-2 md:mb-8">
                         <div class="flex items-center gap-3 mb-2 items-start md:items-center">
-                            <button
+                            <!-- <button
                                 v-if="showEditButton"
                                 type="button"
                                 @click="openEditModal"
@@ -94,7 +137,7 @@ async function onEditSave(updatedMovie: Movie) {
                                 aria-label="Editar película"
                             >
                                 <span class="material-symbols-outlined">edit</span>
-                            </button>
+                            </button> -->
                             <h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">
                                 {{ movie?.title || '—' }}
                             </h1>
@@ -196,6 +239,7 @@ async function onEditSave(updatedMovie: Movie) {
                             />
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
