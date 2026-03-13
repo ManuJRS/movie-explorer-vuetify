@@ -13,8 +13,7 @@ import type { Movie } from '@/types/movie'
 import { useI18n } from 'vue-i18n'
 import { buildFavoriteProfile } from '@/lib/recommendations'
 import PageLoader from '@/components/ui/PageLoader.vue'
-
-
+import { getMovieFullData } from '@/lib/tmdb'
 
 const { t } = useI18n()
 const moviesStore = useMoviesStore()
@@ -23,6 +22,7 @@ const { movies } = storeToRefs(moviesStore)
 const { getRecommendations } = useRecommendations()
 
 const loading = ref(true)
+const loadingDetail = ref(false)
 const showMovieDetailModal = ref(false)
 const selectedMovie = ref<Movie | null>(null)
 
@@ -36,9 +36,27 @@ const tabOptions = computed(() => [
   { value: 'statistics', label: t('favorites.tabStatistics') },
 ])
 
-function openMovieDetail(movie: Movie) {
-  selectedMovie.value = movie
-  showMovieDetailModal.value = true
+async function openMovieDetail(movie: Movie) {
+  if (movie.tmdbId) {
+    loadingDetail.value = true
+    try {
+      const full = await getMovieFullData(movie.tmdbId)
+      selectedMovie.value = {
+        ...movie,
+        watchProviders: full.watchProviders,
+        trailerEmbedUrl: full.trailerEmbedUrl,
+      }
+      showMovieDetailModal.value = true
+    } catch {
+      selectedMovie.value = movie
+      showMovieDetailModal.value = true
+    } finally {
+      loadingDetail.value = false
+    }
+  } else {
+    selectedMovie.value = movie
+    showMovieDetailModal.value = true
+  }
 }
 
 onMounted(async () => {

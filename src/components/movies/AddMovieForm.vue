@@ -90,6 +90,7 @@ defineExpose({
             id="title"
             v-model="title"
             type="text"
+            disabled
             :class="[
               'w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none transition-all placeholder:text-slate-600',
               errors?.title
@@ -123,6 +124,7 @@ defineExpose({
             id="image"
             v-model="image"
             type="url"
+            disabled
             :class="[
               'w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none transition-all placeholder:text-slate-600',
               errors?.image
@@ -155,6 +157,7 @@ defineExpose({
             id="year"
             v-model="year"
             type="number"
+            disabled
             :class="[
               'w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none transition-all placeholder:text-slate-600',
               errors?.year
@@ -182,7 +185,7 @@ defineExpose({
         <p v-if="errors?.year" class="text-xs text-rose-500 font-medium">{{ errors?.year }}</p>
         <p v-else-if="year && !errors?.year" class="text-xs text-emerald-500 font-medium">{{ t('form.looksGood') }}</p>
       </div>
-
+<!-- 
       <div class="pt-4 flex items-center justify-between">
         <button
           type="button"
@@ -198,7 +201,7 @@ defineExpose({
         >
           {{ t('form.added') }}
         </span>
-      </div>
+      </div> -->
 
       <InteractiveHoverButton
         type="submit"
@@ -273,6 +276,7 @@ defineExpose({
                         id="title-mobile"
                         v-model="title"
                         type="text"
+                        disabled
                         :class="[
                           'w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none transition-all placeholder:text-slate-600',
                           errors?.title
@@ -306,6 +310,7 @@ defineExpose({
                         id="image-mobile"
                         v-model="image"
                         type="url"
+                        disabled
                         :class="[
                           'w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none transition-all placeholder:text-slate-600',
                           errors?.image
@@ -338,6 +343,7 @@ defineExpose({
                         id="year-mobile"
                         v-model="year"
                         type="number"
+                        disabled
                         :class="[
                           'w-full rounded-lg px-4 py-3 focus:ring-2 focus:outline-none transition-all placeholder:text-slate-600',
                           errors?.year

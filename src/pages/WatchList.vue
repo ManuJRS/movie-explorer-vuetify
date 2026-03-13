@@ -33,6 +33,8 @@ const selectedMovieForModal = ref<{
   directors?: string[]
   mainActors?: string[]
   writers?: string[]
+  watchProviders?: { mx: string[]; us: string[] }
+  trailerEmbedUrl?: string | null
 } | null>(null)
 
 const TMDB_IMAGE_BASE_URL = import.meta.env.VITE_TMDB_IMAGE_BASE_URL
@@ -74,6 +76,8 @@ async function openWatchlistDetail(tmdbId: number) {
       directors: full.directors,
       mainActors: full.mainActors,
       writers: full.writers,
+      watchProviders: full.watchProviders,
+      trailerEmbedUrl: full.trailerEmbedUrl,
     }
     showMovieDetailModal.value = true
   } catch {

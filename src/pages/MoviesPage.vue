@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import AddMovieForm from '@/components/movies/AddMovieForm.vue'
 import MovieCard from '@/components/favorites/MovieCard.vue'
 import MovieDetailModal from '@/components/shared/MovieDetailModal.vue'
@@ -9,6 +9,10 @@ import Paginator from '@/components/shared/Paginator.vue'
 import TitleIntro from '@/components/movies/TitleIntro.vue'
 import PageLoader from '@/components/ui/PageLoader.vue'
 import { useMoviesPage } from '@/composables/useMoviesPage'
+import { useMoviesStore } from '@/stores/movies'
+import { getMovieFullData } from '@/lib/tmdb'
+import type { Movie } from '@/types/movie'
+import type { TMDbMovie } from '@/composables/useRecommendations'
 
 const {
   user,
@@ -24,9 +28,31 @@ const {
   openMovieDetail,
   openAddMovieModal,
 } = useMoviesPage()
-import { useMoviesStore } from '@/stores/movies'
 
 const moviesStore = useMoviesStore()
+const loadingDetail = ref(false)
+
+async function openDetail(movie: Movie | TMDbMovie) {
+  const movieWithTmdb = movie as Movie
+  if (typeof movieWithTmdb.tmdbId === 'number') {
+    loadingDetail.value = true
+    try {
+      const full = await getMovieFullData(movieWithTmdb.tmdbId)
+      selectedMovie.value = {
+        ...movieWithTmdb,
+        watchProviders: full.watchProviders,
+        trailerEmbedUrl: full.trailerEmbedUrl,
+      }
+      showMovieDetailModal.value = true
+    } catch {
+      openMovieDetail(movie)
+    } finally {
+      loadingDetail.value = false
+    }
+  } else {
+    openMovieDetail(movie)
+  }
+}
 
 onMounted(async () => {
   try {
@@ -74,7 +100,7 @@ onMounted(async () => {
             v-for="movie in paginatedMovies"
             :key="movie.id"
             :movie="movie"
-            @open-detail="openMovieDetail"
+            @open-detail="openDetail"
           />
         </div>
         <Paginator

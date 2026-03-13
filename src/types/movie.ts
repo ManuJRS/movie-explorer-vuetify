@@ -14,6 +14,10 @@ export interface Movie {
   writers?: string[]
   metadata?: MovieMetadata
   favorite: boolean
+  /** Plataformas donde ver (MX/US) desde TMDb watch/providers. */
+  watchProviders?: { mx: string[]; us: string[] }
+  /** URL de embed del trailer (YouTube). Por ahora no se muestra en el modal. */
+  trailerEmbedUrl?: string | null
 }
 
 export interface MovieMetadata {
