@@ -21,7 +21,7 @@ const { t } = useI18n()
                 </div>
                 <div class="relative">
                     <div class="aspect-video glass-darker rounded-2xl overflow-hidden flex items-center justify-center">
-                        <img src="/src/assets/img/soyesteasiessoyyoestoycansado.png" alt="Explication Project" class="w-full h-full object-cover">
+                        <img loading="lazy" src="https://res.cloudinary.com/dronteu5m/image/upload/v1773505933/soyesteasiessoyyoestoycansado_k2gafm.webp" alt="Explication Project" class="w-full h-full object-cover">
                     </div>
                 </div>
             </div>
