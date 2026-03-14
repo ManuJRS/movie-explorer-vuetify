@@ -69,7 +69,7 @@ const { t } = useI18n()
                       alt="Preview"
                       class="w-full h-full object-cover opacity-60"
                       loading="lazy"
-                      src="https://res.cloudinary.com/dronteu5m/image/upload/v1773506072/f7f61abd2f42bbf9f2944ffa80f1f41a_fdyy8n.webp"
+                      src="https://res.cloudinary.com/dronteu5m/image/upload/v1773515493/f7f61abd2f42bbf9f2944ffa80f1f41a_fm9x9q.webp"
                     />
                   </div>
                 </div>
