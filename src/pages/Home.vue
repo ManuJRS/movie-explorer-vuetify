@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { onMounted, ref, nextTick, computed } from 'vue'
-import mobileVideoUrl from '@/assets/recomended-movies-mobile.mp4'
-import statsVideoUrl from '@/assets/your-favorite-movies-mobile.mp4'
-import WatchTrailerUrl from '@/assets/watch-trailer-mobile.mp4'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
