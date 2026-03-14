@@ -13,19 +13,19 @@ import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.v
         loop
         playsinline
         preload="metadata"
-        poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Crect fill='%231e293b' width='1' height='1'/%3E%3C/svg%3E"
+        poster="https://res.cloudinary.com/dronteu5m/image/upload/v1773500401/save-your-movies_woc7jv.png"
         class="w-full h-full object-cover object-bottom opacity-60 scale-105 blur-xs"
       >
         <!-- Móvil: versión más ligera (menor resolución y calidad) -->
         <source
           media="(max-width: 768px)"
-          src="https://res.cloudinary.com/dronteu5m/video/upload/w_640,c_scale,q_auto:low/v1773004245/Dise%C3%B1o_sin_t%C3%ADtulo_5_wah75m.mp4"
+          src="https://res.cloudinary.com/dronteu5m/video/upload/v1773500051/Dise%C3%B1o_sin_t%C3%ADtulo_5_msxm2l.mp4"
           type="video/mp4"
         >
         <!-- Escritorio: video completo -->
         <source
           media="(min-width: 769px)"
-          src="https://res.cloudinary.com/dronteu5m/video/upload/v1773004245/Dise%C3%B1o_sin_t%C3%ADtulo_5_wah75m.mp4"
+          src="https://res.cloudinary.com/dronteu5m/video/upload/v1773500051/Dise%C3%B1o_sin_t%C3%ADtulo_5_msxm2l.mp4"
           type="video/mp4"
         >
       </video>

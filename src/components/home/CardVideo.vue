@@ -1,49 +1,110 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
+type FeatureItem = {
+  icon: string
+  title: string
+  description: string
+}
+
+interface Props {
+  title: string
+  description: string
+  items: FeatureItem[]
+  mediaPosition?: 'left' | 'right'
+  videoSrc?: string
+  posterSrc?: string
+  imageSrc?: string
+  imageAlt?: string
+  mediaType?: 'video' | 'image'
+}
+
+withDefaults(defineProps<Props>(), {
+  mediaPosition: 'right',
+  videoSrc: '',
+  posterSrc: '',
+  imageSrc: '',
+  imageAlt: 'Feature media',
+  mediaType: 'video',
+})
 </script>
 
 <template>
-<section class="md:py-24 py-12">
-    <div class="max-w-7xl mx-auto md:px-6">
-        <div class="group">
-            <div class="">
-                <div class="relative w-full h-full ">
-                    <div class="aspect-video glass-darker rounded-2xl overflow-hidden">
-                        <video autoplay muted loop class="w-full h-full object-cover">
-                        <source src="https://res.cloudinary.com/dronteu5m/video/upload/v1773004245/Dise%C3%B1o_sin_t%C3%ADtulo_5_wah75m.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </div>
-                <div class="md:text-right text-left flex flex-col justify-center p-8">
-                    <h2 class="text-2xl md:text-3xl font-bold mb-6 md:text-right text-left">{{ t('cardVideo.title') }}</h2>
-                    <p class="text-slate-400 mb-8 md:text-right text-left">
-                        {{ t('cardVideo.description') }}
-                    </p>
-                </div>
+  <section class="py-24 px-6 overflow-hidden">
+    <div
+      class="max-w-7xl mx-auto flex flex-col items-center gap-16"
+      :class="mediaPosition === 'left' ? 'lg:flex-row-reverse' : 'lg:flex-row'"
+    >
+      <!-- Content -->
+      <div class="lg:w-1/2 space-y-8">
+        <h2 class="text-4xl md:text-5xl font-black tracking-tight" v-html="title"></h2>
+
+        <p class="text-lg text-slate-500 dark:text-slate-400 leading-relaxed max-w-xl">
+          {{ description }}
+        </p>
+
+        <div class="space-y-6">
+          <div
+            v-for="item in items"
+            :key="`${item.title}-${item.icon}`"
+            class="flex items-start gap-4"
+          >
+            <div class="p-2 bg-primary/20 rounded-lg">
+              <span class="material-symbols-outlined text-primary">
+                {{ item.icon }}
+              </span>
             </div>
-        </div>
-    </div>
-</section>
-<section class="md:py-24 py-12">
-    <div class="max-w-7xl mx-auto md:px-6">
-        <div class="group">
-            <div class="">
-                <div class="relative w-full h-full ">
-                    <div class="aspect-video glass-darker rounded-2xl overflow-hidden">
-                        <video autoplay muted loop class="w-full h-full object-cover">
-                        <source src="https://res.cloudinary.com/dronteu5m/video/upload/v1773008398/Dise%C3%B1o_sin_t%C3%ADtulo_6_d68uqs.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </div>
-                <div class="text-left flex flex-col justify-center p-8">
-                    <h2 class="text-2xl md:text-3xl font-bold mb-6 text-left">{{ t('cardVideo.title2') }}</h2>
-                    <p class="text-slate-400 mb-8 text-left">
-                        {{ t('cardVideo.description2') }}
-                    </p>
-                </div>
+
+            <div>
+              <h4 class="font-bold text-lg">
+                {{ item.title }}
+              </h4>
+              <p class="text-slate-500 dark:text-slate-400">
+                {{ item.description }}
+              </p>
             </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Media -->
+      <div class="lg:w-1/2 relative">
+        <div
+          class="relative mx-auto w-[280px] h-[580px] bg-slate-900 rounded-[3rem] shadow-2xl overflow-hidden"
+        >
+          <template v-if="mediaType === 'video' && videoSrc">
+            <video
+              autoplay
+              loop
+              muted
+              playsinline
+              preload="metadata"
+              :poster="posterSrc ? posterSrc : ''"
+              class="absolute inset-0 w-full h-full object-cover"
+            >
+              <source :src="videoSrc" type="video/mp4" />
+            </video>
+            <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/20 rounded-full blur-[100px] -z-10">
+         </div>
+         
+          </template>
+
+          
+
+          <template v-else-if="mediaType === 'image' && imageSrc">
+            <img
+              :src="imageSrc"
+              :alt="imageAlt"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+          </template>
+
+
+        </div>
+
+        <div
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/20 rounded-full blur-[100px] -z-10"
+        ></div>
+      </div>
     </div>
-</section>
-</template>    
+  </section>
+</template>
