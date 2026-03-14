@@ -76,8 +76,8 @@ onMounted(async () => {
         :title="t('homeFeatures.card1Title')"
         media-position="right"
         media-type="video"
-        video-src="https://res.cloudinary.com/dronteu5m/video/upload/v1773495589/recomended-movies-mobile_usqbhe.mp4"
-        poster-src="https://res.cloudinary.com/dronteu5m/image/upload/v1773497580/recomended-movies-poster_rjrr1w.png"
+        video-src="https://res.cloudinary.com/dronteu5m/video/upload/q_auto:good,w_480,c_limit/v1773495589/recomended-movies-mobile_usqbhe.mp4"
+        poster-src="https://res.cloudinary.com/dronteu5m/image/upload/f_auto,q_80,w_1200,c_limit/v1773497580/recomended-movies-poster_rjrr1w"
         :description="t('homeFeatures.card1Description')"
       />
       <CardVideo
@@ -85,8 +85,8 @@ onMounted(async () => {
         :title="t('homeFeatures.card2Title')"
         media-position="left"
         media-type="video"
-        video-src="https://res.cloudinary.com/dronteu5m/video/upload/v1773498555/watch-trailer_lwryus.mp4"
-        poster-src="https://res.cloudinary.com/dronteu5m/image/upload/v1773496859/watch-trailer-poster_rosgjf.png"
+        video-src="https://res.cloudinary.com/dronteu5m/video/upload/q_auto:good,w_480,c_limit/v1773498555/watch-trailer_lwryus.mp4"
+        poster-src="https://res.cloudinary.com/dronteu5m/image/upload/f_auto,q_80,w_1200,c_limit/v1773496859/watch-trailer-poster_rosgjf"
         :description="t('homeFeatures.card2Description')"
       />
       <CardVideo
@@ -94,8 +94,8 @@ onMounted(async () => {
         :title="t('homeFeatures.card3Title')"
         media-position="right"
         media-type="video"
-        video-src="https://res.cloudinary.com/dronteu5m/video/upload/v1773495584/your-favorite-movies-mobile_veqquy.mp4"
-        poster-src="https://res.cloudinary.com/dronteu5m/image/upload/v1773498844/favorites-movies-poster_aehshb.png"
+        video-src="https://res.cloudinary.com/dronteu5m/video/upload/q_auto:good,w_480,c_limit/v1773495584/your-favorite-movies-mobile_veqquy.mp4"
+        poster-src="https://res.cloudinary.com/dronteu5m/image/upload/f_auto,q_80,w_1200,c_limit/v1773498844/favorites-movies-poster_aehshb"
         :description="t('homeFeatures.card3Description')"
       />
       <ExplicationProject />
