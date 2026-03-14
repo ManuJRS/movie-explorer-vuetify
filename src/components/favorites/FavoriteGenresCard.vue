@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useMoviesStore } from '@/stores/movies'
+import VueApexCharts from 'vue3-apexcharts'
 
 const { t } = useI18n()
 const moviesStore = useMoviesStore()
@@ -93,7 +94,7 @@ const chartOptions = computed(() => ({
     <h3 class="text-lg font-bold text-white mb-6">{{ t('statsFavs.genresTitle') }}</h3>
 
     <div class="flex-1 flex items-center justify-center relative min-h-[220px]">
-      <apexchart
+      <VueApexCharts
         v-if="chartSeries.length"
         type="donut"
         height="220"

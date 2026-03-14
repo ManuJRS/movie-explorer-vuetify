@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useMoviesStore } from '@/stores/movies'
+import VueApexCharts from 'vue3-apexcharts'
 
 const { t } = useI18n()
 import FavoriteDecadesCard from '@/components/favorites/FavoriteDecadesCard.vue'
@@ -29,7 +30,7 @@ const favoriteMoviesChartSeries = computed(() => [totalFavoriteMovies.value])
 
 const favoriteMoviesChartOptions = computed(() => ({
   chart: {
-    type: 'radialBar',
+    type: 'radialBar' as const,
     sparkline: {
       enabled: true,
     },
@@ -56,7 +57,7 @@ const favoriteMoviesChartOptions = computed(() => ({
     },
   },
   stroke: {
-    lineCap: 'round',
+    lineCap: 'round' as const,
   },
   labels: ['Favoritas'],
   colors: ['#a78bfa'],
@@ -66,7 +67,7 @@ const favoriteHoursChartSeries = computed(() => [Number(totalFavoriteHours.value
 
 const favoriteHoursChartOptions = computed(() => ({
   chart: {
-    type: 'radialBar',
+    type: 'radialBar' as const,
     sparkline: {
       enabled: true,
     },
@@ -93,7 +94,7 @@ const favoriteHoursChartOptions = computed(() => ({
     },
   },
   stroke: {
-    lineCap: 'round',
+    lineCap: 'round' as const,
   },
   labels: ['Horas'],
   colors: ['#60a5fa'],
@@ -122,7 +123,7 @@ const favoriteHoursChartOptions = computed(() => ({
                 </h2>
             </div>
             <div class="w-20 h-20">
-              <apexchart
+              <VueApexCharts
                 type="radialBar"
                 height="80"
                 :options="favoriteMoviesChartOptions"
@@ -146,7 +147,7 @@ const favoriteHoursChartOptions = computed(() => ({
               </h2>
             </div>
             <div class="w-20 h-20">
-              <apexchart
+              <VueApexCharts
                 type="radialBar"
                 height="80"
                 :options="favoriteHoursChartOptions"
