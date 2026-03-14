@@ -1,31 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from '@/pages/Home.vue'
-import LoginPage from '@/pages/LoginPage.vue'
-import MoviesPage from '@/pages/MoviesPage.vue'
-import ConfirmEmail from '@/pages/ConfirmEmail.vue'
 import { useAuthStore } from '@/stores/auth'
-import ForgotPasswordView from '@/pages/ForgotPasswordView.vue'
-import UpdatePasswordView from '@/pages/UpdatePasswordView.vue'
-import UserSettings from '@/pages/UserSettings.vue' 
-import InfoPage from '@/pages/InfoPage.vue'
-import RecommendationsPage from '@/pages/RecommendationsPage.vue'
-import WatchList from '@/pages/WatchList.vue'
-import FavoritesPage from '@/pages/FavoritesPage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', name: 'home', component: HomePage },
-    { path: '/login', name: 'login', component: LoginPage },
-    { path: '/movies', name: 'movies', component: MoviesPage, meta: { requiresAuth: true } },
-    { path: '/confirm-email', name: 'confirm-email', component: ConfirmEmail },
-    { path: '/forgot-password', name: 'forgot-password', component: ForgotPasswordView },
-    { path: '/update-password', name: 'update-password', component: UpdatePasswordView },
-    { path: '/user-settings', name: 'user-settings', component: UserSettings, meta: { requiresAuth: true } },
-    { path: '/info', name: 'info', component: InfoPage, meta: { requiresAuth: true } },
-    { path: '/recommendations', name: 'recommendations', component: RecommendationsPage, meta: { requiresAuth: true } },
-    { path: '/watch-list', name: 'watch-list', component: WatchList, meta: { requiresAuth: true } },
-    { path: '/favorites', name: 'favorites', component: FavoritesPage, meta: { requiresAuth: true } },
+    { path: '/', name: 'home', component: () => import('@/pages/Home.vue') },
+    { path: '/login', name: 'login', component: () => import('@/pages/LoginPage.vue') },
+    { path: '/movies', name: 'movies', component: () => import('@/pages/MoviesPage.vue'), meta: { requiresAuth: true } },
+    { path: '/confirm-email', name: 'confirm-email', component: () => import('@/pages/ConfirmEmail.vue') },
+    { path: '/forgot-password', name: 'forgot-password', component: () => import('@/pages/ForgotPasswordView.vue') },
+    { path: '/update-password', name: 'update-password', component: () => import('@/pages/UpdatePasswordView.vue') },
+    { path: '/user-settings', name: 'user-settings', component: () => import('@/pages/UserSettings.vue'), meta: { requiresAuth: true } },
+    { path: '/info', name: 'info', component: () => import('@/pages/InfoPage.vue'), meta: { requiresAuth: true } },
+    { path: '/recommendations', name: 'recommendations', component: () => import('@/pages/RecommendationsPage.vue'), meta: { requiresAuth: true } },
+    { path: '/watch-list', name: 'watch-list', component: () => import('@/pages/WatchList.vue'), meta: { requiresAuth: true } },
+    { path: '/favorites', name: 'favorites', component: () => import('@/pages/FavoritesPage.vue'), meta: { requiresAuth: true } },
   ],
 })
 
