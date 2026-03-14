@@ -94,6 +94,7 @@ withDefaults(defineProps<Props>(), {
             <img
               :src="imageSrc"
               :alt="imageAlt"
+              loading="lazy"
               class="absolute inset-0 w-full h-full object-cover"
             />
           </template>

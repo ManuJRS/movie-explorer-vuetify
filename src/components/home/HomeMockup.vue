@@ -48,7 +48,8 @@ const { t } = useI18n()
                     <img
                       alt="Preview"
                       class="w-full h-full object-cover opacity-60"
-                      src="https://imgs.search.brave.com/qNtbcFQk80F4ELxi4HPi5mgp7gBxZOOWapflEoNXSr8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzL2VlLzQw/L2U0L2VlNDBlNDU0/NGIyN2JjMWMxZGYx/NzlhMjAyYmJjNjNi/LmpwZw"
+                      loading="lazy"
+                      src="https://res.cloudinary.com/dronteu5m/image/upload/v1773506074/ee40e4544b27bc1c1df179a202bbc63b_auy7ww.webp"
                     />
                   </div>
                   <div
@@ -57,7 +58,8 @@ const { t } = useI18n()
                     <img
                       alt="Preview"
                       class="w-full h-full object-cover opacity-60"
-                      src="https://imgs.search.brave.com/XwuZOI_eYW1QGuRvdk5h0-YVFgfHbffrJGuJ89GQkDU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzL2Y3L2Y2/LzFhL2Y3ZjYxYWJk/MmY0MmJiZjlmMjk0/NGZmYTgwZjFmNDFh/LmpwZw"
+                      loading="lazy"
+                      src="https://res.cloudinary.com/dronteu5m/image/upload/v1773506072/71CkEhmQkqL_eoujfg.webp"
                     />
                   </div>
                   <div
@@ -66,7 +68,8 @@ const { t } = useI18n()
                     <img
                       alt="Preview"
                       class="w-full h-full object-cover opacity-60"
-                      src="https://imgs.search.brave.com/8A-ue9gWUi88rldo3wogczGLAc18k2Sn0mXLUxR_VSw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NzFDa0VobVFrcUwu/anBn"
+                      loading="lazy"
+                      src="https://res.cloudinary.com/dronteu5m/image/upload/v1773506072/f7f61abd2f42bbf9f2944ffa80f1f41a_fdyy8n.webp"
                     />
                   </div>
                 </div>
