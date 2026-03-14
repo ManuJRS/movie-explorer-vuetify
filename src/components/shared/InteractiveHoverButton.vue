@@ -25,7 +25,7 @@ withDefaults(defineProps<Props>(), {
     :class="[
       'group relative w-full cursor-pointer overflow-hidden rounded-xl text-sm font-bold transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 sm:text-base',
       variant === 'cancel'
-        ? 'border border-white/20 bg-transparent py-2 px-6 text-center hover:text-red-500 hover:bg-white/10'
+        ? 'border border-white/20 bg-transparent px-6 py-2 text-center hover:bg-white/10 hover:text-red-500'
         : variant === 'demo'
           ? 'border border-white/10 bg-black/70 py-4 pl-10 pr-8 text-center text-white'
           : variant === 'common'
@@ -37,22 +37,30 @@ withDefaults(defineProps<Props>(), {
   >
     <span
       :class="[
-        'inline-block transition-all duration-300',
-        variant === 'common' ? 'relative z-10 translate-x-0 text-white group-hover:text-black' : variant === 'save' ? 'relative z-10 translate-x-0 text-white group-hover:text-black' : variant === 'cancel' ? 'translate-x-0' : 'translate-x-1 group-hover:translate-x-10 group-hover:opacity-0',
+        'inline-block transition-all duration-300 md:pl-0 pl-2',
+        variant === 'common'
+          ? 'relative z-10 translate-x-0 text-white md:group-hover:text-black'
+          : variant === 'save'
+            ? 'relative z-10 translate-x-0 text-white md:group-hover:text-black'
+            : variant === 'cancel'
+              ? 'translate-x-0'
+              : 'translate-x-0 md:translate-x-1 md:group-hover:translate-x-10 md:group-hover:opacity-0',
       ]"
     >
       {{ text }}
     </span>
+
     <span
       v-if="variant === 'common' && !auth.loading"
-      class="material-symbols-outlined relative z-10 shrink-0 text-white transition-transform group-hover:translate-x-1 group-hover:text-black"
+      class="material-symbols-outlined relative z-10 shrink-0 text-white transition-transform md:group-hover:translate-x-1 md:group-hover:text-black"
     >
       arrow_forward
     </span>
 
+    <!-- texto hover solo desktop -->
     <div
       v-if="variant !== 'common' && variant !== 'cancel' && variant !== 'save'"
-      class="absolute top-0 z-20 flex h-full w-full translate-x-10 items-center justify-center gap-4 text-black opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+      class="pointer-events-none absolute top-0 z-20 hidden h-full w-full translate-x-10 items-center justify-center gap-4 text-black opacity-0 transition-all duration-300 md:flex md:group-hover:translate-x-0 md:group-hover:opacity-100"
     >
       <span>{{ text }}</span>
       <svg
@@ -67,32 +75,35 @@ withDefaults(defineProps<Props>(), {
       </svg>
     </div>
 
-    <!-- fondo animado (no en cancel) -->
+    <!-- fondo simple mobile + animado solo desktop -->
     <div
       v-if="variant !== 'cancel'"
-      class="absolute left-[-18%] top-[34%] z-0 h-4 w-4 scale-100 rounded-lg bg-white transition-all duration-300 group-hover:left-0 group-hover:top-0 group-hover:h-full group-hover:w-full group-hover:scale-[1.8]"
+      class="absolute z-0 rounded-lg bg-white transition-all duration-300 hidden md:block
+             left-3 top-1/2 h-4 w-4 -translate-y-1/2
+             md:left-[-18%] md:top-[34%] md:translate-y-0 md:scale-100
+             md:group-hover:left-0 md:group-hover:top-0 md:group-hover:h-full md:group-hover:w-full md:group-hover:scale-[1.8]"
     ></div>
 
-    <!-- icono play (solo en variant demo, sobre el fondo blanco, desaparece al hacer hover) -->
+    <!-- icono play -->
     <span
       v-if="variant === 'demo'"
-      class="material-symbols-outlined pointer-events-none absolute left-[15%] top-[27%] z-20 text-xl text-white opacity-100 transition-all duration-300 group-hover:opacity-0"
+      class="material-symbols-outlined pointer-events-none absolute left-[15%] top-[27%] z-20 text-xl text-white transition-all duration-300 md:opacity-100 md:group-hover:opacity-0"
     >
       play_circle
     </span>
 
-    <!-- icono login (solo en variant login, a la izquierda del texto, desaparece al hacer hover) -->
+    <!-- icono login -->
     <span
       v-if="variant === 'login'"
-      class="material-symbols-outlined pointer-events-none absolute left-4 top-1/2 z-20 -translate-y-1/2 text-xl text-white opacity-100 transition-all duration-300 group-hover:opacity-0"
+      class="material-symbols-outlined pointer-events-none absolute left-4 top-1/2 z-20 -translate-y-1/2 text-xl text-white transition-all duration-300 md:opacity-100 md:group-hover:opacity-0"
     >
       login
     </span>
 
-    <!-- icono save (solo en variant save, a la izquierda del texto, desaparece al hacer hover) -->
+    <!-- icono save -->
     <span
       v-if="variant === 'save'"
-      class="material-symbols-outlined pointer-events-none absolute left-4 top-1/2 z-20 -translate-y-1/2 text-xl text-white opacity-100 transition-all duration-300 group-hover:opacity-0"
+      class="material-symbols-outlined pointer-events-none absolute left-4 top-1/2 z-20 -translate-y-1/2 text-xl text-white transition-all duration-300 md:opacity-100 md:group-hover:opacity-0"
     >
       save
     </span>
