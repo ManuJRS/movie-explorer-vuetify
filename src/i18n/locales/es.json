@@ -104,6 +104,24 @@
     "updatePassword": "Actualizar contraseña",
     "loading": "Cargando..."
   },    
+  "homeFeatures": {
+    "card1Title": "Recomendaciones personalizadas",
+    "card1Description": "Encuentra películas que te interesen y que coincidan con tus gustos.",
+    "card1Item1Title": "Marca tus películas favoritas",
+    "card1Item1Description": "Solo dale Me Gusta y te recomendaremos películas similares.",
+    "card2Title": "Mira los trailers y disponibilidad",
+    "card2Description": "Puedes ver los trailers de las películas y verificar la disponibilidad en las plataformas de streaming.",
+    "card2Item1Title": "Responsive Design",
+    "card2Item1Description": "Ve si te interesa la película y en dónde puedes verla.",
+    "card3Title": "Descubre qué te gusta más",
+    "card3Description": "Resumen y estadísticas de tus películas favoritas.",
+    "card3Item1Title": "Tus géneros favoritos",
+    "card3Item1Description": "Resumen y estadísticas de tus géneros favoritos.",
+    "card3Item2Title": "Tus actores favoritos",
+    "card3Item2Description": "Resumen y estadísticas de tus actores favoritos.",
+    "card3Item3Title": "Tus directores favoritos",
+    "card3Item3Description": "Resumen y estadísticas de tus directores favoritos."
+  },
   "homePage": {
     "title": "Guarda tus películas",
     "description": "Mas vale una pálida tinta que una brillante memoria... pero una aplicación web es aún mejor.",
@@ -119,8 +137,8 @@
     "AccesYourCollectionDescription": "Consulta y administra tu lista de películas en cualquier momento, manteniendo un registro organizado de lo que has visto o quieres ver."
   },
   "explicationProject": {
-    "title": "Hola, ¡me presento!",
-    "description": "Este proyecto es una práctica de desarrollo de software para mi portafolio personal. Si te resulta útil, siéntete en la libertad de usarlo. El stack utilizado es Vue 3, utilizando Pinia para la gestión del estado, Vue Router, i18n para la internacionalización, Tailwind CSS para los estilos y TypeScript. Para el backend y la autenticación de usuarios se utiliza Supabase, mientras que el despliegue y hosting de la aplicación se realiza en Netlify."
+    "title": "Hola",
+    "description": "Este proyecto es una práctica de desarrollo de software para mi portafolio personal. Si te resulta útil, siéntete en la libertad de usarlo."
   },
   "settingsPage": {
     "titlePreview": "Ajustes",

@@ -104,6 +104,24 @@
       "updatePassword": "Update password",
       "loading": "Loading..."
     },
+    "homeFeatures": {
+      "card1Title": "Personalized recommendations",
+      "card1Description": "Find movies that interest you and match your taste.",
+      "card1Item1Title": "Mark your favorite movies",
+      "card1Item1Description": "Just tap Like and we'll recommend similar movies.",
+      "card2Title": "Watch trailers and availability",
+      "card2Description": "Watch movie trailers and check availability on streaming platforms.",
+      "card2Item1Title": "Responsive Design",
+      "card2Item1Description": "See if the movie interests you and where you can watch it.",
+      "card3Title": "Discover what you like most",
+      "card3Description": "Summary and statistics of your favorite movies.",
+      "card3Item1Title": "Your favorite genres",
+      "card3Item1Description": "Summary and statistics of your favorite genres.",
+      "card3Item2Title": "Your favorite actors",
+      "card3Item2Description": "Summary and statistics of your favorite actors.",
+      "card3Item3Title": "Your favorite directors",
+      "card3Item3Description": "Summary and statistics of your favorite directors."
+    },
     "homePage": {
       "title": "Save Your Movies",
       "description": "The faintest ink is better than the best memory… but a web app is even better.",
@@ -120,7 +138,7 @@
     },
     "explicationProject": {
       "title": "Hello, let me introduce myself!",
-      "description": "This project is a software development practice project created for my personal portfolio. If you find it useful, feel free to use it. The stack includes Vue 3, using Pinia for state management, Vue Router, i18n for internationalization, Tailwind CSS for styling, and TypeScript. For the backend and user authentication, the project uses Supabase, while deployment and hosting are handled through Netlify."
+      "description": "This project is a software development practice project created for my personal portfolio. If you find it useful, feel free to use it."
     },
     "settingsPage": {
       "titlePreview": "Settings",
