@@ -7,6 +7,14 @@ import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.v
 <template>
   <header class="relative min-h-[60vh] flex items-center justify-center pt-20 overflow-hidden">
     <div class="absolute inset-0 z-0">
+      <!-- Mobile: imagen estática -->
+      <img
+        src="https://res.cloudinary.com/dronteu5m/image/upload/v1773515484/save-your-movies-home-hero-mobile_djtfoi.webp"
+        alt=""
+        class="absolute inset-0 w-full h-full object-cover object-bottom opacity-60 md:hidden"
+        fetchpriority="high"
+      />
+      <!-- Desktop: video -->
       <video
         autoplay
         muted
@@ -15,7 +23,7 @@ import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.v
         preload="metadata"
         fetchpriority="high"
         poster="https://res.cloudinary.com/dronteu5m/image/upload/f_auto,q_80,w_1200,c_limit/v1773500401/save-your-movies_woc7jv"
-        class="w-full h-full object-cover object-bottom opacity-60 scale-105 blur-xs"
+        class="hidden md:block w-full h-full object-cover object-bottom opacity-60 md:scale-105 blur-none md:blur-sm"
       >
         <source
           src="https://res.cloudinary.com/dronteu5m/video/upload/q_auto:good,w_720,c_limit/v1773500051/Dise%C3%B1o_sin_t%C3%ADtulo_5_msxm2l.mp4"
@@ -23,7 +31,7 @@ import InteractiveHoverButton from '@/components/shared/InteractiveHoverButton.v
         >
       </video>
       <div
-        class="absolute inset-0 bg-gradient-to-b via-background-dark/10 to-background-dark"
+        class="absolute inset-0 bg-gradient-to-b md:via-background-dark/10 via-background-dark/70 to-background-dark"
       />
     </div>
     <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">

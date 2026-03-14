@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+
 type FeatureItem = {
   icon: string
   title: string
@@ -24,6 +26,29 @@ withDefaults(defineProps<Props>(), {
   imageSrc: '',
   imageAlt: 'Feature media',
   mediaType: 'video',
+})
+
+const mediaRef = ref<HTMLElement | null>(null)
+const isInViewport = ref(false)
+let observer: IntersectionObserver | null = null
+
+onMounted(() => {
+  if (!mediaRef.value) return
+  observer = new IntersectionObserver(
+    (entries) => {
+      const [entry] = entries
+      if (entry?.isIntersecting) {
+        isInViewport.value = true
+        observer?.disconnect()
+      }
+    },
+    { rootMargin: '50px', threshold: 0.1 }
+  )
+  observer.observe(mediaRef.value)
+})
+
+onUnmounted(() => {
+  observer?.disconnect()
 })
 </script>
 
@@ -66,26 +91,32 @@ withDefaults(defineProps<Props>(), {
       </div>
 
       <!-- Media -->
-      <div class="lg:w-1/2 relative">
+      <div ref="mediaRef" class="lg:w-1/2 relative">
         <div
           class="relative mx-auto w-[280px] h-[580px] bg-slate-900 rounded-[3rem] shadow-2xl overflow-hidden"
         >
           <template v-if="mediaType === 'video' && videoSrc">
+            <!-- Carga diferida: solo renderiza el video cuando entra en el viewport -->
             <video
+              v-if="isInViewport"
               autoplay
               loop
               muted
               playsinline
-              preload="metadata"
+              preload="none"
               :poster="posterSrc ? posterSrc : ''"
               class="absolute inset-0 w-full h-full object-cover"
             >
               <source :src="videoSrc" type="video/mp4" />
             </video>
             <div
-            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/20 rounded-full blur-[100px] -z-10">
-         </div>
-         
+              v-else-if="posterSrc"
+              class="absolute inset-0 w-full h-full bg-cover bg-center"
+              :style="{ backgroundImage: `url(${posterSrc})` }"
+            />
+            <div
+              class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/20 rounded-full blur-[100px] -z-10"
+            />
           </template>
 
           
