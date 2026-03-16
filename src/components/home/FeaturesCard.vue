@@ -18,27 +18,27 @@ const { t } = useI18n()
         <div class="flex flex-wrap gap-1 mt-6">
             <div class="flex items-center gap-2 pr-2">
                 <span class="material-symbols-outlined text-green-500">check_small</span>
-                <h3 class="text-md text-slate-300 font-bold ">Vue 3 + Vite</h3>
+                <h3 class="text-md text-slate-300 md:font-medium font-normal">Vue 3 + Vite</h3>
             </div>
             <div class="flex items-center gap-2 pr-2">
                 <span class="material-symbols-outlined text-green-500">check_small</span>
-                <h3 class="text-md text-slate-300 font-bold ">Vue Router</h3>
+                <h3 class="text-md text-slate-300 md:font-medium font-normal">Vue Router</h3>
             </div>
             <div class="flex items-center gap-2 pr-2">
                 <span class="material-symbols-outlined text-green-500">check_small</span>
-                <h3 class="text-md text-slate-300 font-bold ">Pinia</h3>
+                <h3 class="text-md text-slate-300 md:font-medium font-normal">Pinia</h3>
             </div>
             <div class="flex items-center gap-2 pr-2">
                 <span class="material-symbols-outlined text-green-500">check_small</span>
-                <h3 class="text-md text-slate-300 font-bold ">Vue I18n</h3>
+                <h3 class="text-md text-slate-300 md:font-medium font-normal">Vue I18n</h3>
             </div>
             <div class="flex items-center gap-2 pr-2">
                 <span class="material-symbols-outlined text-green-500">check_small</span>
-                <h3 class="text-md text-slate-300 font-bold ">Tailwind CSS v4</h3>
+                <h3 class="text-md text-slate-300 md:font-medium font-normal">Tailwind CSS v4</h3>
             </div>
             <div class="flex items-center gap-2 pr-2">
                 <span class="material-symbols-outlined text-green-500">check_small</span>
-                <h3 class="text-md text-slate-300 font-bold ">ApexCharts</h3>
+                <h3 class="text-md text-slate-300 md:font-medium font-normal">ApexCharts</h3>
             </div>
         </div>
       </div>
@@ -51,15 +51,15 @@ const { t } = useI18n()
         <div class="flex flex-wrap gap-1 mt-6">
           <div class="flex items-center gap-2 pr-2">
             <span class="material-symbols-outlined text-green-500">check_small</span>
-            <h3 class="text-md text-slate-300 font-bold ">Supabase Authentication</h3>
+            <h3 class="text-md text-slate-300 md:font-medium font-normal">Supabase Authentication</h3>
           </div>
           <div class="flex items-center gap-2 pr-2">
             <span class="material-symbols-outlined text-green-500">check_small</span>
-            <h3 class="text-md text-slate-300 font-bold ">Session Management</h3>
+            <h3 class="text-md text-slate-300 md:font-medium font-normal">Session Management</h3>
           </div>
           <div class="flex items-center gap-2 pr-2">
             <span class="material-symbols-outlined text-green-500">check_small</span>
-            <h3 class="text-md text-slate-300 font-bold ">Movie Data Storage</h3>
+            <h3 class="text-md text-slate-300 md:font-medium font-normal">Movie Data Storage</h3>
           </div>
         </div>
       </div>
@@ -72,23 +72,23 @@ const { t } = useI18n()
         <div class="flex flex-wrap gap-1 mt-6">
           <div class="flex items-center gap-2 pr-2">
             <span class="material-symbols-outlined text-green-500">check_small</span>
-            <h3 class="text-md text-slate-300 font-bold ">Vite Build System</h3>
+            <h3 class="text-md text-slate-300 md:font-medium font-normal">Vite Build System</h3>
           </div>
           <div class="flex items-center gap-2 pr-2">
             <span class="material-symbols-outlined text-green-500">check_small</span>
-            <h3 class="text-md text-slate-300 font-bold ">TypeScript</h3>
+            <h3 class="text-md text-slate-300 md:font-medium font-normal">TypeScript</h3>
           </div>
           <div class="flex items-center gap-2 pr-2">
             <span class="material-symbols-outlined text-green-500">check_small</span>
-            <h3 class="text-md text-slate-300 font-bold ">Commitlint</h3>
+            <h3 class="text-md text-slate-300 md:font-medium font-normal">Commitlint</h3>
           </div>
           <div class="flex items-center gap-2 pr-2">
             <span class="material-symbols-outlined text-green-500">check_small</span>
-                <h3 class="text-md text-slate-300 font-bold ">Husky Git Hooks</h3>
+                <h3 class="text-md text-slate-300 md:font-medium font-normal">Husky Git Hooks</h3>
           </div>    
           <div class="flex items-center gap-2 pr-2">
             <span class="material-symbols-outlined text-green-500">check_small</span>
-            <h3 class="text-md text-slate-300 font-bold ">Vite Vue DevTools</h3>
+            <h3 class="text-md text-slate-300 md:font-medium font-normal">Vite Vue DevTools</h3>
           </div>
           </div>
       </div>
@@ -101,27 +101,27 @@ const { t } = useI18n()
         <div class="flex flex-wrap gap-1 mt-6">
           <div class="flex items-center gap-2 pr-2">
             <span class="material-symbols-outlined text-green-500">check_small</span>
-            <h3 class="text-md text-slate-300 font-bold ">Movie Tracking</h3>
+            <h3 class="text-md text-slate-300 md:font-medium font-normal">Movie Tracking</h3>
           </div>
           <div class="flex items-center gap-2 pr-2">
             <span class="material-symbols-outlined text-green-500">check_small</span>
-            <h3 class="text-md text-slate-300 font-bold ">Recommendations</h3>
+            <h3 class="text-md text-slate-300 md:font-medium font-normal">Recommendations</h3>
           </div>
           <div class="flex items-center gap-2 pr-2">
             <span class="material-symbols-outlined text-green-500">check_small</span>
-            <h3 class="text-md text-slate-300 font-bold ">Statistics Dashboard</h3>
+            <h3 class="text-md text-slate-300 md:font-medium font-normal">Statistics Dashboard</h3>
           </div>
           <div class="flex items-center gap-2 pr-2">
             <span class="material-symbols-outlined text-green-500">check_small</span>
-            <h3 class="text-md text-slate-300 font-bold ">Favorites</h3>
+            <h3 class="text-md text-slate-300 md:font-medium font-normal">Favorites</h3>
           </div>
           <div class="flex items-center gap-2 pr-2">
             <span class="material-symbols-outlined text-green-500">check_small</span>
-            <h3 class="text-md text-slate-300 font-bold ">Watchlist</h3>
+            <h3 class="text-md text-slate-300 md:font-medium font-normal">Watchlist</h3>
           </div>
           <div class="flex items-center gap-2 pr-2">
             <span class="material-symbols-outlined text-green-500">check_small</span>
-            <h3 class="text-md text-slate-300 font-bold ">Multi-Language</h3>
+            <h3 class="text-md text-slate-300 md:font-medium font-normal">Multi-Language</h3>
           </div>
         </div>
       </div>

@@ -53,7 +53,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="py-24 px-6 overflow-hidden">
+  <section class="md:py-24 py-12 px-6 overflow-hidden">
     <div
       class="max-w-7xl mx-auto flex flex-col items-center gap-16"
       :class="mediaPosition === 'left' ? 'lg:flex-row-reverse' : 'lg:flex-row'"
