@@ -170,7 +170,7 @@ function onAddToLibrary() {
           {{ movie.platform }}
         </span>
         <img
-          :src="movie.image || 'https://via.placeholder.com/300x450?text=No+Poster'"
+          :src="movie.image"
           :alt="movie.title"
           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
