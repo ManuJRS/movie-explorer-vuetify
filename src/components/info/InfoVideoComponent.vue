@@ -24,7 +24,7 @@ defineProps({
 <template>
     <section class="">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="p-8 md:p-16 rounded-2xl group">
+        <div class="p-2 rounded-2xl group">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
                     <h2 class="text-2xl md:text-3xl font-bold mb-6">{{ title }}</h2>
@@ -38,8 +38,9 @@ defineProps({
                     </div>
                 </div>
                 <div class="relative">
-                    <div class="aspect-video glass-darker rounded-2xl overflow-hidden flex items-center justify-center">
-                        <iframe :src="videoUrl" frameborder="0" allowfullscreen></iframe>
+                    <div class="aspect-video w-full h-full glass-darker rounded-2xl overflow-hidden flex items-center justify-center">
+                        <img :src="videoUrl" alt="" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 w-full h-full bg-cover bg-center" :style="{ backgroundImage: `url(${videoUrl})` }"></div>
                     </div>
                 </div>
             </div>
