@@ -1,201 +1,116 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { supabase } from '@/lib/supabase'
-import { useAuthStore } from '@/stores/auth'
-import type { Movie, DbMovie } from '@/types/movie'
+import { getDemoMoviesSeed } from '@/data/demoSeed'
+import type { Movie } from '@/types/movie'
 
-function dbToUi(m: DbMovie): Movie {
-  const details = m.tmdb_details
+const DEMO_MOVIES_KEY = 'movie-explorer-demo-movies'
+const DEMO_MOVIES_JSON_URL = '/data/demo-movies.json'
+
+function normalizeMovie(raw: Record<string, unknown>): Movie {
   return {
-    id: m.id,
-    title: m.title,
-    year: String(m.year),
-    image: m.poster_url ?? '',
-    platform: m.platform ?? '',
-    synopsis: m.synopsis ?? '',
-    ...(details && { tmdbId: details.tmdb_id }),
-    ...(details && {
-      genres: details.genres,
-      runtime: details.runtime,
-      rating: details.rating,
-      directors: details.directors,
-      mainActors: details.mainActors,
-      writers: details.writers,
-    }),
-    favorite: m.favorite,
+    id: String(raw.id ?? ''),
+    title: String(raw.title ?? ''),
+    year: String(raw.year ?? ''),
+    image: String(raw.image ?? ''),
+    platform: String(raw.platform ?? ''),
+    synopsis: String(raw.synopsis ?? ''),
+    tmdbId: typeof raw.tmdbId === 'number' ? raw.tmdbId : undefined,
+    genres: Array.isArray(raw.genres) ? raw.genres.map(String) : undefined,
+    runtime: typeof raw.runtime === 'number' ? raw.runtime : null,
+    rating: typeof raw.rating === 'number' ? raw.rating : undefined,
+    directors: Array.isArray(raw.directors) ? raw.directors.map(String) : undefined,
+    mainActors: Array.isArray(raw.mainActors) ? raw.mainActors.map(String) : undefined,
+    writers: Array.isArray(raw.writers) ? raw.writers.map(String) : undefined,
+    favorite: Boolean(raw.favorite),
   }
+}
+
+async function fetchDemoMoviesFromJson(): Promise<Movie[]> {
+  const res = await fetch(DEMO_MOVIES_JSON_URL, { cache: 'no-store' })
+  if (!res.ok) throw new Error(`Failed to load demo movies: ${res.status}`)
+  const data = await res.json()
+  if (!Array.isArray(data)) return []
+  return data.map((item: Record<string, unknown>) => normalizeMovie(item))
 }
 
 export const useMoviesStore = defineStore('movies', () => {
   const movies = ref<Movie[]>([])
 
-  async function loadMovies() {
-    const auth = useAuthStore()
-    if (!auth.user) {
-      movies.value = []
-      return
-    }
-  
+  function persistDemoMovies() {
     try {
-      const { data, error } = await supabase
-        .from('movies')
-        .select('*')
-        .order('created_at', { ascending: false })
-  
-      if (error) throw error
-  
-      movies.value = (data ?? []).map((m: DbMovie) => dbToUi(m))
-    } catch (error) {
-      console.error('Error loading movies:', error)
+      localStorage.setItem(DEMO_MOVIES_KEY, JSON.stringify(movies.value))
+    } catch (e) {
+      console.error('Error persisting demo movies:', e)
+    }
+  }
+
+  async function loadMovies() {
+    try {
+      const raw = localStorage.getItem(DEMO_MOVIES_KEY)
+      if (raw) {
+        const parsed = JSON.parse(raw) as Movie[]
+        movies.value = Array.isArray(parsed) ? parsed : []
+      } else {
+        movies.value = await fetchDemoMoviesFromJson()
+        persistDemoMovies()
+      }
+    } catch (e) {
+      console.error('Error loading demo movies:', e)
+      movies.value = getDemoMoviesSeed()
+      persistDemoMovies()
     }
   }
 
   async function addMovie(movie: Omit<Movie, 'id'>) {
-    const auth = useAuthStore()
-    if (!auth.user) throw new Error('Not authenticated')
-
-    const hasTmdbData =
-      movie.tmdbId != null ||
-      movie.genres?.length ||
-      movie.runtime != null ||
-      movie.rating != null ||
-      movie.directors?.length ||
-      movie.mainActors?.length ||
-      movie.writers?.length
-
-    const tmdbDetails = hasTmdbData
-      ? {
-          tmdb_id: movie.tmdbId ?? undefined,
-          genres: movie.genres,
-          runtime: movie.runtime ?? null,
-          rating: movie.rating,
-          directors: movie.directors,
-          mainActors: movie.mainActors,
-          writers: movie.writers,
-        }
-      : null
-
-    try {
-      const payload: Record<string, unknown> = {
-        user_id: auth.user.id,
-        title: movie.title.trim(),
-        year: Number(movie.year),
-        poster_url: movie.image?.trim() || null,
-        platform: movie.platform || null,
-        synopsis: movie.synopsis || null,
-      }
-      if (tmdbDetails) (payload as Record<string, unknown>).tmdb_details = tmdbDetails
-
-      const { data, error } = await supabase
-        .from('movies')
-        .insert(payload)
-        .select('*')
-        .single()
-
-      if (error) throw error
-
-      const details = (data as DbMovie).tmdb_details
-      movies.value.unshift({
-        id: data.id,
-        title: data.title,
-        year: String(data.year),
-        image: data.poster_url ?? '',
-        platform: data.platform ?? '',
-        synopsis: data.synopsis ?? '',
-        ...(details && { tmdbId: details.tmdb_id }),
-        ...(details && {
-          genres: details.genres,
-          runtime: details.runtime,
-          rating: details.rating,
-          directors: details.directors,
-          mainActors: details.mainActors,
-          writers: details.writers,
-        }),
-        favorite: false,
-      })
-    } catch (error) {
-      console.error('Error adding movie:', error)
-      throw error
+    const newMovie: Movie = {
+      ...movie,
+      id: `demo-${crypto.randomUUID()}`,
+      favorite: movie.favorite ?? false,
     }
+    movies.value = [newMovie, ...movies.value]
+    persistDemoMovies()
   }
 
   async function updateMovie(movie: Movie) {
-    try {
-      const payload: Record<string, unknown> = {
-        title: movie.title.trim(),
-        year: Number(movie.year),
-        poster_url: movie.image?.trim() || null,
-        platform: movie.platform || null,
-        synopsis: movie.synopsis || null,
-      }
-      const hasTmdbData =
-        movie.tmdbId != null ||
-        movie.genres?.length ||
-        movie.runtime != null ||
-        movie.rating != null ||
-        movie.directors?.length ||
-        movie.mainActors?.length ||
-        movie.writers?.length
-
-      const tmdbDetails = hasTmdbData
-        ? {
-            tmdb_id: movie.tmdbId ?? undefined,
-            genres: movie.genres,
-              runtime: movie.runtime ?? null,
-              rating: movie.rating,
-              directors: movie.directors,
-              mainActors: movie.mainActors,
-            writers: movie.writers,
-          }
-        : null
-      if (tmdbDetails) (payload as Record<string, unknown>).tmdb_details = tmdbDetails
-
-      const { error } = await supabase.from('movies').update(payload).eq('id', movie.id)
-
-      if (error) throw error
-
-      const idx = movies.value.findIndex(m => m.id === movie.id)
-      if (idx !== -1) {
-        movies.value = [...movies.value.slice(0, idx), movie, ...movies.value.slice(idx + 1)]
-      }
-    } catch (error) {
-      console.error('Error updating movie:', error)
-      throw error
+    const idx = movies.value.findIndex(m => m.id === movie.id)
+    if (idx !== -1) {
+      movies.value = [...movies.value.slice(0, idx), movie, ...movies.value.slice(idx + 1)]
+      persistDemoMovies()
     }
   }
 
   async function deleteMovie(id: string) {
-    try {
-      const { error } = await supabase.from('movies').delete().eq('id', id)
-      if (error) throw error
-
-      movies.value = movies.value.filter(movie => movie.id !== id)
-    } catch (error) {
-      console.error('Error deleting movie:', error)
-      throw error
-    }
+    movies.value = movies.value.filter(movie => movie.id !== id)
+    persistDemoMovies()
   }
 
   function resetMovies() {
     movies.value = []
+    try {
+      localStorage.removeItem(DEMO_MOVIES_KEY)
+    } catch {
+      // ignore
+    }
+  }
+
+  /** Borra los datos locales y vuelve a cargar desde public/data/demo-movies.json. Útil para ver cambios en el JSON. */
+  async function resetToDemoFromJson() {
+    try {
+      localStorage.removeItem(DEMO_MOVIES_KEY)
+      movies.value = await fetchDemoMoviesFromJson()
+      persistDemoMovies()
+    } catch (e) {
+      console.error('Error resetting to demo JSON:', e)
+      movies.value = getDemoMoviesSeed()
+      persistDemoMovies()
+    }
   }
 
   async function toggleFavorite(movieId: string, currentValue: boolean) {
-    try {
-      const { error: supabaseError } = await supabase
-        .from('movies')
-        .update({ favorite: !currentValue })
-        .eq('id', movieId)
-
-      if (supabaseError) throw supabaseError
-
-      const movie = movies.value.find(m => m.id === movieId)
-      if (movie) {
-        movie.favorite = !currentValue
-      }
-    } catch (err) {
-      console.error('Error updating favorite:', err)
-      throw err
+    const movie = movies.value.find(m => m.id === movieId)
+    if (movie) {
+      movie.favorite = !currentValue
+      persistDemoMovies()
     }
   }
 
@@ -207,5 +122,6 @@ export const useMoviesStore = defineStore('movies', () => {
     updateMovie,
     deleteMovie,
     resetMovies,
+    resetToDemoFromJson,
   }
 })

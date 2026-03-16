@@ -2,7 +2,10 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { useAuthStore } from '@/stores/auth'
+import { getDemoWatchlistSeed } from '@/data/demoSeed'
 import type { WatchlistItem, DbWatchlistItem } from '@/types/watchlist'
+
+const DEMO_WATCHLIST_KEY = 'movie-explorer-demo-watchlist'
 
 function dbToUi(m: DbWatchlistItem): WatchlistItem {
   return {
@@ -20,10 +23,30 @@ function dbToUi(m: DbWatchlistItem): WatchlistItem {
 export const useWatchlistStore = defineStore('watchlist', () => {
   const items = ref<WatchlistItem[]>([])
 
+  function persistDemoWatchlist() {
+    try {
+      localStorage.setItem(DEMO_WATCHLIST_KEY, JSON.stringify(items.value))
+    } catch (e) {
+      console.error('Error persisting demo watchlist:', e)
+    }
+  }
+
   async function loadWatchlist() {
     const auth = useAuthStore()
     if (!auth.user) {
-      items.value = []
+      try {
+        const raw = localStorage.getItem(DEMO_WATCHLIST_KEY)
+        if (raw) {
+          const parsed = JSON.parse(raw) as WatchlistItem[]
+          items.value = Array.isArray(parsed) ? parsed : []
+        } else {
+          items.value = getDemoWatchlistSeed()
+          persistDemoWatchlist()
+        }
+      } catch {
+        items.value = getDemoWatchlistSeed()
+        persistDemoWatchlist()
+      }
       return
     }
 
@@ -50,7 +73,23 @@ export const useWatchlistStore = defineStore('watchlist', () => {
     vote_average: number
   }) {
     const auth = useAuthStore()
-    if (!auth.user) throw new Error('Debes iniciar sesión para agregar a pendientes')
+    if (!auth.user) {
+      const existing = items.value.find((item) => item.tmdbId === movie.id)
+      if (existing) return
+      const newItem: WatchlistItem = {
+        id: `demo-wl-${crypto.randomUUID()}`,
+        tmdbId: movie.id,
+        title: movie.title,
+        posterPath: movie.poster_path,
+        overview: movie.overview || null,
+        releaseDate: movie.release_date || null,
+        voteAverage: movie.vote_average ?? 0,
+        createdAt: new Date().toISOString(),
+      }
+      items.value = [newItem, ...items.value]
+      persistDemoWatchlist()
+      return
+    }
 
     const existing = items.value.find((item) => item.tmdbId === movie.id)
     if (existing) return
@@ -82,6 +121,12 @@ export const useWatchlistStore = defineStore('watchlist', () => {
   }
 
   async function removeFromWatchlist(id: string) {
+    const auth = useAuthStore()
+    if (!auth.user) {
+      items.value = items.value.filter((item) => item.id !== id)
+      persistDemoWatchlist()
+      return
+    }
     try {
       const { error } = await supabase.from('watchlist').delete().eq('id', id)
       if (error) throw error
@@ -97,11 +142,23 @@ export const useWatchlistStore = defineStore('watchlist', () => {
     return items.value.some((item) => item.tmdbId === tmdbId)
   }
 
+  /** Borra los datos locales y vuelve a cargar la watchlist por defecto (seed). */
+  function resetToDemoSeed() {
+    try {
+      localStorage.removeItem(DEMO_WATCHLIST_KEY)
+      items.value = getDemoWatchlistSeed()
+      persistDemoWatchlist()
+    } catch (e) {
+      console.error('Error resetting watchlist:', e)
+    }
+  }
+
   return {
     items,
     loadWatchlist,
     addToWatchlist,
     removeFromWatchlist,
     isInWatchlist,
+    resetToDemoSeed,
   }
 })

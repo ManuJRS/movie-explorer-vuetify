@@ -2,7 +2,6 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useMoviesStore } from '@/stores/movies'
-import { useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
 import MovieCard from '@/components/favorites/MovieCard.vue'
 import Paginator from '@/components/shared/Paginator.vue'
@@ -12,7 +11,6 @@ import type { Movie } from '@/types/movie'
 const ITEMS_PER_PAGE = 12
 
 const moviesStore = useMoviesStore()
-const authStore = useAuthStore()
 const { movies } = storeToRefs(moviesStore)
 const { t } = useI18n()
 
@@ -56,14 +54,7 @@ function openMovieDetail(movie: Movie | TMDbMovie) {
 </script>
 
 <template>
-    <div
-      v-if="!authStore.user"
-      class="rounded-2xl border border-white/10 bg-white/5 p-8 text-center text-slate-400"
-    >
-      {{ t('loginPage.description') }}
-    </div>
-
-    <div v-else-if="loading" class="text-slate-400">
+    <div v-if="loading" class="text-slate-400">
       {{ t('favorites.loading') }}
     </div>
 

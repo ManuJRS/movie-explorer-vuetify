@@ -273,5 +273,9 @@
   "paginator": {
     "prev": "Anterior",
     "next": "Siguiente"
+  },
+  "demo": {
+    "restoreDefaultList": "Restaurar lista por defecto",
+    "restoring": "..."
   }
 }

@@ -272,5 +272,9 @@
     "paginator": {
       "prev": "Prev",
       "next": "Next"
+    },
+    "demo": {
+      "restoreDefaultList": "Restore default list",
+      "restoring": "..."
     }
   }

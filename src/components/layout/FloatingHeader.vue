@@ -40,7 +40,6 @@ const {
 
       <div class="hidden items-center gap-1 lg:flex">
         <router-link
-          v-if="user"
           v-for="link in links"
           :key="link.label"
           :to="link.href"
@@ -70,7 +69,7 @@ const {
           </button>
         </div>
         <button
-            v-if="!user"
+            v-if="!user && !isMobile"
             type="button"
             class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md border border-black/10 bg-white px-4 text-sm font-medium transition-colors hover:cursor-pointer hover:bg-black/5 dark:border-white/10 dark:bg-slate-950 dark:hover:bg-white/5"
             @click="goToLogin(); closeMenu();"
@@ -78,7 +77,7 @@ const {
             {{ t('nav.signIn') }}
           </button>
         <button
-          v-if="user"
+          
           type="button"
           @click="toggleMenu"
           class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-black/10 bg-white text-slate-900 transition-colors hover:bg-black/5 lg:hidden dark:border-white/10 dark:bg-slate-950 dark:text-white dark:hover:bg-white/5"

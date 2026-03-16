@@ -11,6 +11,7 @@ import { getMovieFullData } from '@/lib/tmdb'
 import PageLoader from '@/components/ui/PageLoader.vue'
 
 const isLoading = ref(true)
+const resetting = ref(false)
 
 const { t } = useI18n()
 const watchlistStore = useWatchlistStore()
@@ -131,23 +132,43 @@ onMounted(async () => {
 watch(totalPages, (total) => {
   if (currentPage.value > total) currentPage.value = 1
 })
+
+async function restoreDefaultWatchlist() {
+  resetting.value = true
+  try {
+    watchlistStore.resetToDemoSeed()
+  } finally {
+    resetting.value = false
+  }
+}
 </script>
 
 <template>
   <PageLoader v-if="isLoading" />
   <section class="mt-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <div class="max-w-7xl mx-auto">
-      <div class="mb-10">
-        <h1 class="text-2xl md:text-3xl font-bold mb-3">
-          {{ t('watchlist.title') }}
-        </h1>
-        <p class="text-slate-400 max-w-2xl">
-          {{ t('watchlist.description') }}
-        </p>
+      <div class="mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-bold mb-3">
+            {{ t('watchlist.title') }}
+          </h1>
+          <p class="text-slate-400 max-w-2xl">
+            {{ t('watchlist.description') }}
+          </p>
+        </div>
+        <button
+          type="button"
+          class="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-2 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 disabled:opacity-50"
+          :disabled="resetting"
+          @click="restoreDefaultWatchlist"
+        >
+        <span class="material-symbols-outlined">restore_page</span>
+          {{ resetting ? t('demo.restoring') : t('demo.restoreDefaultList') }}
+        </button>
       </div>
 
       <div
-        v-if="!authStore.user"
+        v-if="!authStore.user && watchlistStore.items.length === 0"
         class="rounded-2xl border border-white/10 bg-white/5 p-6 text-slate-300"
       >
         {{ t('loginPage.description') }}

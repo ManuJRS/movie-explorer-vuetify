@@ -60,9 +60,8 @@ export function useMoviesPage() {
 
   watch(
     user,
-    async (u) => {
-      if (u) await moviesStore.loadMovies()
-      else moviesStore.resetMovies()
+    async () => {
+      await moviesStore.loadMovies()
     },
     { immediate: true }
   )
