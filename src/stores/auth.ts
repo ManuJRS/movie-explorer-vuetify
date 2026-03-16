@@ -21,15 +21,18 @@ export const useAuthStore = defineStore('auth', {
       if (initPromise) return initPromise
 
       initPromise = (async () => {
-        const { data: sessionData } = await supabase.auth.getSession()
-        this.user = sessionData.session?.user ?? null
+        try {
+          const { data: sessionData } = await supabase.auth.getSession()
+          this.user = sessionData.session?.user ?? null
+          const changeResult = supabase.auth.onAuthStateChange((_event, session) => {
+            this.user = session?.user ?? null
+          })
+          const sub = (changeResult as { data?: { subscription?: { unsubscribe: () => void } } })?.data?.subscription
+          authUnsubscribe = typeof sub?.unsubscribe === 'function' ? sub.unsubscribe : undefined
+        } catch {
+          this.user = null
+        }
         this._sessionRestored = true
-
-        const changeResult = supabase.auth.onAuthStateChange((_event, session) => {
-          this.user = session?.user ?? null
-        })
-        const sub = (changeResult as { data?: { subscription?: { unsubscribe: () => void } } })?.data?.subscription
-        authUnsubscribe = typeof sub?.unsubscribe === 'function' ? sub.unsubscribe : undefined
       })()
 
       await initPromise
