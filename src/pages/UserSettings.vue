@@ -140,15 +140,15 @@ const topWriters = computed(() => {
           </p>
           <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-4 sm:mb-3">
               <h3 class="text-sm sm:text-base font-bold tracking-wider text-slate-400 shrink-0">{{ t('settingsPage.ProfileName') }}:</h3>
-              <h4 class="text-base sm:text-lg tracking-wider text-slate-900 dark:text-white break-words min-w-0">{{ user?.user_metadata?.username || user?.user_metadata?.name || '—' }}</h4>
+              <h4 class="text-base sm:text-lg tracking-wider text-slate-900 dark:text-white break-words min-w-0">Pedro Perez</h4>
           </div>
           <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-4 sm:mb-3">
               <h3 class="text-sm sm:text-base font-bold tracking-wider text-slate-400 shrink-0">{{ t('settingsPage.ProfileEmail') }}:</h3>
-              <h4 class="text-base sm:text-lg tracking-wider text-slate-900 dark:text-white break-all min-w-0">{{ user?.email ?? '—' }}</h4>
+              <h4 class="text-base sm:text-lg tracking-wider text-slate-900 dark:text-white break-all min-w-0">testemail@test.com</h4>
           </div>
           <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
               <h3 class="text-sm sm:text-base font-bold tracking-wider text-slate-400 shrink-0">{{ t('settingsPage.Password') }}:</h3>
-              <router-link to="/update-password" class="text-blue-500 hover:text-blue-600 underline sm:no-underline font-semibold text-base sm:text-lg">{{ t('settingsPage.UpdatePassword') }}</router-link>
+              <span class="text-slate-400 dark:text-slate-500 font-semibold text-base sm:text-lg cursor-not-allowed select-none">{{ t('settingsPage.UpdatePassword') }}</span>
           </div>
 
     </div>
