@@ -42,7 +42,7 @@ export function useFloatingHeader() {
   }
 
   function goToLogin() {
-    router.push('/login')
+    window.location.href = 'https://movie-collection-manu.netlify.app/login'
   }
 
   watch(open, (isOpen) => {
