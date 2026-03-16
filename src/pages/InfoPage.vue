@@ -26,11 +26,6 @@ const faqItems = [
       t('faqPage.answer2'),
   },
   {
-    question: t('faqPage.question3'),
-    answer:
-      t('faqPage.answer3'),
-  },
-  {
     question: t('faqPage.question4'),
     answer:
       t('faqPage.answer4'),
@@ -47,8 +42,7 @@ const faqItems = [
                 <span class="text-sm text-slate-400"> {{ t('infoPage.backToMovies') }}</span>
             </router-link>
         </div>
-            <InfoVideoComponent :title="t('infoPage.howToUse')" :description="t('infoPage.howToUseDescription')" videoUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ" />
-            <InfoVideoComponent :title="t('infoPage.HoToEdit')" :description="t('infoPage.HoToEditDescription')" videoUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ" />
+            <InfoVideoComponent :title="t('infoPage.howToUse')" :description="t('infoPage.howToUseDescription')" videoUrl="https://res.cloudinary.com/dronteu5m/image/upload/v1773679114/add-movie_xoaaae.webp" />
 
             <AccordionFAQS
                 :title="t('faqPage.title')"
