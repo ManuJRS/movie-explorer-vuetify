@@ -4,6 +4,7 @@ import './style.css'
 import router from '@/router'
 import i18n from '@/i18n'
 import { createPinia } from 'pinia'
+import '@/assets/styles/fonts.css'
 
 createApp(App)
   .use(createPinia())
